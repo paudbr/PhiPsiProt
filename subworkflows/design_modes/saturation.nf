@@ -4,7 +4,9 @@ workflow SATURATION {
 
     take:
     input_pdb
+    target_chain
+    positions
 
     main:
-    PYROSETTA_SATURATION(input_pdb)
+    PYROSETTA_SATURATION(input_pdb, target_chain, positions)
 }

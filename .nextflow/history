@@ -23,3 +23,6 @@
 2026-05-26 09:27:43	35.5s	loquacious_hilbert	ERR	91417e381a4e9e16cc9e2c0e474cd51d	860c5bcc-ef8a-4b9f-b930-12b2bbd26c54	nextflow run . --mode saturation --input_pdb test_data/test.pdb -profile docker
 2026-05-26 09:29:58	8.7s	lethal_ptolemy	OK	91417e381a4e9e16cc9e2c0e474cd51d	ca0af297-be78-47bb-bf4e-178bf2f6ea2e	nextflow run . --mode saturation --input_pdb test_data/test.pdb -profile docker
 2026-05-26 09:47:30	6.5s	fervent_joliot	OK	91417e381a4e9e16cc9e2c0e474cd51d	4e4513e0-a4db-4637-9020-6d3278891b8e	nextflow run . --mode saturation --input_pdb test_data/test.pdb -profile docker
+2026-05-26 10:46:46	-	kickass_swirles	-	88c219f607fecc831299b179ff2c6722	5b56bed3-1a67-482b-b57e-89da2b025f25	nextflow run . --mode saturation --input_pdb test_data/test.pdb --target_chain A --positions 1 -profile docker
+2026-05-26 10:50:53	-	happy_wing	-	5d10be4493e7d82e34b2ba9aaeeee04d	5aa7f02f-1339-45d0-9360-885c896584e6	nextflow run . --mode saturation --input_pdb test_data/test.pdb --target_chain A --positions 1 -profile docker
+2026-05-26 10:53:04	5.7s	sharp_franklin	OK	fe8f6bcd61314a3567ddba23dd7246bf	b08bea8f-9a0e-4a52-acb3-94c1a0cd9dd1	nextflow run . --mode saturation --input_pdb test_data/test.pdb --target_chain A --positions 1 -profile docker

@@ -33,10 +33,12 @@ def parse_pdb_residues(pdb_path):
                 continue
 
             key = (chain, resnum, icode)
+
             if key in seen:
                 continue
 
             seen.add(key)
+
             residues.append({
                 "chain": chain,
                 "position": resnum,
@@ -49,16 +51,43 @@ def parse_pdb_residues(pdb_path):
 
 
 def main():
+
     parser = argparse.ArgumentParser()
+
     parser.add_argument("--input_pdb", required=True)
+    parser.add_argument("--target_chain", default="ALL")
+    parser.add_argument("--positions", default="ALL")
     parser.add_argument("--output", required=True)
+
     args = parser.parse_args()
 
     pdb = Path(args.input_pdb)
+
     residues = parse_pdb_residues(pdb)
 
+    # Filter by chain
+    if args.target_chain != "ALL":
+        residues = [
+            r for r in residues
+            if r["chain"] == args.target_chain
+        ]
+
+    # Filter by positions
+    if args.positions != "ALL":
+
+        selected_positions = set(
+            p.strip() for p in args.positions.split(",")
+        )
+
+        residues = [
+            r for r in residues
+            if r["position"] in selected_positions
+        ]
+
     with open(args.output, "w", newline="") as out:
+
         writer = csv.writer(out)
+
         writer.writerow([
             "candidate_id",
             "chain",
@@ -71,13 +100,23 @@ def main():
         ])
 
         counter = 1
+
         for res in residues:
+
             wt = res["wildtype"]
+
             for mut in STANDARD_AA:
+
                 if mut == wt:
                     continue
 
-                mutation = f"{wt}{res['chain']}{res['position']}{mut}"
+                mutation = (
+                    f"{wt}"
+                    f"{res['chain']}"
+                    f"{res['position']}"
+                    f"{mut}"
+                )
+
                 candidate_id = f"sat_{counter:06d}"
 
                 writer.writerow([
