@@ -9,7 +9,7 @@ process RUN_CHAI1 {
 
     input:
     tuple val(meta), path(fasta)
-    path "weights/*"
+    path weights_dir
 
     output:
     path ("raw/**")                                     , emit: raw
@@ -33,7 +33,7 @@ process RUN_CHAI1 {
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     # Point Chai-1 to the locally staged weights (avoids runtime download)
-    export CHAI_DOWNLOADS_DIR=\$PWD/weights
+    export CHAI_DOWNLOADS_DIR="${weights_dir}"
 
     # Run Chai-1 — no MSA databases needed
     chai fold \\

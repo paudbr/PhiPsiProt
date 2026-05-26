@@ -379,7 +379,8 @@ model_name = {
     "rosettafold_all_atom": "RosettaFold All-Atom",
     "helixfold3": "HelixFold3",
     "rosettafold2na": "RoseTTAFold2NA",
-    "boltz": "Boltz"
+    "boltz": "Boltz",
+    "chai1": "Chai-1"
 }
 
 parser = argparse.ArgumentParser()

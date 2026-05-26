@@ -31,13 +31,13 @@
                     "fa_icon": "fas fa-folder-open",
                     "errorMessage": "Output directory path must be specified"
                 },
-                "mode": {
+                "structural_tools": {
                     "type": "string",
-                    "default": "alphafold2",
-                    "description": "Specifies the mode in which the pipeline will be run. mode can be any combination of ['alphafold2', 'alphafold3', 'colabfold', 'esmfold', 'rosettafold_all_atom', 'boltz', 'helixfold3', 'rosettafold2na'] separated by a comma (',') with no spaces.",
+                    "default": "AF3",
+                    "description": "Specifies the structural validation tools to run. Can be any combination of ['AF2', 'AF3', 'ESM', 'Chai'] separated by a comma (',') with no spaces.",
                     "fa_icon": "fas fa-cogs",
-                    "pattern": "^(alphafold2|alphafold3|colabfold|esmfold|rosettafold_all_atom|helixfold3|boltz|rosettafold2na|)(,(alphafold2|alphafold3|colabfold|esmfold|rosettafold_all_atom|helixfold3|boltz|rosettafold2na)?,?)*(?<!,)$",
-                    "errorMessage": "Mode must be a comma-separated list containing any combination of 'alphafold2', 'alphafold3', 'colabfold', 'esmfold', 'rosettafold_all_atom', 'boltz', or 'helixfold3' with no spaces."
+                    "pattern": "^(AF2|AF3|ESM|Chai)(,(AF2|AF3|ESM|Chai)?,?)*(?<!,)$",
+                    "errorMessage": "structural_tools must be a comma-separated list containing any combination of 'AF2', 'AF3', 'ESM', 'Chai'"
                 },
                 "use_gpu": {
                     "type": "boolean",
