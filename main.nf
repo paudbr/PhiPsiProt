@@ -18,23 +18,10 @@
 include { PREPARE_ALPHAFOLD2_DBS           } from './subworkflows/local/prepare_alphafold2_dbs'
 include { PREPARE_ALPHAFOLD3_DBS           } from './subworkflows/local/prepare_alphafold3_dbs'
 include { PREPARE_ESMFOLD_DBS              } from './subworkflows/local/prepare_esmfold_dbs'
-include { PREPARE_ROSETTAFOLD_ALL_ATOM_DBS } from './subworkflows/local/prepare_rosettafold_all_atom_dbs'
-include { PREPARE_HELIXFOLD3_DBS           } from './subworkflows/local/prepare_helixfold3_dbs'
-include { PREPARE_BOLTZ_DBS                } from './subworkflows/local/prepare_boltz_dbs'
-include { PREPARE_ROSETTAFOLD2NA_DBS       } from './subworkflows/local/prepare_rosettafold2na_dbs'
-
-include { PREPARE_COLABFOLD_DBS  as PREPARE_COLABFOLD_DBS_COLABFOLD } from './subworkflows/local/prepare_colabfold_dbs'
-include { PREPARE_COLABFOLD_DBS  as PREPARE_COLABFOLD_DBS_BOLTZ     } from './subworkflows/local/prepare_colabfold_dbs'
-
 include { ALPHAFOLD2                       } from './workflows/alphafold2'
 include { CHAI1                            } from './workflows/chai1'
 include { ALPHAFOLD3                       } from './workflows/alphafold3'
-include { COLABFOLD                        } from './workflows/colabfold'
 include { ESMFOLD                          } from './workflows/esmfold'
-include { ROSETTAFOLD_ALL_ATOM             } from './workflows/rosettafold_all_atom'
-include { HELIXFOLD3                       } from './workflows/helixfold3'
-include { BOLTZ                            } from './workflows/boltz'
-include { ROSETTAFOLD2NA                   } from './workflows/rosettafold2na'
 
 include { PIPELINE_INITIALISATION          } from './subworkflows/local/utils_nfcore_proteinfold_pipeline'
 include { PIPELINE_COMPLETION              } from './subworkflows/local/utils_nfcore_proteinfold_pipeline'
@@ -72,7 +59,7 @@ workflow NFCORE_PROTEINFOLD {
     ch_versions          = channel.empty()
     ch_report_input      = channel.empty()
     ch_top_ranked_model  = channel.empty()
-    requested_modes      = params.structural_tools.toLowerCase().split(",")
+    requested_modes      = params.structural_tools.toLowerCase().split(",").collect { it.trim() }
     requested_modes_size = requested_modes.size()
 
     ch_dummy_file = channel.fromPath("$projectDir/assets/NO_FILE")
@@ -81,7 +68,7 @@ workflow NFCORE_PROTEINFOLD {
     //
     // WORKFLOW: Run alphafold2
     //
-    if(requested_modes.contains("AF2")) {
+    if(requested_modes.contains("af2")) {
 
         //
         // SUBWORKFLOW: Prepare Alphafold2 DBs
@@ -166,7 +153,7 @@ workflow NFCORE_PROTEINFOLD {
     //
     // WORKFLOW: Run alphafold3
     //
-    if(requested_modes.contains("AF3")) {
+    if(requested_modes.contains("af3")) {
 
         //
         // SUBWORKFLOW: Prepare Alphafold3 DBs
@@ -241,7 +228,7 @@ workflow NFCORE_PROTEINFOLD {
     //
     // WORKFLOW: Run esmfold
     //
-    if(requested_modes.contains("ESM")) {
+    if(requested_modes.contains("esm")) {
 
         //
         // SUBWORKFLOW: Prepare esmfold DBs
@@ -277,106 +264,26 @@ workflow NFCORE_PROTEINFOLD {
 
 
     //
-// WORKFLOW: Run Chai-1
-//
-    if(requested_modes.contains("Chai")) {
-        //
-        // SUBWORKFLOW: Prepare Chai-1 weights
-        // Much simpler than AF3 — no MSA databases needed, just model weights
-        //
-        PREPARE_CHAI1_WEIGHTS (
-            params.chai1_weights_path
-        )
-        ch_versions = ch_versions.mix(PREPARE_CHAI1_WEIGHTS.out.versions)
-
+    // WORKFLOW: Run Chai-1
+    //
+    if(requested_modes.contains("chai")) {
         //
         // WORKFLOW: Run nf-core/chai1 workflow
         //
         CHAI1 (
             ch_samplesheet,
-            ch_versions,
-            PREPARE_CHAI1_WEIGHTS.out.weights
+            ch_versions
         )
         ch_multiqc      = ch_multiqc.mix(CHAI1.out.multiqc_report)
         ch_versions     = ch_versions.mix(CHAI1.out.versions)
-        ch_report_input = ch_report_input
-                            .mix(
-                                CHAI1
-                                    .out
-                                    .cif
-                                    .map { it ->
-                                        [
-                                            it[0],
-                                            it[1].sort { path ->
-                                                def filename = path.name
-                                                def matcher  = filename =~ /.*_ranked_(\d+)\.cif/
-                                                if (matcher.matches()) {
-                                                    return matcher[0][1].toInteger()
-                                                } else {
-                                                    return 0  // fallback if no match
-                                                }
-                                            }.subList(0, Math.min(5, it[1].size() as int))
-                                        ]
-                                    }
-                                .join(CHAI1.out.ptms)   // no MSA, no PAE — use ptm scores instead
-                            )
-        ch_top_ranked_model = ch_top_ranked_model.mix(CHAI1.out.top_ranked_cif)
+        ch_report_input = ch_report_input.mix(
+            CHAI1.out.pdb
+                .combine(ch_dummy_file)
+                .combine(ch_dummy_file_pae)
+        )
+        ch_top_ranked_model = ch_top_ranked_model.mix(CHAI1.out.top_ranked_pdb)
     }
 
-
-    // WORKFLOW: Run Boltz
-    //
-    if (requested_modes.contains("boltz")) {
-
-        PREPARE_BOLTZ_DBS(
-            params.boltz_db,
-            params.boltz_ccd_path,
-            params.boltz_model_path,
-            params.boltz2_aff_path,
-            params.boltz2_conf_path,
-            params.boltz2_mols_path,
-            params.boltz_ccd_link,
-            params.boltz_model_link,
-            params.boltz2_aff_link,
-            params.boltz2_conf_link,
-            params.boltz2_mols_link
-        )
-        ch_versions = ch_versions.mix(PREPARE_BOLTZ_DBS.out.versions)
-
-        PREPARE_COLABFOLD_DBS_BOLTZ (
-            params.colabfold_db,
-            params.use_msa_server,
-            params.colabfold_alphafold2_params_path,
-            params.colabfold_envdb_path,
-            params.colabfold_uniref30_path,
-            params.colabfold_alphafold2_params_link,
-            params.colabfold_db_link,
-            params.colabfold_uniref30_link,
-            params.colabfold_create_index
-        )
-        ch_versions = ch_versions.mix(PREPARE_COLABFOLD_DBS_BOLTZ.out.versions)
-
-        BOLTZ(
-            ch_samplesheet,
-            ch_versions,
-            PREPARE_BOLTZ_DBS.out.boltz_ccd,
-            PREPARE_BOLTZ_DBS.out.boltz_model,
-            PREPARE_BOLTZ_DBS.out.boltz2_aff,
-            PREPARE_BOLTZ_DBS.out.boltz2_conf,
-            PREPARE_BOLTZ_DBS.out.boltz2_mols,
-            PREPARE_COLABFOLD_DBS_BOLTZ.out.colabfold_db,
-            PREPARE_COLABFOLD_DBS_BOLTZ.out.uniref30,
-            params.use_msa_server
-        )
-        ch_multiqc                  = ch_multiqc.mix(BOLTZ.out.multiqc_report)
-        ch_versions                 = ch_versions.mix(BOLTZ.out.versions)
-        ch_report_input             = ch_report_input.mix(
-            BOLTZ.out.pdb
-            .join(BOLTZ.out.msa)
-            .join(BOLTZ.out.pae)
-        )
-        ch_top_ranked_model         = ch_top_ranked_model.mix(BOLTZ.out.top_ranked_pdb)
-    }
     //
     // POST PROCESSING: generate visualisation reports
     //

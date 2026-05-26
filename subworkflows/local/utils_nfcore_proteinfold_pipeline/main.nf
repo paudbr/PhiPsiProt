@@ -188,7 +188,7 @@ workflow PIPELINE_COMPLETION {
 // Check and validate pipeline parameters
 //
 def validateInputParameters() {
-    if (params.mode.toLowerCase().split(",").contains("alphafold3")) {
+    if (params.structural_tools.toLowerCase().split(",").collect { it.trim() }.contains("af3")) {
         alphafold3Warn(log)
     }
 }

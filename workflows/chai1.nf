@@ -119,7 +119,7 @@ workflow CHAI1 {
         }
         .set { ch_top_ranked_pdb }
 
-    // Prepare PTM scores (replaces MSA + PAE — Chai-1 doesn't produce those)
+
     RUN_CHAI1
         .out
         .ptms

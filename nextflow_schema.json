@@ -34,10 +34,10 @@
                 "structural_tools": {
                     "type": "string",
                     "default": "AF3",
-                    "description": "Specifies the mode in which the pipeline will be run. mode can be any combination of ['AF2', 'AF3', 'ESM', 'Chai'] separated by a comma (',') with no spaces.",
+                    "description": "Specifies the structural validation tools to run. Can be any combination of ['AF2', 'AF3', 'ESM', 'Chai'] separated by a comma (',') with no spaces.",
                     "fa_icon": "fas fa-cogs",
                     "pattern": "^(AF2|AF3|ESM|Chai)(,(AF2|AF3|ESM|Chai)?,?)*(?<!,)$",
-                    "errorMessage": "Mode must be a comma-separated list containing any combination of 'AF2', 'AF3', 'ESM', 'Chai'"
+                    "errorMessage": "structural_tools must be a comma-separated list containing any combination of 'AF2', 'AF3', 'ESM', 'Chai'"
                 },
                 "use_gpu": {
                     "type": "boolean",

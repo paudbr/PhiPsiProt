@@ -50,20 +50,20 @@ workflow POST_PROCESSING {
         if (requested_modes_size > 1){
             ch_dummy_file = channel.fromPath("$projectDir/assets/NO_FILE")
 
-            def esm = ch_top_ranked_model.filter { it ->it[0].model == 'esmfold' }
-            def not_esm = ch_top_ranked_model.filter { it -> it[0].model != 'esmfold' }
+            def no_msa = ch_top_ranked_model.filter { it -> it[0].model in ['esmfold', 'chai1'] }
+            def with_msa = ch_top_ranked_model.filter { it -> !(it[0].model in ['esmfold', 'chai1']) }
 
-            esm = esm
+            no_msa = no_msa
                     .map { it ->
                         [it[0], it[1]]
                     }
                     .merge(ch_dummy_file)
 
-            not_esm = not_esm
+            with_msa = with_msa
                         .map { it ->  [it[0], it[1]] }
                         .join(GENERATE_REPORT.out.sequence_coverage)
 
-            not_esm.mix(esm).set{ch_comparison_report_files}
+            with_msa.mix(no_msa).set{ch_comparison_report_files}
 
             ch_comparison_report_files
                 .map { it ->
