@@ -40,6 +40,7 @@ include { PIPELINE_COMPLETION              } from './subworkflows/local/utils_nf
 include { getColabfoldAlphafold2Params     } from './subworkflows/local/utils_nfcore_proteinfold_pipeline'
 include { getColabfoldAlphafold2ParamsPath } from './subworkflows/local/utils_nfcore_proteinfold_pipeline'
 include { POST_PROCESSING                  } from './subworkflows/local/post_processing'
+include { SATURATION } from './subworkflows/design_modes/saturation'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -605,6 +606,11 @@ workflow NFCORE_PROTEINFOLD {
 workflow {
 
     main:
+
+    if (params.mode == 'saturation') {
+    SATURATION(params.mode)
+    return
+    }
     //
     // SUBWORKFLOW: Run initialisation tasks
     //
