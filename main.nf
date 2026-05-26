@@ -27,6 +27,7 @@ include { PREPARE_COLABFOLD_DBS  as PREPARE_COLABFOLD_DBS_COLABFOLD } from './su
 include { PREPARE_COLABFOLD_DBS  as PREPARE_COLABFOLD_DBS_BOLTZ     } from './subworkflows/local/prepare_colabfold_dbs'
 
 include { ALPHAFOLD2                       } from './workflows/alphafold2'
+include { CHAI1                            } from './workflows/chai1'
 include { ALPHAFOLD3                       } from './workflows/alphafold3'
 include { COLABFOLD                        } from './workflows/colabfold'
 include { ESMFOLD                          } from './workflows/esmfold'
@@ -71,7 +72,7 @@ workflow NFCORE_PROTEINFOLD {
     ch_versions          = channel.empty()
     ch_report_input      = channel.empty()
     ch_top_ranked_model  = channel.empty()
-    requested_modes      = params.mode.toLowerCase().split(",")
+    requested_modes      = params.structural_tools.toLowerCase().split(",")
     requested_modes_size = requested_modes.size()
 
     ch_dummy_file = channel.fromPath("$projectDir/assets/NO_FILE")
@@ -80,7 +81,7 @@ workflow NFCORE_PROTEINFOLD {
     //
     // WORKFLOW: Run alphafold2
     //
-    if(requested_modes.contains("alphafold2")) {
+    if(requested_modes.contains("AF2")) {
 
         //
         // SUBWORKFLOW: Prepare Alphafold2 DBs
@@ -165,7 +166,7 @@ workflow NFCORE_PROTEINFOLD {
     //
     // WORKFLOW: Run alphafold3
     //
-    if(requested_modes.contains("alphafold3")) {
+    if(requested_modes.contains("AF3")) {
 
         //
         // SUBWORKFLOW: Prepare Alphafold3 DBs
@@ -236,67 +237,11 @@ workflow NFCORE_PROTEINFOLD {
         ch_top_ranked_model = ch_top_ranked_model.mix(ALPHAFOLD3.out.top_ranked_pdb)
     }
 
-    //
-    // WORKFLOW: Run colabfold
-    //
-    if(requested_modes.contains("colabfold")) {
-
-        //
-        // SUBWORKFLOW: Prepare Colabfold DBs
-        //
-        PREPARE_COLABFOLD_DBS_COLABFOLD (
-            params.colabfold_db,
-            params.use_msa_server,
-            params.colabfold_alphafold2_params_path,
-            params.colabfold_envdb_path,
-            params.colabfold_uniref30_path,
-            params.colabfold_alphafold2_params_link,
-            params.colabfold_db_link,
-            params.colabfold_uniref30_link,
-            params.colabfold_create_index
-        )
-        ch_versions = ch_versions.mix(PREPARE_COLABFOLD_DBS_COLABFOLD.out.versions)
-
-        //
-        // WORKFLOW: Run nf-core/colabfold workflow
-        //
-        COLABFOLD (
-            ch_samplesheet,
-            ch_versions,
-            params.colabfold_model_preset,
-            PREPARE_COLABFOLD_DBS_COLABFOLD.out.params,
-            PREPARE_COLABFOLD_DBS_COLABFOLD.out.colabfold_db,
-            PREPARE_COLABFOLD_DBS_COLABFOLD.out.uniref30,
-            params.colabfold_num_recycles
-        )
-
-        ch_multiqc          = ch_multiqc.mix(COLABFOLD.out.multiqc_report)
-        ch_versions         = ch_versions.mix(COLABFOLD.out.versions)
-        ch_report_input     = ch_report_input
-                                .mix(COLABFOLD.out.pdb.map { it ->
-                                    [ it[0],
-                                        it[1].sort { path ->
-                                            def filename = path.name
-                                            def matcher = filename =~ /_relaxed_rank_(\d+)\.pdb/
-                                            if (matcher.matches()) {
-                                                return matcher[0][1].toInteger()
-                                            } else {
-                                                return 0  // fallback if no match
-                                            }
-                                        }.subList(0, Math.min(5, it[1].size() as int))
-                                    ]
-                                }
-                                .join(COLABFOLD.out.msa)
-                                .join(COLABFOLD.out.pae)
-                            )
-
-        ch_top_ranked_model = ch_top_ranked_model.mix(COLABFOLD.out.top_ranked_pdb)
-    }
 
     //
     // WORKFLOW: Run esmfold
     //
-    if(requested_modes.contains("esmfold")) {
+    if(requested_modes.contains("ESM")) {
 
         //
         // SUBWORKFLOW: Prepare esmfold DBs
@@ -330,184 +275,54 @@ workflow NFCORE_PROTEINFOLD {
         ch_top_ranked_model = ch_top_ranked_model.mix(ESMFOLD.out.pdb)
     }
 
-    //
 
-    // WORKFLOW: Run rosettafold_all_atom
     //
-    if(requested_modes.contains("rosettafold_all_atom")) {
-
+// WORKFLOW: Run Chai-1
+//
+    if(requested_modes.contains("Chai")) {
         //
-        // SUBWORKFLOW: Prepare Rosettafold-all-atom DBs
+        // SUBWORKFLOW: Prepare Chai-1 weights
+        // Much simpler than AF3 — no MSA databases needed, just model weights
         //
-        PREPARE_ROSETTAFOLD_ALL_ATOM_DBS (
-            params.rosettafold_all_atom_db,
-            params.rosettafold_all_atom_bfd_path,
-            params.rosettafold_all_atom_uniref30_path,
-            params.rosettafold_all_atom_pdb100_path,
-            params.rosettafold_all_atom_paper_weights_path,
-            params.rosettafold_all_atom_bfd_link,
-            params.rosettafold_all_atom_uniref30_link,
-            params.rosettafold_all_atom_pdb100_link,
-            params.rosettafold_all_atom_paper_weights_link
+        PREPARE_CHAI1_WEIGHTS (
+            params.chai1_weights_path
         )
-        ch_versions = ch_versions.mix(PREPARE_ROSETTAFOLD_ALL_ATOM_DBS.out.versions)
+        ch_versions = ch_versions.mix(PREPARE_CHAI1_WEIGHTS.out.versions)
 
         //
-        // WORKFLOW: Run nf-core/rosettafold_all_atom workflow
+        // WORKFLOW: Run nf-core/chai1 workflow
         //
-        ROSETTAFOLD_ALL_ATOM (
+        CHAI1 (
             ch_samplesheet,
             ch_versions,
-            params.uniref30_prefix,
-            PREPARE_ROSETTAFOLD_ALL_ATOM_DBS.out.bfd,
-            PREPARE_ROSETTAFOLD_ALL_ATOM_DBS.out.uniref30,
-            PREPARE_ROSETTAFOLD_ALL_ATOM_DBS.out.pdb100,
-            PREPARE_ROSETTAFOLD_ALL_ATOM_DBS.out.rfaa_paper_weights
+            PREPARE_CHAI1_WEIGHTS.out.weights
         )
-        ch_multiqc                              = ch_multiqc.mix(ROSETTAFOLD_ALL_ATOM.out.multiqc_report.collect())
-        ch_versions                             = ch_versions.mix(ROSETTAFOLD_ALL_ATOM.out.versions)
-        ch_report_input                         = ch_report_input.mix(ROSETTAFOLD_ALL_ATOM.out.pdb
-                                                                    .join(ROSETTAFOLD_ALL_ATOM.out.msa)
-                                                                    .join(ROSETTAFOLD_ALL_ATOM.out.pae)
-                                                                    )
-        ch_top_ranked_model                     = ch_top_ranked_model.mix(ROSETTAFOLD_ALL_ATOM.out.pdb)
-    }
-
-    //
-    // WORKFLOW: Run helixfold3
-    //
-    if(requested_modes.contains("helixfold3")) {
-
-        //
-        // SUBWORKFLOW: Prepare helixfold3 DBs
-        //
-        PREPARE_HELIXFOLD3_DBS (
-            params.helixfold3_db,
-            params.helixfold3_uniclust30_link,
-            params.helixfold3_ccd_preprocessed_link,
-            params.helixfold3_rfam_link,
-            params.helixfold3_init_models_link,
-            params.helixfold3_bfd_link,
-            params.helixfold3_small_bfd_link,
-            params.helixfold3_uniprot_sprot_link,
-            params.helixfold3_uniprot_trembl_link,
-            params.helixfold3_pdb_seqres_link,
-            params.helixfold3_uniref90_link,
-            params.helixfold3_mgnify_link,
-            params.helixfold3_pdb_mmcif_link,
-            params.helixfold3_obsolete_link,
-            params.helixfold3_maxit_src_link,
-            params.helixfold3_uniclust30_path,
-            params.helixfold3_ccd_preprocessed_path,
-            params.helixfold3_rfam_path,
-            params.helixfold3_init_models_path,
-            params.helixfold3_bfd_path,
-            params.helixfold3_small_bfd_path,
-            params.helixfold3_uniprot_path,
-            params.helixfold3_pdb_seqres_path,
-            params.helixfold3_uniref90_path,
-            params.helixfold3_mgnify_path,
-            params.helixfold3_pdb_mmcif_path,
-            params.helixfold3_obsolete_path,
-            params.helixfold3_maxit_src_path
-        )
-        ch_versions = ch_versions.mix(PREPARE_HELIXFOLD3_DBS.out.versions)
-
-        //
-        // WORKFLOW: Run nf-core/helixfold3 workflow
-        //
-        HELIXFOLD3 (
-            ch_samplesheet,
-            ch_versions,
-            params.uniref30_prefix,
-            PREPARE_HELIXFOLD3_DBS.out.helixfold3_uniclust30,
-            PREPARE_HELIXFOLD3_DBS.out.helixfold3_ccd_preprocessed,
-            PREPARE_HELIXFOLD3_DBS.out.helixfold3_rfam,
-            PREPARE_HELIXFOLD3_DBS.out.helixfold3_bfd,
-            PREPARE_HELIXFOLD3_DBS.out.helixfold3_small_bfd,
-            PREPARE_HELIXFOLD3_DBS.out.helixfold3_uniprot,
-            PREPARE_HELIXFOLD3_DBS.out.helixfold3_pdb_seqres,
-            PREPARE_HELIXFOLD3_DBS.out.helixfold3_uniref90,
-            PREPARE_HELIXFOLD3_DBS.out.helixfold3_mgnify,
-            PREPARE_HELIXFOLD3_DBS.out.helixfold3_mmcif_files,
-            PREPARE_HELIXFOLD3_DBS.out.helixfold3_obsolete,
-            PREPARE_HELIXFOLD3_DBS.out.helixfold3_init_models,
-            PREPARE_HELIXFOLD3_DBS.out.helixfold3_maxit_src
-        )
-        ch_multiqc          = ch_multiqc.mix(HELIXFOLD3.out.multiqc_report.collect())
-        ch_versions         = ch_versions.mix(HELIXFOLD3.out.versions)
-        ch_report_input     = ch_report_input
-                                .mix(HELIXFOLD3.out.pdb.map { it ->
-                                    [ it[0],
-                                        it[1].sort { path ->
-                                            def filename = path.name
-                                            def matcher = filename =~ /ranked_(\d+)\.pdb/
-                                            if (matcher.matches()) {
-                                                return matcher[0][1].toInteger()
-                                            } else {
-                                                return 0  // fallback if no match
-                                            }
-                                        }.subList(0, Math.min(5, it[1].size() as int))
-                                    ]
-                                }
-                                .join(HELIXFOLD3.out.msa)
-                                .join(HELIXFOLD3.out.pae)
+        ch_multiqc      = ch_multiqc.mix(CHAI1.out.multiqc_report)
+        ch_versions     = ch_versions.mix(CHAI1.out.versions)
+        ch_report_input = ch_report_input
+                            .mix(
+                                CHAI1
+                                    .out
+                                    .cif
+                                    .map { it ->
+                                        [
+                                            it[0],
+                                            it[1].sort { path ->
+                                                def filename = path.name
+                                                def matcher  = filename =~ /.*_ranked_(\d+)\.cif/
+                                                if (matcher.matches()) {
+                                                    return matcher[0][1].toInteger()
+                                                } else {
+                                                    return 0  // fallback if no match
+                                                }
+                                            }.subList(0, Math.min(5, it[1].size() as int))
+                                        ]
+                                    }
+                                .join(CHAI1.out.ptms)   // no MSA, no PAE — use ptm scores instead
                             )
-        ch_top_ranked_model = ch_top_ranked_model.mix(HELIXFOLD3.out.top_ranked_pdb)
+        ch_top_ranked_model = ch_top_ranked_model.mix(CHAI1.out.top_ranked_cif)
     }
 
-    //
-    // WORKFLOW: Run rosettafold2na
-    //
-    if(requested_modes.contains("rosettafold2na")) {
-
-        //
-        // SUBWORKFLOW: Prepare RosettaFold2NA DBs
-        //
-        PREPARE_ROSETTAFOLD2NA_DBS (
-            params.rosettafold2na_db,
-            params.rosettafold2na_bfd_path,
-            params.rosettafold2na_uniref30_path,
-            params.rosettafold2na_pdb100_path,
-            params.rosettafold2na_rna_path,
-            params.rosettafold2na_weights_path,
-            params.rosettafold2na_bfd_link,
-            params.rosettafold2na_uniref30_link,
-            params.rosettafold2na_pdb100_link,
-            params.rosettafold2na_weights_link,
-            params.rfam_full_region_link,
-            params.rfam_cm_link,
-            params.rnacentral_rfam_annotations_link,
-            params.rnacentral_id_mapping_link,
-            params.rnacentral_sequences_link
-        )
-        ch_versions = ch_versions.mix(PREPARE_ROSETTAFOLD2NA_DBS.out.versions)
-
-        //
-        // WORKFLOW: Run nf-core/rosettafold2na workflow
-        //
-        ROSETTAFOLD2NA (
-            ch_samplesheet,
-            ch_versions,
-            PREPARE_ROSETTAFOLD2NA_DBS.out.bfd,
-            PREPARE_ROSETTAFOLD2NA_DBS.out.uniref30,
-            PREPARE_ROSETTAFOLD2NA_DBS.out.pdb100,
-            PREPARE_ROSETTAFOLD2NA_DBS.out.rna,
-            PREPARE_ROSETTAFOLD2NA_DBS.out.rosettafold2na_weights
-        )
-        ch_multiqc                              = ch_multiqc.mix(ROSETTAFOLD2NA.out.multiqc_report.collect())
-        ch_versions                             = ch_versions.mix(ROSETTAFOLD2NA.out.versions)
-        ch_report_input                         = ch_report_input
-                                                    .mix(
-                                                        ROSETTAFOLD2NA
-                                                            .out
-                                                            .pdb
-                                                            .map { meta, pdb -> [ meta, [ pdb ] ] }
-                                                            .join(ROSETTAFOLD2NA.out.msa)
-                                                            .join(ROSETTAFOLD2NA.out.pae)
-                                                    )
-        ch_top_ranked_model                     = ch_top_ranked_model.mix(ROSETTAFOLD2NA.out.pdb)
-    }
 
     // WORKFLOW: Run Boltz
     //

@@ -9,7 +9,7 @@ process RUN_CHAI1 {
 
     input:
     tuple val(meta), path(fasta)
-    path "weights/*"
+    path weights_dir
 
     output:
     path ("raw/**")                                     , emit: raw
