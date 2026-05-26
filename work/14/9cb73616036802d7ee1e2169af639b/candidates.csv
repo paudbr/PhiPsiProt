@@ -1,0 +1,2 @@
+id,fasta,pdb,mode
+dummy_peptide_design,dummy.fasta,dummy.pdb,peptide_design

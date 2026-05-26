@@ -1,0 +1,2 @@
+task_id	hash	native_id	name	status	exit	submit	duration	realtime	%cpu	peak_rss	peak_vmem	rchar	wchar
+1	cd/b70ab6	465481	ANTIBODY_DESIGN:DESIGN_DUMMY (antibody_design)	COMPLETED	0	2026-05-26 08:03:00.736	67ms	4ms	78.0%	0	0	109.1 KB	272 B

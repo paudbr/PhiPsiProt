@@ -41,6 +41,9 @@ include { getColabfoldAlphafold2Params     } from './subworkflows/local/utils_nf
 include { getColabfoldAlphafold2ParamsPath } from './subworkflows/local/utils_nfcore_proteinfold_pipeline'
 include { POST_PROCESSING                  } from './subworkflows/local/post_processing'
 include { SATURATION } from './subworkflows/design_modes/saturation'
+include { BACKBONE } from './subworkflows/design_modes/backbone'
+include { PEPTIDE_DESIGN } from './subworkflows/design_modes/peptide_design'
+include { ANTIBODY_DESIGN } from './subworkflows/design_modes/antibody_design'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -609,6 +612,21 @@ workflow {
 
     if (params.mode == 'saturation') {
     SATURATION(params.mode)
+    return
+    }
+
+    if (params.mode == 'backbone') {
+    BACKBONE(params.mode)
+    return
+    }
+
+    if (params.mode == 'peptide_design') {
+    PEPTIDE_DESIGN(params.mode)
+    return
+    }
+
+    if (params.mode == 'antibody_design') {
+    ANTIBODY_DESIGN(params.mode)
     return
     }
     //

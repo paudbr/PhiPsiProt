@@ -1,0 +1,2 @@
+id,fasta,pdb,mode
+dummy_backbone,dummy.fasta,dummy.pdb,backbone
