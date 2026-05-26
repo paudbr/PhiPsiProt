@@ -69,7 +69,7 @@ workflow NFCORE_PROTEINFOLD {
     ch_dummy_file = channel.fromPath("$projectDir/assets/NO_FILE")
     ch_dummy_file_pae = channel.fromPath("$projectDir/assets/NO_FILE_PAE")
     
-    if (params.mode == 'saturation') {
+    if (params.mode == 'screening') {
     SATURATION(file(params.input_pdb), params.target_chain, params.positions)
     }
 
