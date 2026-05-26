@@ -68,6 +68,40 @@ workflow NFCORE_PROTEINFOLD {
 
     ch_dummy_file = channel.fromPath("$projectDir/assets/NO_FILE")
     ch_dummy_file_pae = channel.fromPath("$projectDir/assets/NO_FILE_PAE")
+    
+    if (params.mode == 'saturation') {
+    SATURATION(file(params.input_pdb), params.target_chain, params.positions)
+    return
+    }
+
+    if (params.mode == 'backbone') {
+    BACKBONE(params.mode)
+    return
+    }
+
+    if (params.mode == 'peptide_design') {
+    PEPTIDE_DESIGN(params.mode)
+    return
+    }
+
+    if (params.mode == 'antibody_design') {
+    ANTIBODY_DESIGN(params.mode)
+    return
+    }
+    //
+    // SUBWORKFLOW: Run initialisation tasks
+    //
+    PIPELINE_INITIALISATION (
+        params.version,
+        params.validate_params,
+        params.monochrome_logs,
+        args,
+        params.outdir,
+        params.input,
+        params.help,
+        params.help_full,
+        params.show_hidden
+    )
 
     //
     // WORKFLOW: Run alphafold2
