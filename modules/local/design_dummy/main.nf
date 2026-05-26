@@ -1,6 +1,8 @@
 process DESIGN_DUMMY {
     tag "$mode"
 
+    container 'docker.io/library/ubuntu:22.04'
+
     input:
     val mode
 
