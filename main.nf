@@ -71,22 +71,22 @@ workflow NFCORE_PROTEINFOLD {
     
     if (params.mode == 'saturation') {
     SATURATION(file(params.input_pdb), params.target_chain, params.positions)
-    return
     }
 
     if (params.mode == 'backbone') {
     BACKBONE(params.mode)
-    return
     }
 
     if (params.mode == 'peptide_design') {
     PEPTIDE_DESIGN(params.mode)
-    return
     }
 
     if (params.mode == 'antibody_design') {
     ANTIBODY_DESIGN(params.mode)
-    return
+    }
+
+    else if (params.mode != 'structural') {
+        error "Unknown mode: ${params.mode}"
     }
     //
     // SUBWORKFLOW: Run initialisation tasks
@@ -101,6 +101,10 @@ workflow NFCORE_PROTEINFOLD {
         params.help,
         params.help_full,
         params.show_hidden
+    )
+
+    NFCORE_PROTEINFOLD(
+        PIPELINE_INITIALISATION.out.samplesheet
     )
 
     //
@@ -355,74 +359,3 @@ workflow NFCORE_PROTEINFOLD {
     emit:
     multiqc_report = ch_multiqc
 }
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    RUN MAIN WORKFLOW
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-workflow {
-
-    main:
-
-    if (params.mode == 'saturation') {
-    SATURATION(file(params.input_pdb), params.target_chain, params.positions)
-    return
-    }
-
-    if (params.mode == 'backbone') {
-    BACKBONE(params.mode)
-    return
-    }
-
-    if (params.mode == 'peptide_design') {
-    PEPTIDE_DESIGN(params.mode)
-    return
-    }
-
-    if (params.mode == 'antibody_design') {
-    ANTIBODY_DESIGN(params.mode)
-    return
-    }
-    //
-    // SUBWORKFLOW: Run initialisation tasks
-    //
-    PIPELINE_INITIALISATION (
-        params.version,
-        params.validate_params,
-        params.monochrome_logs,
-        args,
-        params.outdir,
-        params.input,
-        params.help,
-        params.help_full,
-        params.show_hidden
-    )
-
-    //
-    // WORKFLOW: Run main workflow
-    //
-    NFCORE_PROTEINFOLD (
-        PIPELINE_INITIALISATION.out.samplesheet
-    )
-
-    //
-    // SUBWORKFLOW: Run completion tasks
-    //
-    PIPELINE_COMPLETION (
-        params.email,
-        params.email_on_fail,
-        params.plaintext_email,
-        params.outdir,
-        params.monochrome_logs,
-        params.hook_url,
-        NFCORE_PROTEINFOLD.out.multiqc_report
-    )
-}
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    THE END
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
