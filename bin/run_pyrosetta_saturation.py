@@ -1,7 +1,52 @@
 #!/usr/bin/env python3
 
 import argparse
+import csv
 from pathlib import Path
+
+AA3_TO_1 = {
+    "ALA": "A", "ARG": "R", "ASN": "N", "ASP": "D",
+    "CYS": "C", "GLN": "Q", "GLU": "E", "GLY": "G",
+    "HIS": "H", "ILE": "I", "LEU": "L", "LYS": "K",
+    "MET": "M", "PHE": "F", "PRO": "P", "SER": "S",
+    "THR": "T", "TRP": "W", "TYR": "Y", "VAL": "V",
+}
+
+STANDARD_AA = list("ACDEFGHIKLMNPQRSTVWY")
+
+
+def parse_pdb_residues(pdb_path):
+    residues = []
+    seen = set()
+
+    with open(pdb_path) as handle:
+        for line in handle:
+            if not line.startswith("ATOM"):
+                continue
+
+            resname = line[17:20].strip()
+            chain = line[21].strip()
+            resnum = line[22:26].strip()
+            icode = line[26].strip()
+
+            if resname not in AA3_TO_1:
+                continue
+
+            key = (chain, resnum, icode)
+            if key in seen:
+                continue
+
+            seen.add(key)
+            residues.append({
+                "chain": chain,
+                "position": resnum,
+                "icode": icode,
+                "wildtype": AA3_TO_1[resname],
+                "resname": resname,
+            })
+
+    return residues
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -10,13 +55,44 @@ def main():
     args = parser.parse_args()
 
     pdb = Path(args.input_pdb)
+    residues = parse_pdb_residues(pdb)
 
-    if not pdb.exists():
-        raise FileNotFoundError(f"Input PDB not found: {pdb}")
+    with open(args.output, "w", newline="") as out:
+        writer = csv.writer(out)
+        writer.writerow([
+            "candidate_id",
+            "chain",
+            "position",
+            "wildtype",
+            "mutant",
+            "mutation",
+            "ddg",
+            "input_pdb",
+        ])
 
-    with open(args.output, "w") as out:
-        out.write("candidate_id,mutation,ddg,input_pdb\n")
-        out.write(f"test_candidate,NA,0.0,{pdb.name}\n")
+        counter = 1
+        for res in residues:
+            wt = res["wildtype"]
+            for mut in STANDARD_AA:
+                if mut == wt:
+                    continue
+
+                mutation = f"{wt}{res['chain']}{res['position']}{mut}"
+                candidate_id = f"sat_{counter:06d}"
+
+                writer.writerow([
+                    candidate_id,
+                    res["chain"],
+                    res["position"],
+                    wt,
+                    mut,
+                    mutation,
+                    "NA",
+                    pdb.name,
+                ])
+
+                counter += 1
+
 
 if __name__ == "__main__":
     main()
