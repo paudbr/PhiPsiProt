@@ -1,0 +1,2 @@
+id,fasta,pdb,mode
+dummy_antibody_design,dummy.fasta,dummy.pdb,antibody_design
