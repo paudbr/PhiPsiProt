@@ -39,6 +39,20 @@
                     "pattern": "^(AF2|AF3|ESM|Chai)(,(AF2|AF3|ESM|Chai)?,?)*(?<!,)$",
                     "errorMessage": "structural_tools must be a comma-separated list containing any combination of 'AF2', 'AF3', 'ESM', 'Chai'"
                 },
+                "mode": {
+                    "type": "string",
+                    "default": "structural",
+                    "description": "Specifies the pipeline mode.",
+                    "fa_icon": "fas fa-cogs",
+                    "enum": [
+                        "structural",
+                        "screening",
+                        "backbone",
+                        "peptide_design",
+                        "antibody_design"
+                    ],
+                    "errorMessage": "mode must be one of: 'structural', 'screening', 'backbone', 'peptide_design', or 'antibody_design'"
+                },
                 "use_gpu": {
                     "type": "boolean",
                     "description": "Run on CPUs (default) or GPUs",
