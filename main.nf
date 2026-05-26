@@ -611,8 +611,8 @@ workflow {
     main:
 
     if (params.mode == 'saturation') {
-    SATURATION(params.mode)
-    return
+        SATURATION(file(params.input_pdb))
+        return
     }
 
     if (params.mode == 'backbone') {

@@ -1,10 +1,10 @@
-include { DESIGN_DUMMY } from '../../modules/local/design_dummy/main'
+include { PYROSETTA_SATURATION } from '../../modules/local/pyrosetta_saturation/main'
 
 workflow SATURATION {
 
     take:
-    mode
+    input_pdb
 
     main:
-    DESIGN_DUMMY(mode)
+    PYROSETTA_SATURATION(input_pdb)
 }

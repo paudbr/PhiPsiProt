@@ -1,0 +1,2 @@
+task_id	hash	native_id	name	status	exit	submit	duration	realtime	%cpu	peak_rss	peak_vmem	rchar	wchar
+1	3c/4b7c10	505605	SATURATION:PYROSETTA_SATURATION (test.pdb)	FAILED	1	2026-05-26 09:27:48.029	30s	29.9s	-	-	-	-	-

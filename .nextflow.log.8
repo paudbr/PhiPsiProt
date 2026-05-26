@@ -1,129 +1,118 @@
-may-26 08:02:53.768 [main] DEBUG nextflow.cli.Launcher - Setting HTTP proxy: ProxyConfig[protocol=http; host=10.15.206.126; port=3128]
-may-26 08:02:53.789 [main] DEBUG nextflow.cli.Launcher - Setting HTTPS proxy: ProxyConfig[protocol=https; host=10.15.206.126; port=3128]
-may-26 08:02:53.790 [main] DEBUG nextflow.cli.Launcher - Setting http proxy: ProxyConfig[protocol=http; host=10.15.206.126; port=3128]
-may-26 08:02:53.790 [main] DEBUG nextflow.cli.Launcher - Setting https proxy: ProxyConfig[protocol=https; host=10.15.206.126; port=3128]
-may-26 08:02:53.790 [main] DEBUG nextflow.cli.Launcher - $> nextflow run . --mode antibody_design
-may-26 08:02:53.833 [main] DEBUG nextflow.cli.CmdRun - N E X T F L O W  ~  version 25.10.4
-may-26 08:02:53.847 [main] DEBUG nextflow.plugin.PluginsFacade - Setting up plugin manager > mode=prod; embedded=false; plugins-dir=/home/lgonlopez/.nextflow/plugins; core-plugins: nf-amazon@3.4.4,nf-azure@1.20.2,nf-cloudcache@0.5.0,nf-codecommit@0.5.0,nf-console@1.3.0,nf-google@1.23.5,nf-k8s@1.2.2,nf-tower@1.17.5,nf-wave@1.16.1
-may-26 08:02:53.863 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
-may-26 08:02:53.863 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
-may-26 08:02:53.865 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.12.0 in 'deployment' mode
-may-26 08:02:53.873 [main] DEBUG nextflow.util.RetryConfig - Missing nextflow session - using default retry config
-may-26 08:02:53.951 [main] INFO  org.pf4j.AbstractPluginManager - No plugins
-may-26 08:02:54.642 [main] DEBUG nextflow.config.ConfigBuilder - Found config local: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/nextflow.config
-may-26 08:02:54.643 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/nextflow.config
-may-26 08:02:54.652 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `standard`
-may-26 08:02:55.646 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins declared=[nf-schema@2.6.1]
-may-26 08:02:55.646 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins default=[]
-may-26 08:02:55.646 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins resolved requirement=[nf-schema@2.6.1]
-may-26 08:02:55.842 [main] DEBUG n.plugin.HttpPluginRepository - Registry request: https://registry.nextflow.io/api/v1/plugins/dependencies?plugins=nf-schema%402.6.1&nextflowVersion=25.10.4
+may-26 09:14:42.386 [main] DEBUG nextflow.cli.Launcher - Setting HTTP proxy: ProxyConfig[protocol=http; host=10.15.206.126; port=3128]
+may-26 09:14:42.407 [main] DEBUG nextflow.cli.Launcher - Setting HTTPS proxy: ProxyConfig[protocol=https; host=10.15.206.126; port=3128]
+may-26 09:14:42.408 [main] DEBUG nextflow.cli.Launcher - Setting http proxy: ProxyConfig[protocol=http; host=10.15.206.126; port=3128]
+may-26 09:14:42.408 [main] DEBUG nextflow.cli.Launcher - Setting https proxy: ProxyConfig[protocol=https; host=10.15.206.126; port=3128]
+may-26 09:14:42.408 [main] DEBUG nextflow.cli.Launcher - $> nextflow run . --mode saturation --input_pdb test_data/test.pdb -profile docker
+may-26 09:14:42.453 [main] DEBUG nextflow.cli.CmdRun - N E X T F L O W  ~  version 25.10.4
+may-26 09:14:42.467 [main] DEBUG nextflow.plugin.PluginsFacade - Setting up plugin manager > mode=prod; embedded=false; plugins-dir=/home/lgonlopez/.nextflow/plugins; core-plugins: nf-amazon@3.4.4,nf-azure@1.20.2,nf-cloudcache@0.5.0,nf-codecommit@0.5.0,nf-console@1.3.0,nf-google@1.23.5,nf-k8s@1.2.2,nf-tower@1.17.5,nf-wave@1.16.1
+may-26 09:14:42.482 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+may-26 09:14:42.483 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+may-26 09:14:42.485 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.12.0 in 'deployment' mode
+may-26 09:14:42.493 [main] DEBUG nextflow.util.RetryConfig - Missing nextflow session - using default retry config
+may-26 09:14:42.574 [main] INFO  org.pf4j.AbstractPluginManager - No plugins
+may-26 09:14:43.223 [main] DEBUG nextflow.config.ConfigBuilder - Found config local: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/nextflow.config
+may-26 09:14:43.225 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/nextflow.config
+may-26 09:14:43.234 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `docker`
+may-26 09:14:43.963 [main] DEBUG nextflow.config.ConfigBuilder - Available config profiles: [uzl_omics, denbi_qbic, mjolnir_globe, uppmax, incliva, uge, icr_alma, rosalind_uge, lugh, mccleary, test_split_fasta, unibe_ibu, czbiohub_aws, jax, roslin, iris, tes, scw, test_full_boltz, tigem, tubingen_apg, vsc_calcua, pdc_kth, humantechnopole, test_alphafold2_split, stjude, daisybio, eddie, medair, biowulf, bi, test_full_colabfold_webserver, cedars, utd_ganymede, charliecloud, seattlechildrens, rosalind, cfc, emulate_amd64, uzh, ccga_dx, crick, test_rosettafold_all_atom, ku_sund_danhead, marvin, shifter, biohpc_gen, mana, wehi, arcc, test_full_helixfold3, imperial, maestro, cannon, nci_gadi, test_rosettafold2na, eva_grace, googlebatch, sahmri, kaust, alliance_canada, cambridge, jex, test_helixfold3, test_full_colabfold_multimer, cheaha, nyu_hpc, test, test_full_alphafold2_multimer, gpu, seg_globe, mssm, sanger, test_full_rosettafold2na, pasteur, einstein, ethz_euler, tuos_stanage, test_colabfold_webserver, azurebatch, crukmi, csiro_petrichor, wave, docker, hypatia, psmn, test_full_alphafold2_split, fgcz, conda, mpcdf_viper, dirac, uw_hyak_pedslabs, binac2, genouest, unsw_katana, utd_juno, test_boltz, seawulf, lovelace, test_alphafold3_standard, uct_hpc, aws_tower, bih, cfc_dev, ifb_core, embl_hd, mcw_rcc, alice, giga, ilifu, ki_luria, test_colabfold_local, vai, test_full_esmfold_multimer, unc_longleaf, apollo, test_full_alphafold2_standard, ipop_up, ceci_nic5, ccga_cau, mahuika, apptainer, bigpurple, adcra, pawsey_setonix, vsc_kul_uhasselt, purdue_gautschi, pawsey_nimbus, rki, ucl_myriad, fred_hutch, icr_davros, ceres, purdue_negishi, munin, hasta, shu_bmrc, ebi_codon_slurm, ebc, lrz_cm4, purdue_bell, mamba, york_viking, unc_lccc, awsbatch, wustl_htcf, ceci_dragon2, genotoul, abims, janelia, nu_genomics, oist, arm64, mpcdf, leicester, vsc_ugent, test_alphafold3_download, create, sage, podman, ebi_codon, xanadu, marjorie, computerome, ucd_sonic, test_alphafold2_download, dkfz, bluebear, m3c, test_full, imb, ucl_cscluster, seadragon, qmul_apocrita, engaging, gis, eva, unity, cropdiversityhpc, nygc, test_esmfold, crg, singularity, test_colabfold_download, self_hosted_runner, tufts, debug, hki_genie, test_full_rosettafold_all_atom, cbe, test_full_colabfold_local, test_full_esmfold, phoenix, uod_hpc, fub_curta, fsu_draco]
+may-26 09:14:43.994 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins declared=[nf-schema@2.6.1]
+may-26 09:14:43.995 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins default=[]
+may-26 09:14:43.995 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins resolved requirement=[nf-schema@2.6.1]
+may-26 09:14:44.190 [main] DEBUG n.plugin.HttpPluginRepository - Registry request: https://registry.nextflow.io/api/v1/plugins/dependencies?plugins=nf-schema%402.6.1&nextflowVersion=25.10.4
 - code: 200
 - body: {"plugins":[{"id":"nf-schema","releases":[{"version":"2.6.1","url":"https://registry.nextflow.io/api/v1/plugins/nf-schema/2.6.1/download/nf-schema-2.6.1.zip","date":"2025-10-27T10:50:21.364829Z","sha512sum":"467832f2987f90e2d2aa8e6d8387e45d4a0406ce8b5579a71fcd506155b85491bc6e978a536d767508a8ed1a4610a60c1f0cd3d9dc226f4fea1ce2973a23d043","requires":">=25.10.0","dependsOn":[],"status":"PUBLISHED"}],"projectUrl":"https://github.com/nextflow-io/nf-schema","provider":"nextflow-io"}]}
-may-26 08:02:55.871 [main] DEBUG nextflow.plugin.PluginUpdater - Installing plugin nf-schema version: 2.6.1
-may-26 08:02:55.877 [main] INFO  org.pf4j.AbstractPluginManager - Plugin 'nf-schema@2.6.1' resolved
-may-26 08:02:55.877 [main] INFO  org.pf4j.AbstractPluginManager - Start plugin 'nf-schema@2.6.1'
-may-26 08:02:55.880 [main] DEBUG nextflow.plugin.BasePlugin - Plugin started nf-schema@2.6.1
-may-26 08:02:55.884 [main] DEBUG n.secret.LocalSecretsProvider - Secrets store: /home/lgonlopez/.nextflow/secrets/store.json
-may-26 08:02:55.885 [main] DEBUG nextflow.secret.SecretsLoader - Discovered secrets providers: [nextflow.secret.LocalSecretsProvider@2475fba3] - activable => nextflow.secret.LocalSecretsProvider@2475fba3
-may-26 08:02:55.888 [main] DEBUG nextflow.cli.CmdRun - Applied DSL=2 by global default
-may-26 08:02:55.899 [main] DEBUG nextflow.cli.CmdRun - Launching `./main.nf` [insane_lattes] DSL2 - revision: 35d1941091
-may-26 08:02:55.930 [main] DEBUG nextflow.Session - Session UUID: 3cf64aaa-e56a-402d-b608-27dace8dd9e1
-may-26 08:02:55.931 [main] DEBUG nextflow.Session - Run name: insane_lattes
-may-26 08:02:55.931 [main] DEBUG nextflow.Session - Executor pool size: 32
-may-26 08:02:55.936 [main] DEBUG nextflow.file.FilePorter - File porter settings maxRetries=3; maxTransfers=50; pollTimeout=null
-may-26 08:02:55.938 [main] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'FileTransfer' minSize=10; maxSize=96; workQueue=LinkedBlockingQueue[-1]; allowCoreThreadTimeout=false
-may-26 08:02:55.949 [main] DEBUG nextflow.cli.CmdRun - 
+may-26 09:14:44.217 [main] DEBUG nextflow.plugin.PluginUpdater - Installing plugin nf-schema version: 2.6.1
+may-26 09:14:44.223 [main] INFO  org.pf4j.AbstractPluginManager - Plugin 'nf-schema@2.6.1' resolved
+may-26 09:14:44.223 [main] INFO  org.pf4j.AbstractPluginManager - Start plugin 'nf-schema@2.6.1'
+may-26 09:14:44.227 [main] DEBUG nextflow.plugin.BasePlugin - Plugin started nf-schema@2.6.1
+may-26 09:14:44.232 [main] DEBUG n.secret.LocalSecretsProvider - Secrets store: /home/lgonlopez/.nextflow/secrets/store.json
+may-26 09:14:44.233 [main] DEBUG nextflow.secret.SecretsLoader - Discovered secrets providers: [nextflow.secret.LocalSecretsProvider@561d88ee] - activable => nextflow.secret.LocalSecretsProvider@561d88ee
+may-26 09:14:44.235 [main] DEBUG nextflow.cli.CmdRun - Applied DSL=2 by global default
+may-26 09:14:44.246 [main] DEBUG nextflow.cli.CmdRun - Launching `./main.nf` [festering_feynman] DSL2 - revision: 91417e381a
+may-26 09:14:44.277 [main] DEBUG nextflow.Session - Session UUID: 316c445d-712d-4c61-bcae-522c73a36b5a
+may-26 09:14:44.277 [main] DEBUG nextflow.Session - Run name: festering_feynman
+may-26 09:14:44.277 [main] DEBUG nextflow.Session - Executor pool size: 32
+may-26 09:14:44.282 [main] DEBUG nextflow.file.FilePorter - File porter settings maxRetries=3; maxTransfers=50; pollTimeout=null
+may-26 09:14:44.285 [main] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'FileTransfer' minSize=10; maxSize=96; workQueue=LinkedBlockingQueue[-1]; allowCoreThreadTimeout=false
+may-26 09:14:44.297 [main] DEBUG nextflow.cli.CmdRun - 
   Version: 25.10.4 build 11173
   Created: 10-02-2026 15:17 UTC 
   System: Linux 6.8.0-111-generic
   Runtime: Groovy 4.0.28 on OpenJDK 64-Bit Server VM 17.0.7+4-jvmci-23.0-b10
   Encoding: UTF-8 (UTF-8)
-  Process: 465297@FRS-BINF-02 [127.0.1.1]
-  CPUs: 32 - Mem: 82.4 GB (77.4 GB) - Swap: 4 GB (4 GB)
-may-26 08:02:55.961 [main] DEBUG nextflow.Session - Work-dir: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/work [ext2/ext3]
-may-26 08:02:55.982 [main] DEBUG nextflow.executor.ExecutorFactory - Extension executors providers=[]
-may-26 08:02:55.989 [main] DEBUG nextflow.Session - Observer factory (v2): LinObserverFactory
-may-26 08:02:55.990 [main] DEBUG nextflow.Session - Observer factory (v2): DefaultObserverFactory
-may-26 08:02:56.001 [main] DEBUG nextflow.Session - Observer factory (v2): ValidationObserverFactory
-may-26 08:02:56.021 [main] DEBUG nextflow.cache.CacheFactory - Using Nextflow cache factory: nextflow.cache.DefaultCacheFactory
-may-26 08:02:56.028 [main] DEBUG nextflow.util.CustomThreadPool - Creating default thread pool > poolSize: 33; maxThreads: 1000
-may-26 08:02:56.080 [main] DEBUG nextflow.Session - Session start
-may-26 08:02:56.084 [main] DEBUG nextflow.trace.TraceFileObserver - Workflow started -- trace file: null/pipeline_info/execution_trace_2026-05-26_08-02-54.txt
-may-26 08:02:56.349 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
-may-26 08:02:58.973 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryLog:paramsSummaryLog]; plugin Id: nf-schema
-may-26 08:02:58.979 [main] DEBUG n.validation.config.ValidationConfig - Set `validation.monochromeLogs` to false
-may-26 08:02:58.980 [main] DEBUG n.validation.config.ValidationConfig - Added the following parameters to the ignored parameters: [genomes]
-may-26 08:02:58.986 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [validateParameters:validateParameters]; plugin Id: nf-schema
-may-26 08:02:58.987 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
-may-26 08:02:58.988 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
-may-26 08:02:58.988 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [samplesheetToList:samplesheetToList]; plugin Id: nf-schema
-may-26 08:02:58.989 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
-may-26 08:02:59.177 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryLog:paramsSummaryLog]; plugin Id: nf-schema
-may-26 08:02:59.178 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [validateParameters:validateParameters]; plugin Id: nf-schema
-may-26 08:02:59.178 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
-may-26 08:02:59.179 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
-may-26 08:02:59.180 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [samplesheetToList:samplesheetToList]; plugin Id: nf-schema
-may-26 08:02:59.180 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
-may-26 08:02:59.354 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryLog:paramsSummaryLog]; plugin Id: nf-schema
-may-26 08:02:59.355 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [validateParameters:validateParameters]; plugin Id: nf-schema
-may-26 08:02:59.355 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
-may-26 08:02:59.356 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
-may-26 08:02:59.357 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [samplesheetToList:samplesheetToList]; plugin Id: nf-schema
-may-26 08:02:59.357 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
-may-26 08:02:59.534 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryLog:paramsSummaryLog]; plugin Id: nf-schema
-may-26 08:02:59.535 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [validateParameters:validateParameters]; plugin Id: nf-schema
-may-26 08:02:59.536 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
-may-26 08:02:59.538 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
-may-26 08:02:59.538 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [samplesheetToList:samplesheetToList]; plugin Id: nf-schema
-may-26 08:02:59.538 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
-may-26 08:02:59.795 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
-may-26 08:02:59.874 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryLog:paramsSummaryLog]; plugin Id: nf-schema
-may-26 08:02:59.875 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [validateParameters:validateParameters]; plugin Id: nf-schema
-may-26 08:02:59.876 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
-may-26 08:02:59.877 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
-may-26 08:02:59.877 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [samplesheetToList:samplesheetToList]; plugin Id: nf-schema
-may-26 08:02:59.878 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
-may-26 08:03:00.175 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryLog:paramsSummaryLog]; plugin Id: nf-schema
-may-26 08:03:00.176 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [validateParameters:validateParameters]; plugin Id: nf-schema
-may-26 08:03:00.176 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
-may-26 08:03:00.177 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
-may-26 08:03:00.177 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [samplesheetToList:samplesheetToList]; plugin Id: nf-schema
-may-26 08:03:00.178 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
-may-26 08:03:00.330 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
-may-26 08:03:00.386 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryLog:paramsSummaryLog]; plugin Id: nf-schema
-may-26 08:03:00.387 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [validateParameters:validateParameters]; plugin Id: nf-schema
-may-26 08:03:00.387 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
-may-26 08:03:00.389 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
-may-26 08:03:00.389 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [samplesheetToList:samplesheetToList]; plugin Id: nf-schema
-may-26 08:03:00.389 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
-may-26 08:03:00.608 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: null
-may-26 08:03:00.609 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
-may-26 08:03:00.614 [main] DEBUG nextflow.executor.Executor - [warm up] executor > local
-may-26 08:03:00.617 [main] DEBUG n.processor.LocalPollingMonitor - Creating local task monitor for executor 'local' > cpus=32; memory=82.4 GB; capacity=32; pollInterval=100ms; dumpInterval=5m
-may-26 08:03:00.618 [main] DEBUG n.processor.TaskPollingMonitor - >>> barrier register (monitor: local)
-may-26 08:03:00.630 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'ANTIBODY_DESIGN:DESIGN_DUMMY': maxForks=0; fair=false; array=0
-may-26 08:03:00.660 [main] DEBUG nextflow.Session - Config process names validation disabled as requested
-may-26 08:03:00.661 [main] DEBUG nextflow.Session - Igniting dataflow network (1)
-may-26 08:03:00.662 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > ANTIBODY_DESIGN:DESIGN_DUMMY
-may-26 08:03:00.663 [main] DEBUG nextflow.script.ScriptRunner - Parsed script files:
+  Process: 499430@FRS-BINF-02 [127.0.1.1]
+  CPUs: 32 - Mem: 82.4 GB (75.7 GB) - Swap: 4 GB (4 GB)
+may-26 09:14:44.311 [main] DEBUG nextflow.Session - Work-dir: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/work [ext2/ext3]
+may-26 09:14:44.330 [main] DEBUG nextflow.executor.ExecutorFactory - Extension executors providers=[]
+may-26 09:14:44.337 [main] DEBUG nextflow.Session - Observer factory (v2): LinObserverFactory
+may-26 09:14:44.339 [main] DEBUG nextflow.Session - Observer factory (v2): DefaultObserverFactory
+may-26 09:14:44.350 [main] DEBUG nextflow.Session - Observer factory (v2): ValidationObserverFactory
+may-26 09:14:44.370 [main] DEBUG nextflow.cache.CacheFactory - Using Nextflow cache factory: nextflow.cache.DefaultCacheFactory
+may-26 09:14:44.378 [main] DEBUG nextflow.util.CustomThreadPool - Creating default thread pool > poolSize: 33; maxThreads: 1000
+may-26 09:14:44.427 [main] DEBUG nextflow.Session - Session start
+may-26 09:14:44.431 [main] DEBUG nextflow.trace.TraceFileObserver - Workflow started -- trace file: null/pipeline_info/execution_trace_2026-05-26_09-14-43.txt
+may-26 09:14:44.690 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+may-26 09:14:47.155 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryLog:paramsSummaryLog]; plugin Id: nf-schema
+may-26 09:14:47.160 [main] DEBUG n.validation.config.ValidationConfig - Set `validation.monochromeLogs` to false
+may-26 09:14:47.161 [main] DEBUG n.validation.config.ValidationConfig - Added the following parameters to the ignored parameters: [genomes]
+may-26 09:14:47.168 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [validateParameters:validateParameters]; plugin Id: nf-schema
+may-26 09:14:47.169 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
+may-26 09:14:47.170 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
+may-26 09:14:47.171 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [samplesheetToList:samplesheetToList]; plugin Id: nf-schema
+may-26 09:14:47.171 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
+may-26 09:14:47.358 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryLog:paramsSummaryLog]; plugin Id: nf-schema
+may-26 09:14:47.359 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [validateParameters:validateParameters]; plugin Id: nf-schema
+may-26 09:14:47.359 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
+may-26 09:14:47.360 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
+may-26 09:14:47.360 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [samplesheetToList:samplesheetToList]; plugin Id: nf-schema
+may-26 09:14:47.361 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
+may-26 09:14:47.522 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryLog:paramsSummaryLog]; plugin Id: nf-schema
+may-26 09:14:47.522 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [validateParameters:validateParameters]; plugin Id: nf-schema
+may-26 09:14:47.523 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
+may-26 09:14:47.524 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
+may-26 09:14:47.524 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [samplesheetToList:samplesheetToList]; plugin Id: nf-schema
+may-26 09:14:47.524 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
+may-26 09:14:47.696 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryLog:paramsSummaryLog]; plugin Id: nf-schema
+may-26 09:14:47.697 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [validateParameters:validateParameters]; plugin Id: nf-schema
+may-26 09:14:47.697 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
+may-26 09:14:47.698 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
+may-26 09:14:47.698 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [samplesheetToList:samplesheetToList]; plugin Id: nf-schema
+may-26 09:14:47.699 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
+may-26 09:14:47.929 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
+may-26 09:14:48.006 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryLog:paramsSummaryLog]; plugin Id: nf-schema
+may-26 09:14:48.007 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [validateParameters:validateParameters]; plugin Id: nf-schema
+may-26 09:14:48.007 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
+may-26 09:14:48.009 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
+may-26 09:14:48.009 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [samplesheetToList:samplesheetToList]; plugin Id: nf-schema
+may-26 09:14:48.009 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
+may-26 09:14:48.292 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryLog:paramsSummaryLog]; plugin Id: nf-schema
+may-26 09:14:48.292 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [validateParameters:validateParameters]; plugin Id: nf-schema
+may-26 09:14:48.293 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
+may-26 09:14:48.294 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
+may-26 09:14:48.294 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [samplesheetToList:samplesheetToList]; plugin Id: nf-schema
+may-26 09:14:48.294 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
+may-26 09:14:48.434 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
+may-26 09:14:48.488 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryLog:paramsSummaryLog]; plugin Id: nf-schema
+may-26 09:14:48.488 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [validateParameters:validateParameters]; plugin Id: nf-schema
+may-26 09:14:48.488 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
+may-26 09:14:48.489 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
+may-26 09:14:48.490 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [samplesheetToList:samplesheetToList]; plugin Id: nf-schema
+may-26 09:14:48.490 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
+may-26 09:14:48.642 [main] DEBUG nextflow.script.ScriptRunner - Parsed script files:
   Script_714c8ca89cd9d55f: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/subworkflows/local/prepare_alphafold3_dbs.nf
   Script_16143ac4827f9518: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/modules/local/mmseqs_colabfoldsearch/main.nf
   Script_8f8c7d0f2a4c48da: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/modules/local/compare_structures/main.nf
   Script_873c0131ae8ce821: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/modules/nf-core/multiqc/main.nf
   Script_fbc7130024ee091d: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/subworkflows/local/aria2_uncompress.nf
-  Script_d635659d7d21d25d: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/modules/local/design_dummy/main.nf
   Script_16d59aca71284b00: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/modules/local/fasta2json/main.nf
   Script_1809358c99d7cc3b: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/modules/local/generate_report/main.nf
   Script_8988a74ceda92929: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/subworkflows/local/prepare_boltz_dbs.nf
   Script_f204df13a0731422: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/subworkflows/local/post_processing.nf
   Script_081a99adc3498595: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/modules/nf-core/unzip/main.nf
   Script_7ed3b164cdc813f3: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/subworkflows/local/prepare_colabfold_dbs.nf
-  Script_b9d484152cdb19c9: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/subworkflows/design_modes/antibody_design.nf
-  Script_ad27ea02e54bb158: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/subworkflows/design_modes/backbone.nf
   Script_0e522e239c72fa00: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/workflows/alphafold2.nf
   Script_21e13aede2614953: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/workflows/boltz.nf
+  Script_92339867097f1302: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/main.nf
   Script_b4971a8adbe8ce0c: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/subworkflows/local/prepare_esmfold_dbs.nf
-  Script_4ccff765fc3d2be7: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/main.nf
   Script_3557edd1eda5bfd1: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/modules/local/colabfold_batch/main.nf
   Script_220b170b361e8403: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/modules/local/run_alphafold2_pred/main.nf
   Script_80f6fd871cbc9490: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/modules/local/rosettafold2na_fasta/main.nf
@@ -148,12 +137,11 @@ may-26 08:03:00.663 [main] DEBUG nextflow.script.ScriptRunner - Parsed script fi
   Script_e72d28d41417e65a: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/modules/local/fasta_to_alphafold3_json/main.nf
   Script_ac258ef1994281e8: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/modules/nf-core/untar/main.nf
   Script_a7b23449dcde0af1: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/modules/local/combine_uniprot/main.nf
-  Script_22624b2e40a1dabc: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/subworkflows/design_modes/saturation.nf
   Script_b4a791ce21eec4cc: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/modules/local/multifasta_to_csv/main.nf
   Script_f8b6a6afd919f018: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/subworkflows/local/prepare_rosettafold_all_atom_dbs.nf
   Script_4d945e3ed2e39689: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/subworkflows/local/prepare_rosettafold2na_dbs.nf
-  Script_f9b581f2677008b6: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/modules/local/split_msa/main.nf
   Script_b02d15d436c37a6e: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/workflows/rosettafold2na.nf
+  Script_f9b581f2677008b6: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/modules/local/split_msa/main.nf
   Script_a2beb73133ffd8c0: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/workflows/helixfold3.nf
   Script_15db0e8d9062b311: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/modules/local/multifasta_to_singlefasta/main.nf
   Script_5e7ac9f4ba5137ff: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/modules/local/run_alphafold2_msa/main.nf
@@ -163,30 +151,124 @@ may-26 08:03:00.663 [main] DEBUG nextflow.script.ScriptRunner - Parsed script fi
   Script_da2ecc775fab5e47: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/subworkflows/local/utils_nfcore_proteinfold_pipeline/main.nf
   Script_75d1a4c7e589b723: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/workflows/colabfold.nf
   Script_4f612cfd8c52e8cd: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/subworkflows/nf-core/utils_nextflow_pipeline/main.nf
-  Script_710833a5f95ee0a2: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/subworkflows/design_modes/peptide_design.nf
   Script_db33a546948eb190: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/modules/nf-core/mmseqs/createindex/main.nf
   Script_49074a8aa708e930: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/modules/local/run_rosettafold2na/main.nf
   Script_623dc2cc517aadc9: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/modules/local/run_alphafold2/main.nf
+  Script_ee6c8461a0275fa8: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/subworkflows/design_modes/saturation.nf
   Script_ecef9394b6a46342: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/modules/local/download_pdbmmcif_af3/main.nf
-may-26 08:03:00.663 [main] DEBUG nextflow.script.ScriptRunner - > Awaiting termination 
-may-26 08:03:00.663 [main] DEBUG nextflow.Session - Session await
-may-26 08:03:00.734 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
-may-26 08:03:00.736 [Task submitter] INFO  nextflow.Session - [cd/b70ab6] Submitted process > ANTIBODY_DESIGN:DESIGN_DUMMY (antibody_design)
-may-26 08:03:00.804 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 1; name: ANTIBODY_DESIGN:DESIGN_DUMMY (antibody_design); status: COMPLETED; exit: 0; error: -; workDir: /home/lgonlopez/storage/phipsiprot/PhiPsiProt/work/cd/b70ab69b68c0bdbb3ca27d2570482c]
-may-26 08:03:00.804 [Task monitor] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'TaskFinalizer' minSize=10; maxSize=96; workQueue=LinkedBlockingQueue[-1]; allowCoreThreadTimeout=false
-may-26 08:03:00.814 [TaskFinalizer-1] WARN  nextflow.processor.PublishDir - Process `ANTIBODY_DESIGN:DESIGN_DUMMY` publishDir path contains a variable with a null value
-may-26 08:03:00.818 [TaskFinalizer-1] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'PublishDir' minSize=10; maxSize=96; workQueue=LinkedBlockingQueue[-1]; allowCoreThreadTimeout=false
-may-26 08:03:00.822 [main] DEBUG nextflow.Session - Session await > all processes finished
-may-26 08:03:00.901 [Task monitor] DEBUG n.processor.TaskPollingMonitor - <<< barrier arrives (monitor: local) - terminating tasks monitor poll loop
-may-26 08:03:00.901 [main] DEBUG nextflow.Session - Session await > all barriers passed
-may-26 08:03:00.903 [main] DEBUG nextflow.util.ThreadPoolManager - Thread pool 'TaskFinalizer' shutdown completed (hard=false)
-may-26 08:03:00.903 [main] DEBUG nextflow.util.ThreadPoolManager - Thread pool 'PublishDir' shutdown completed (hard=false)
-may-26 08:03:00.907 [main] DEBUG n.trace.WorkflowStatsObserver - Workflow completed > WorkflowStats[succeededCount=1; failedCount=0; ignoredCount=0; cachedCount=0; pendingCount=0; submittedCount=0; runningCount=0; retriesCount=0; abortedCount=0; succeedDuration=4ms; failedDuration=0ms; cachedDuration=0ms;loadCpus=0; loadMemory=0; peakRunning=1; peakCpus=1; peakMemory=6 GB; ]
-may-26 08:03:01.113 [main] DEBUG nextflow.trace.ReportObserver - Workflow completed -- rendering execution report
-may-26 08:03:01.341 [main] DEBUG nextflow.trace.TimelineObserver - Workflow completed -- rendering execution timeline
-may-26 08:03:01.364 [main] DEBUG nextflow.trace.TraceFileObserver - Workflow completed -- saving trace file
-may-26 08:03:01.368 [main] DEBUG nextflow.cache.CacheDB - Closing CacheDB done
-may-26 08:03:01.385 [main] INFO  org.pf4j.AbstractPluginManager - Stop plugin 'nf-schema@2.6.1'
-may-26 08:03:01.385 [main] DEBUG nextflow.plugin.BasePlugin - Plugin stopped nf-schema
-may-26 08:03:01.385 [main] DEBUG nextflow.util.ThreadPoolManager - Thread pool 'FileTransfer' shutdown completed (hard=false)
-may-26 08:03:01.385 [main] DEBUG nextflow.script.ScriptRunner - > Execution complete -- Goodbye
+may-26 09:14:48.653 [main] DEBUG n.trace.WorkflowStatsObserver - Workflow completed > WorkflowStats[succeededCount=0; failedCount=0; ignoredCount=0; cachedCount=0; pendingCount=0; submittedCount=0; runningCount=0; retriesCount=0; abortedCount=0; succeedDuration=0ms; failedDuration=0ms; cachedDuration=0ms;loadCpus=0; loadMemory=0; peakRunning=0; peakCpus=0; peakMemory=0; ]
+may-26 09:14:48.841 [main] DEBUG nextflow.trace.ReportObserver - Workflow completed -- rendering execution report
+may-26 09:14:49.018 [main] DEBUG nextflow.trace.TimelineObserver - Workflow completed -- rendering execution timeline
+may-26 09:14:49.039 [main] DEBUG nextflow.trace.TraceFileObserver - Workflow completed -- saving trace file
+may-26 09:14:49.047 [main] ERROR nextflow.cli.Launcher - Module compilation error
+- file : /home/lgonlopez/storage/phipsiprot/PhiPsiProt/modules/local/pyrosetta_saturation/main.nf
+- cause: Unexpected input: '{' @ line 4, column 30.
+   process PYROSETTA_SATURATION {
+                                ^
+
+1 error
+
+NOTE: If this is the beginning of a process or workflow, there may be a syntax error in the body, such as a missing or extra comma, for which a more specific error message could not be produced.
+nextflow.exception.ScriptCompilationException: Module compilation error
+- file : /home/lgonlopez/storage/phipsiprot/PhiPsiProt/modules/local/pyrosetta_saturation/main.nf
+- cause: Unexpected input: '{' @ line 4, column 30.
+   process PYROSETTA_SATURATION {
+                                ^
+
+1 error
+
+NOTE: If this is the beginning of a process or workflow, there may be a syntax error in the body, such as a missing or extra comma, for which a more specific error message could not be produced.
+	at nextflow.script.parser.v1.ScriptLoaderV1.parse0(ScriptLoaderV1.groovy:204)
+	at nextflow.script.parser.v1.ScriptLoaderV1.parse(ScriptLoaderV1.groovy:215)
+	at nextflow.script.parser.v1.ScriptLoaderV1.runScript(ScriptLoaderV1.groovy:230)
+	at nextflow.script.IncludeDef.memoizedMethodPriv$loadModuleV1PathMapSession(IncludeDef.groovy:166)
+	at nextflow.script.IncludeDef.access$1(IncludeDef.groovy)
+	at nextflow.script.IncludeDef$__clinit__closure3.doCall(IncludeDef.groovy)
+	at jdk.internal.reflect.GeneratedMethodAccessor31.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.codehaus.groovy.reflection.CachedMethod.invoke(CachedMethod.java:343)
+	at groovy.lang.MetaMethod.doMethodInvoke(MetaMethod.java:328)
+	at org.codehaus.groovy.runtime.metaclass.ClosureMetaClass.invokeMethod(ClosureMetaClass.java:280)
+	at groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:1007)
+	at groovy.lang.Closure.call(Closure.java:433)
+	at org.codehaus.groovy.runtime.memoize.Memoize$MemoizeFunction.lambda$call$0(Memoize.java:137)
+	at org.codehaus.groovy.runtime.memoize.ConcurrentCommonCache.getAndPut(ConcurrentCommonCache.java:137)
+	at org.codehaus.groovy.runtime.memoize.ConcurrentCommonCache.getAndPut(ConcurrentCommonCache.java:113)
+	at org.codehaus.groovy.runtime.memoize.Memoize$MemoizeFunction.call(Memoize.java:136)
+	at nextflow.script.IncludeDef.loadModuleV1(IncludeDef.groovy)
+	at nextflow.script.IncludeDef.load0(IncludeDef.groovy:113)
+	at org.codehaus.groovy.vmplugin.v8.IndyInterface.fromCache(IndyInterface.java:321)
+	at Script_ee6c8461a0275fa8.runScript(Script_ee6c8461a0275fa8:1)
+	at nextflow.script.BaseScript.run0(BaseScript.groovy:218)
+	at nextflow.script.BaseScript.run(BaseScript.groovy:260)
+	at nextflow.script.parser.v1.ScriptLoaderV1.runScript(ScriptLoaderV1.groovy:246)
+	at nextflow.script.parser.v1.ScriptLoaderV1.runScript(ScriptLoaderV1.groovy:231)
+	at nextflow.script.IncludeDef.memoizedMethodPriv$loadModuleV1PathMapSession(IncludeDef.groovy:166)
+	at nextflow.script.IncludeDef.access$1(IncludeDef.groovy)
+	at nextflow.script.IncludeDef$__clinit__closure3.doCall(IncludeDef.groovy)
+	at jdk.internal.reflect.GeneratedMethodAccessor31.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.codehaus.groovy.reflection.CachedMethod.invoke(CachedMethod.java:343)
+	at groovy.lang.MetaMethod.doMethodInvoke(MetaMethod.java:328)
+	at org.codehaus.groovy.runtime.metaclass.ClosureMetaClass.invokeMethod(ClosureMetaClass.java:280)
+	at groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:1007)
+	at groovy.lang.Closure.call(Closure.java:433)
+	at org.codehaus.groovy.runtime.memoize.Memoize$MemoizeFunction.lambda$call$0(Memoize.java:137)
+	at org.codehaus.groovy.runtime.memoize.ConcurrentCommonCache.getAndPut(ConcurrentCommonCache.java:137)
+	at org.codehaus.groovy.runtime.memoize.ConcurrentCommonCache.getAndPut(ConcurrentCommonCache.java:113)
+	at org.codehaus.groovy.runtime.memoize.Memoize$MemoizeFunction.call(Memoize.java:136)
+	at nextflow.script.IncludeDef.loadModuleV1(IncludeDef.groovy)
+	at nextflow.script.IncludeDef.load0(IncludeDef.groovy:113)
+	at org.codehaus.groovy.vmplugin.v8.IndyInterface.fromCache(IndyInterface.java:321)
+	at Script_92339867097f1302.runScript(Script_92339867097f1302:43)
+	at nextflow.script.BaseScript.run0(BaseScript.groovy:218)
+	at nextflow.script.BaseScript.run(BaseScript.groovy:260)
+	at nextflow.script.parser.v1.ScriptLoaderV1.runScript(ScriptLoaderV1.groovy:246)
+	at nextflow.script.parser.v1.ScriptLoaderV1.runScript(ScriptLoaderV1.groovy)
+	at nextflow.script.ScriptRunner.run(ScriptRunner.groovy:246)
+	at nextflow.script.ScriptRunner.execute(ScriptRunner.groovy:139)
+	at nextflow.cli.CmdRun.run(CmdRun.groovy:429)
+	at nextflow.cli.Launcher.run(Launcher.groovy:515)
+	at nextflow.cli.Launcher.main(Launcher.groovy:675)
+Caused by: org.codehaus.groovy.control.MultipleCompilationErrorsException: startup failed:
+Script_49c8fdf4cec964a5: 4: Unexpected input: '{' @ line 4, column 30.
+   process PYROSETTA_SATURATION {
+                                ^
+
+1 error
+
+	at org.codehaus.groovy.control.ErrorCollector.failIfErrors(ErrorCollector.java:292)
+	at org.codehaus.groovy.control.ErrorCollector.addFatalError(ErrorCollector.java:148)
+	at org.apache.groovy.parser.antlr4.AstBuilder.collectSyntaxError(AstBuilder.java:4739)
+	at org.apache.groovy.parser.antlr4.AstBuilder.access$100(AstBuilder.java:169)
+	at org.apache.groovy.parser.antlr4.AstBuilder$3.syntaxError(AstBuilder.java:4750)
+	at groovyjarjarantlr4.v4.runtime.ProxyErrorListener.syntaxError(ProxyErrorListener.java:44)
+	at groovyjarjarantlr4.v4.runtime.Parser.notifyErrorListeners(Parser.java:543)
+	at groovyjarjarantlr4.v4.runtime.DefaultErrorStrategy.notifyErrorListeners(DefaultErrorStrategy.java:154)
+	at org.apache.groovy.parser.antlr4.internal.DescriptiveErrorStrategy.reportInputMismatch(DescriptiveErrorStrategy.java:104)
+	at org.apache.groovy.parser.antlr4.internal.DescriptiveErrorStrategy.recover(DescriptiveErrorStrategy.java:55)
+	at org.apache.groovy.parser.antlr4.internal.DescriptiveErrorStrategy.recoverInline(DescriptiveErrorStrategy.java:68)
+	at groovyjarjarantlr4.v4.runtime.Parser.match(Parser.java:213)
+	at org.apache.groovy.parser.antlr4.GroovyParser.compilationUnit(GroovyParser.java:368)
+	at org.apache.groovy.parser.antlr4.AstBuilder.buildCST(AstBuilder.java:243)
+	at org.apache.groovy.parser.antlr4.AstBuilder.buildCST(AstBuilder.java:221)
+	at org.apache.groovy.parser.antlr4.AstBuilder.buildAST(AstBuilder.java:262)
+	at org.apache.groovy.parser.antlr4.Antlr4ParserPlugin.buildAST(Antlr4ParserPlugin.java:58)
+	at org.codehaus.groovy.control.SourceUnit.buildAST(SourceUnit.java:256)
+	at java.base/java.util.Iterator.forEachRemaining(Iterator.java:133)
+	at java.base/java.util.Spliterators$IteratorSpliterator.forEachRemaining(Spliterators.java:1845)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762)
+	at org.codehaus.groovy.control.CompilationUnit.compile(CompilationUnit.java:631)
+	at groovy.lang.GroovyClassLoader.doParseClass(GroovyClassLoader.java:365)
+	at groovy.lang.GroovyClassLoader.lambda$parseClass$2(GroovyClassLoader.java:314)
+	at org.codehaus.groovy.runtime.memoize.StampedCommonCache.compute(StampedCommonCache.java:163)
+	at org.codehaus.groovy.runtime.memoize.StampedCommonCache.getAndPut(StampedCommonCache.java:154)
+	at groovy.lang.GroovyClassLoader.parseClass(GroovyClassLoader.java:314)
+	at groovy.lang.GroovyShell.parseClass(GroovyShell.java:572)
+	at groovy.lang.GroovyShell.parse(GroovyShell.java:585)
+	at groovy.lang.GroovyShell.parse(GroovyShell.java:639)
+	at groovy.lang.GroovyShell.parse(GroovyShell.java:643)
+	at nextflow.script.parser.v1.ScriptLoaderV1.parse0(ScriptLoaderV1.groovy:183)
+	... 53 common frames omitted
