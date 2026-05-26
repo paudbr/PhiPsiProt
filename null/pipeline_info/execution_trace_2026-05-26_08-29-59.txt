@@ -1,0 +1,2 @@
+task_id	hash	native_id	name	status	exit	submit	duration	realtime	%cpu	peak_rss	peak_vmem	rchar	wchar
+1	9f/d7905a	478491	PEPTIDE_DESIGN:DESIGN_DUMMY (peptide_design)	COMPLETED	0	2026-05-26 08:30:05.196	522ms	4ms	110.3%	0	0	60.2 KB	278 B
