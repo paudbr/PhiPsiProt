@@ -1,0 +1,4 @@
+task_id	hash	native_id	name	status	exit	submit	duration	realtime	%cpu	peak_rss	peak_vmem	rchar	wchar
+1	ec/27e5f9	474620	SCREENING:POCKET_DETECTION (test_ligand.pdb)	COMPLETED	0	2026-05-27 09:04:17.621	560ms	24ms	126.7%	3.3 MB	4.4 MB	821.3 KB	206 B
+2	22/b13865	474917	SCREENING:PYROSETTA_SCREENING (test_ligand.pdb)	COMPLETED	0	2026-05-27 09:04:18.206	527ms	30ms	106.7%	14.1 MB	18.5 MB	1 MB	4 KB
+3	71/f8a0da	475150	SCREENING:DDG_FILTER (filter_ddg)	COMPLETED	0	2026-05-27 09:04:18.754	513ms	28ms	112.3%	13.5 MB	18.3 MB	843.5 KB	5.8 KB

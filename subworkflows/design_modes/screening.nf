@@ -1,5 +1,6 @@
 include { PYROSETTA_SCREENING } from '../../modules/local/pyrosetta_screening/main'
 include { DDG_FILTER } from '../../modules/local/ddg_filter/main'
+include { POCKET_DETECTION } from '../../modules/local/pocket_detection/main'
 
 workflow SCREENING {
 
@@ -9,7 +10,19 @@ workflow SCREENING {
     positions
 
     main:
-    PYROSETTA_SCREENING(input_pdb, target_chain, positions)
+
+    if (params.ligand_resname) {
+
+        POCKET_DETECTION(input_pdb, params.ligand_resname, params.distance_cutoff ?: 6.0)
+
+        PYROSETTA_SCREENING(input_pdb, target_chain, POCKET_DETECTION.out)
+
+    } else {
+
+        PYROSETTA_SCREENING(input_pdb, target_chain, positions)
+
+    }
+
     DDG_FILTER(PYROSETTA_SCREENING.out[0])
 
     emit:

@@ -17,10 +17,16 @@ process PYROSETTA_SCREENING {
 
     script:
     """
+    if [ -f "${positions}" ]; then
+        POSITIONS=\$(cat ${positions})
+    else
+        POSITIONS="${positions ?: 'ALL'}"
+    fi
+
     python $projectDir/bin/run_pyrosetta_screening.py \
         --input_pdb $input_pdb \
         --target_chain ${target_chain ?: 'ALL'} \
-        --positions ${positions ?: 'ALL'} \
+        --positions \$POSITIONS \
         --output candidates.csv \
         --fasta_output candidates.fasta
     """
