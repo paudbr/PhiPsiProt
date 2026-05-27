@@ -1,0 +1,4 @@
+task_id	hash	native_id	name	status	exit	submit	duration	realtime	%cpu	peak_rss	peak_vmem	rchar	wchar
+1	d7/b95c51	482545	SCREENING:RESIDUE_SELECTION (test_ligand.pdb)	COMPLETED	0	2026-05-27 09:22:43.753	550ms	27ms	117.4%	14 MB	18.8 MB	826.2 KB	207 B
+2	f7/2faf87	482839	SCREENING:PYROSETTA_SCREENING (test_ligand.pdb)	COMPLETED	0	2026-05-27 09:22:44.330	572ms	50ms	117.3%	14.6 MB	19 MB	1 MB	4 KB
+3	30/a7262d	483077	SCREENING:DDG_FILTER (filter_ddg)	COMPLETED	0	2026-05-27 09:22:44.923	524ms	23ms	132.0%	3.4 MB	4.4 MB	843.5 KB	5.8 KB

@@ -69,9 +69,7 @@ workflow NFCORE_PROTEINFOLD {
     ch_dummy_file = channel.fromPath("$projectDir/assets/NO_FILE")
     ch_dummy_file_pae = channel.fromPath("$projectDir/assets/NO_FILE_PAE")
     
-    if (params.mode == 'screening') {
-    SCREENING(file(params.input_pdb), params.target_chain, params.positions)
-    }
+    SCREENING(file(params.input_pdb), params.target_chain ?: 'A', params.positions ?: 'ALL')
 
     if (params.mode == 'backbone') {
     BACKBONE(params.mode)
