@@ -1,8 +1,8 @@
 #!/usr/bin/env bash -C -e -u -o pipefail
-if [ -f "/home/lgonlopez/storage/phipsiprot/PhiPsiProt/work/ed/60c1f1e9643c9b55a53dd11a399426/selected_positions.txt" ]; then
-    POSITIONS=$(cat /home/lgonlopez/storage/phipsiprot/PhiPsiProt/work/ed/60c1f1e9643c9b55a53dd11a399426/selected_positions.txt)
+if [ -f "/home/lgonlopez/storage/phipsiprot/PhiPsiProt/work/78/4bf15b60e46a66730617c2af558595/selected_positions.txt" ]; then
+    POSITIONS=$(cat /home/lgonlopez/storage/phipsiprot/PhiPsiProt/work/78/4bf15b60e46a66730617c2af558595/selected_positions.txt)
 else
-    POSITIONS="/home/lgonlopez/storage/phipsiprot/PhiPsiProt/work/ed/60c1f1e9643c9b55a53dd11a399426/selected_positions.txt"
+    POSITIONS="/home/lgonlopez/storage/phipsiprot/PhiPsiProt/work/78/4bf15b60e46a66730617c2af558595/selected_positions.txt"
 fi
 
 if [ -z "$POSITIONS" ]; then

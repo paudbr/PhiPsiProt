@@ -17,6 +17,7 @@ process RESIDUE_SELECTION {
 
     output:
     path "selected_positions.txt"
+    path "selection_summary.csv"
 
     script:
     """
@@ -29,5 +30,9 @@ process RESIDUE_SELECTION {
         --interface_chain ${interface_chain ?: ''} \
         --distance_cutoff ${distance_cutoff ?: 6.0} \
         --output selected_positions.txt
+
+    echo "selection_mode,target_chain,positions,ligand_resname,interface_chain,distance_cutoff,selected_positions" > selection_summary.csv
+    echo "${selection_mode ?: 'manual'},${target_chain ?: 'A'},${positions ?: 'ALL'},${ligand_resname ?: 'NONE'},${interface_chain ?: 'NONE'},${distance_cutoff ?: 6.0},\$(cat selected_positions.txt)" >> selection_summary.csv
+
     """
 }

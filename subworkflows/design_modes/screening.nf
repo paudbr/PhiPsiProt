@@ -24,7 +24,7 @@ workflow SCREENING {
     PYROSETTA_SCREENING(
         input_pdb,
         target_chain,
-        RESIDUE_SELECTION.out
+        RESIDUE_SELECTION.out[0]
     )
 
     DDG_FILTER(
@@ -32,10 +32,11 @@ workflow SCREENING {
     )
 
     emit:
-    selected_positions = RESIDUE_SELECTION.out
+    selected_positions = RESIDUE_SELECTION.out[0]
     candidates_csv = PYROSETTA_SCREENING.out[0]
     candidates_fasta = PYROSETTA_SCREENING.out[1]
     filtered_candidates_csv = DDG_FILTER.out[0]
     filtered_candidates_fasta = DDG_FILTER.out[1]
     screening_samplesheet = DDG_FILTER.out[2]
+    selection_summary = RESIDUE_SELECTION.out[1]
 }
