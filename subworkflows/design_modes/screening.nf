@@ -2,6 +2,7 @@ include { PYROSETTA_SCREENING } from '../../modules/local/pyrosetta_screening/ma
 include { DDG_FILTER } from '../../modules/local/ddg_filter/main'
 include { RESIDUE_SELECTION } from '../../modules/local/residue_selection/main'
 include { RANK_SCREENING } from '../../modules/local/ranking/main'
+include { MERGE_SCREENING_RESULTS } from '../../modules/local/merge_screening_results/main'
 
 workflow SCREENING {
 
@@ -36,6 +37,11 @@ workflow SCREENING {
     DDG_FILTER.out[0]
     )
 
+    MERGE_SCREENING_RESULTS(
+    RANK_SCREENING.out,
+    RESIDUE_SELECTION.out[1]
+    )
+
     emit:
     selected_positions = RESIDUE_SELECTION.out[0]
     candidates_csv = PYROSETTA_SCREENING.out[0]
@@ -45,4 +51,5 @@ workflow SCREENING {
     screening_samplesheet = DDG_FILTER.out[2]
     selection_summary = RESIDUE_SELECTION.out[1]
     ranked_candidates = RANK_SCREENING.out
+    final_screening_results = MERGE_SCREENING_RESULTS.out
 }
