@@ -1,6 +1,7 @@
 include { PYROSETTA_SCREENING } from '../../modules/local/pyrosetta_screening/main'
 include { DDG_FILTER } from '../../modules/local/ddg_filter/main'
 include { RESIDUE_SELECTION } from '../../modules/local/residue_selection/main'
+include { RANK_SCREENING } from '../../modules/local/ranking/main'
 
 workflow SCREENING {
 
@@ -31,6 +32,10 @@ workflow SCREENING {
         PYROSETTA_SCREENING.out[0]
     )
 
+    RANK_SCREENING(
+    DDG_FILTER.out[0]
+    )
+
     emit:
     selected_positions = RESIDUE_SELECTION.out[0]
     candidates_csv = PYROSETTA_SCREENING.out[0]
@@ -39,4 +44,5 @@ workflow SCREENING {
     filtered_candidates_fasta = DDG_FILTER.out[1]
     screening_samplesheet = DDG_FILTER.out[2]
     selection_summary = RESIDUE_SELECTION.out[1]
+    ranked_candidates = RANK_SCREENING.out
 }

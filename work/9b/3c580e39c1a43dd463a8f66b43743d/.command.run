@@ -1,11 +1,10 @@
 #!/bin/bash
 ### ---
-### name: 'SCREENING:DDG_FILTER (filter_ddg)'
-### container: 'quay.io/phipsiprot_ddg_filter:dev'
+### name: 'SCREENING:RESIDUE_SELECTION (test_interface.pdb)'
+### container: 'quay.io/phipsiprot_pyrosetta:dev'
 ### outputs:
-### - 'filtered_candidates.csv'
-### - 'filtered_candidates.fasta'
-### - 'screening_samplesheet.csv'
+### - 'selected_positions.txt'
+### - 'selection_summary.csv'
 ### ...
 set -e
 set -u
@@ -130,7 +129,7 @@ nxf_write_trace() {
 nxf_trace_mac() {
     local start_millis=$(nxf_date)
 
-    /usr/bin/env bash -C -e -u -o pipefail /home/lgonlopez/storage/phipsiprot/PhiPsiProt/work/4c/aec5c91057ed73d4308ec59625414d/.command.sh
+    /usr/bin/env bash -C -e -u -o pipefail /home/lgonlopez/storage/phipsiprot/PhiPsiProt/work/9b/3c580e39c1a43dd463a8f66b43743d/.command.sh
 
     local end_millis=$(nxf_date)
     local wall_time=$((end_millis-start_millis))
@@ -157,7 +156,7 @@ nxf_trace_linux() {
     local start_millis=$(nxf_date)
     trap 'kill $mem_proc' ERR
     
-    /usr/bin/env bash -C -e -u -o pipefail /home/lgonlopez/storage/phipsiprot/PhiPsiProt/work/4c/aec5c91057ed73d4308ec59625414d/.command.sh &
+    /usr/bin/env bash -C -e -u -o pipefail /home/lgonlopez/storage/phipsiprot/PhiPsiProt/work/9b/3c580e39c1a43dd463a8f66b43743d/.command.sh &
     local task=$!
 
     mem_fd=$(nxf_fd)
@@ -291,7 +290,7 @@ on_exit() {
     local exit_status=${nxf_main_ret:=0}
     [[ ${exit_status} -eq 0 && ${nxf_unstage_ret:=0} -ne 0 ]] && exit_status=${nxf_unstage_ret:=0}
     [[ ${exit_status} -eq 0 && ${last_err} -ne 0 ]] && exit_status=${last_err}
-    printf -- $exit_status > /home/lgonlopez/storage/phipsiprot/PhiPsiProt/work/4c/aec5c91057ed73d4308ec59625414d/.exitcode
+    printf -- $exit_status > /home/lgonlopez/storage/phipsiprot/PhiPsiProt/work/9b/3c580e39c1a43dd463a8f66b43743d/.exitcode
     set +u
     docker rm $NXF_BOXID &>/dev/null || true
     exit $exit_status
@@ -303,14 +302,14 @@ on_term() {
 }
 
 nxf_launch() {
-    docker run -i --cpu-shares 1024 --memory 6144m -e "NXF_TASK_WORKDIR" -e "NXF_DEBUG=${NXF_DEBUG:=0}" -v /home/lgonlopez/storage/phipsiprot/PhiPsiProt:/home/lgonlopez/storage/phipsiprot/PhiPsiProt -w "$NXF_TASK_WORKDIR" -u $(id -u):$(id -g) --name $NXF_BOXID quay.io/phipsiprot_ddg_filter:dev /bin/bash -c "eval $(nxf_container_env); bash -C -e -u -o pipefail /home/lgonlopez/storage/phipsiprot/PhiPsiProt/work/4c/aec5c91057ed73d4308ec59625414d/.command.run nxf_trace"
+    docker run -i --cpu-shares 1024 --memory 6144m -e "NXF_TASK_WORKDIR" -e "NXF_DEBUG=${NXF_DEBUG:=0}" -v /home/lgonlopez/storage/phipsiprot/PhiPsiProt:/home/lgonlopez/storage/phipsiprot/PhiPsiProt -w "$NXF_TASK_WORKDIR" -u $(id -u):$(id -g) --name $NXF_BOXID quay.io/phipsiprot_pyrosetta:dev /bin/bash -c "eval $(nxf_container_env); bash -C -e -u -o pipefail /home/lgonlopez/storage/phipsiprot/PhiPsiProt/work/9b/3c580e39c1a43dd463a8f66b43743d/.command.run nxf_trace"
 }
 
 nxf_stage() {
     true
     # stage input files
-    rm -f candidates.csv
-    ln -s /home/lgonlopez/storage/phipsiprot/PhiPsiProt/work/b0/26fead56e3a5ab908602a016c05313/candidates.csv candidates.csv
+    rm -f test_interface.pdb
+    ln -s /home/lgonlopez/storage/phipsiprot/PhiPsiProt/test_data/test_interface.pdb test_interface.pdb
 }
 
 nxf_unstage_outputs() {
@@ -338,7 +337,7 @@ nxf_main() {
     export NXF_BOXID="nxf-$(dd bs=18 count=1 if=/dev/urandom 2>/dev/null | base64 | tr +/ 0A | tr -d '\r\n')"
     NXF_SCRATCH=''
     [[ $NXF_DEBUG > 0 ]] && nxf_env
-    touch /home/lgonlopez/storage/phipsiprot/PhiPsiProt/work/4c/aec5c91057ed73d4308ec59625414d/.command.begin
+    touch /home/lgonlopez/storage/phipsiprot/PhiPsiProt/work/9b/3c580e39c1a43dd463a8f66b43743d/.command.begin
     set +u
     set -u
     [[ $NXF_SCRATCH ]] && cd $NXF_SCRATCH
