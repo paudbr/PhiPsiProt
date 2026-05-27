@@ -28,7 +28,7 @@ include { PIPELINE_COMPLETION              } from './subworkflows/local/utils_nf
 include { getColabfoldAlphafold2Params     } from './subworkflows/local/utils_nfcore_proteinfold_pipeline'
 include { getColabfoldAlphafold2ParamsPath } from './subworkflows/local/utils_nfcore_proteinfold_pipeline'
 include { POST_PROCESSING                  } from './subworkflows/local/post_processing'
-include { SATURATION } from './subworkflows/design_modes/saturation'
+include { SCREENING } from './subworkflows/design_modes/screening'
 include { BACKBONE } from './subworkflows/design_modes/backbone'
 include { PEPTIDE_DESIGN } from './subworkflows/design_modes/peptide_design'
 include { ANTIBODY_DESIGN } from './subworkflows/design_modes/antibody_design'
@@ -70,7 +70,7 @@ workflow NFCORE_PROTEINFOLD {
     ch_dummy_file_pae = channel.fromPath("$projectDir/assets/NO_FILE_PAE")
     
     if (params.mode == 'screening') {
-    SATURATION(file(params.input_pdb), params.target_chain, params.positions)
+    SCREENING(file(params.input_pdb), params.target_chain, params.positions)
     }
 
     if (params.mode == 'backbone') {
@@ -358,4 +358,63 @@ workflow NFCORE_PROTEINFOLD {
 
     emit:
     multiqc_report = ch_multiqc
+}
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    RUN MAIN WORKFLOW
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+workflow {
+
+    main:
+
+    design_mode = (params.mode ?: '').toLowerCase().trim()
+
+    if (design_mode == 'screening') {
+        SCREENING(file(params.input_pdb), params.target_chain, params.positions)
+        return
+    }
+
+    if (design_mode == 'backbone') {
+        BACKBONE(params.mode)
+        return
+    }
+
+    if (design_mode == 'peptide_design') {
+        PEPTIDE_DESIGN(params.mode)
+        return
+    }
+
+    if (design_mode == 'antibody_design') {
+        ANTIBODY_DESIGN(params.mode)
+        return
+    }
+
+    PIPELINE_INITIALISATION (
+        params.version,
+        params.validate_params,
+        params.monochrome_logs,
+        args,
+        params.outdir,
+        params.input,
+        params.help,
+        params.help_full,
+        params.show_hidden
+    )
+
+    NFCORE_PROTEINFOLD (
+        PIPELINE_INITIALISATION.out.samplesheet
+    )
+
+    PIPELINE_COMPLETION (
+        params.email,
+        params.email_on_fail,
+        params.plaintext_email,
+        params.outdir,
+        params.monochrome_logs,
+        params.hook_url,
+        NFCORE_PROTEINFOLD.out.multiqc_report
+    )
 }

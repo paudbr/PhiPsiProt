@@ -1,0 +1,3 @@
+task_id	hash	native_id	name	status	exit	submit	duration	realtime	%cpu	peak_rss	peak_vmem	rchar	wchar
+1	b8/bda580	442454	SCREENING:PYROSETTA_SCREENING (test.pdb)	COMPLETED	0	2026-05-27 07:50:20.326	538ms	26ms	121.9%	14.2 MB	18.6 MB	1 MB	1.9 KB
+2	cd/506329	442759	SCREENING:DDG_FILTER (filter_ddg)	COMPLETED	0	2026-05-27 07:50:20.891	525ms	25ms	123.1%	13.7 MB	18.7 MB	844 KB	1.5 KB
