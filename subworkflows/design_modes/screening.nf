@@ -15,5 +15,7 @@ workflow SCREENING {
     emit:
     candidates_csv = PYROSETTA_SCREENING.out[0]
     candidates_fasta = PYROSETTA_SCREENING.out[1]
-    filtered_candidates = DDG_FILTER.out
+    filtered_candidates_csv = DDG_FILTER.out[0]
+    filtered_candidates_fasta = DDG_FILTER.out[1]
+    screening_samplesheet = DDG_FILTER.out[2]
 }
