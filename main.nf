@@ -71,9 +71,11 @@ workflow NFCORE_PROTEINFOLD {
     
     SCREENING(file(params.input_pdb), params.target_chain ?: 'A', params.positions ?: 'ALL')
 
-    if (params.mode == 'backbone') {
-    BACKBONE(params.mode)
+    if (design_mode == 'backbone') {
+    BACKBONE(file(params.input_pdb))
+    return
     }
+    
 
     if (params.mode == 'peptide_design') {
     PEPTIDE_DESIGN(params.mode)
@@ -376,7 +378,7 @@ workflow {
     }
 
     if (design_mode == 'backbone') {
-        BACKBONE(params.mode)
+        BACKBONE(file(params.input_pdb))
         return
     }
 

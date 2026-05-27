@@ -1,10 +1,14 @@
-include { DESIGN_DUMMY } from '../../modules/local/design_dummy/main'
+include { BACKBONE_DESIGN } from '../../modules/local/backbone_design/main'
 
 workflow BACKBONE {
 
     take:
-    mode
+    input_pdb
 
     main:
-    DESIGN_DUMMY(mode)
+    BACKBONE_DESIGN(input_pdb)
+
+    emit:
+    designed_pdbs = BACKBONE_DESIGN.out[0]
+    design_metadata = BACKBONE_DESIGN.out[1]
 }
