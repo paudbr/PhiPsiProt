@@ -91,21 +91,8 @@ workflow NFCORE_PROTEINFOLD {
     //
     // SUBWORKFLOW: Run initialisation tasks
     //
-    PIPELINE_INITIALISATION (
-        params.version,
-        params.validate_params,
-        params.monochrome_logs,
-        args,
-        params.outdir,
-        params.input,
-        params.help,
-        params.help_full,
-        params.show_hidden
-    )
 
-    NFCORE_PROTEINFOLD(
-        PIPELINE_INITIALISATION.out.samplesheet
-    )
+    
 
     //
     // WORKFLOW: Run alphafold2
@@ -358,4 +345,35 @@ workflow NFCORE_PROTEINFOLD {
 
     emit:
     multiqc_report = ch_multiqc
+}
+
+
+// ─── ENTRY WORKFLOW ────────────────────────────────────────────────────────
+workflow {
+
+    PIPELINE_INITIALISATION (
+        params.version,
+        params.validate_params,
+        params.monochrome_logs,
+        args,
+        params.outdir,
+        params.input,
+        params.help,
+        params.help_full,
+        params.show_hidden
+    )
+
+    NFCORE_PROTEINFOLD (
+        PIPELINE_INITIALISATION.out.samplesheet
+    )
+
+    PIPELINE_COMPLETION (
+        params.email,
+        params.email_on_fail,
+        params.plaintext_email,
+        params.outdir,
+        params.monochrome_logs,
+        params.hook_url,
+        NFCORE_PROTEINFOLD.out.multiqc_report
+    )
 }

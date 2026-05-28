@@ -115,6 +115,23 @@
                 }
             }
         },
+        "chai1_options": {
+            "title": "chai1 options",
+            "type": "object",
+            "fa_icon": "fas fa-dna",
+            "description": "chai1 options.",
+            "properties": {
+                "chai1_weights_path": {
+                    "type": "string",
+                    "default" : "/mnt/data_local/chai_cache/",
+                    "format": "directory-path",
+                    "description": "The directory where weights and models predownloaded are stored",
+                    "fa_icon": "fas fa-folder-open",
+                    "errorMessage": "Output directory path must be specified"
+                }
+            }
+        },
+
         "alphafold2_options": {
             "title": "AlphaFold2 options",
             "type": "object",

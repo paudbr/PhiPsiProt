@@ -17,36 +17,6 @@ include { MMCIF2PDB as MMCIF2PDB_MODELS     } from '../modules/local/mmcif2pdb/m
     storeDir makes Nextflow skip this process if the output already exists on disk
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-
-process DOWNLOAD_CHAI1_WEIGHTS {
-    label 'process_single'
-    storeDir params.chai1_weights_path ?: "${projectDir}/../chai1_weights"
-    container "nf-core/proteinfold_chai1:1.0.0"
-
-    output:
-    path "weights"    , emit: weights
-    path "versions.yml", emit: versions
-
-    script:
-    """
-    mkdir -p weights
-    export CHAI_DOWNLOADS_DIR=\$PWD/weights
-
-    # Trigger weight download by running a no-op inference call
-    python3 -c "
-import os
-os.environ['CHAI_DOWNLOADS_DIR'] = 'weights'
-from chai_lab.download import download_all
-download_all()
-"
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        python: \$(python3 --version | sed 's/Python //g')
-        chai_lab: \$(python3 -c "import chai_lab; print(chai_lab.__version__)" 2>/dev/null || echo "unknown")
-    END_VERSIONS
-    """
-}
-
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     RUN MAIN WORKFLOW
@@ -67,16 +37,16 @@ workflow CHAI1 {
 
     //
     // Download weights once — storeDir skips this automatically on reruns
+    // workflow
+    ch_weights = Channel.value(file(params.chai1_weights_path, checkIfExists: true))
     //
-    DOWNLOAD_CHAI1_WEIGHTS()
-    ch_versions = ch_versions.mix(DOWNLOAD_CHAI1_WEIGHTS.out.versions)
 
     //
     // MODULE: Run Chai-1 — no FASTA→JSON conversion needed, takes FASTA directly
     //
     RUN_CHAI1 (
         ch_samplesheet,
-        DOWNLOAD_CHAI1_WEIGHTS.out.weights
+        ch_weights
     )
     ch_versions = ch_versions.mix(RUN_CHAI1.out.versions)
 

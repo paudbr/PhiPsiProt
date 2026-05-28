@@ -1,0 +1,1 @@
+nextflow run main.nf --input /mnt/data_local/pipes/structural/PhiPsiProt_structural/samplesheet.csv --outdir /mnt/data_local/pipes/structural/test_Dsup/outdir_chai/ -profile docker --structural_tools Chai --mode structural --use_gpu true
