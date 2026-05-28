@@ -2,6 +2,7 @@ include { BACKBONE_DESIGN } from '../../modules/local/backbone_design/main'
 include { BACKBONE_SUMMARY } from '../../modules/local/backbone_summary/main'
 include { PROTEINMPNN_DESIGN } from '../../modules/local/proteinmpnn_design/main'
 include { MERGE_BACKBONE_RESULTS } from '../../modules/local/merge_backbone_results/main'
+include { LIGANDMPNN_DESIGN } from '../../modules/local/ligandmpnn_design/main'
 
 workflow BACKBONE {
 
@@ -16,6 +17,10 @@ workflow BACKBONE {
 
     PROTEINMPNN_DESIGN(BACKBONE_DESIGN.out[0])
 
+    if (params.use_ligandmpnn) {
+    LIGANDMPNN_DESIGN(BACKBONE_DESIGN.out[0])
+    }
+    
     MERGE_BACKBONE_RESULTS(
         BACKBONE_SUMMARY.out[0],
         PROTEINMPNN_DESIGN.out
