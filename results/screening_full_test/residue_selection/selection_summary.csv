@@ -1,0 +1,2 @@
+selection_mode,target_chain,positions,ligand_resname,interface_chain,distance_cutoff,selected_positions
+interface,A,ALL,NONE,B,6.0,1

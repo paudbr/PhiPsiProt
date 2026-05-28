@@ -29,6 +29,8 @@ process BACKBONE_DESIGN {
         'contigmap.contigs=[${params.contig ?: "4-4"}]' \
         diffuser.partial_T=${params.partial_T ?: 1}
 
+    sudo chown -R \$(id -u):\$(id -g) rfdiffusion_output
+
     cp rfdiffusion_output/backbone_design_0.pdb .
     cp rfdiffusion_output/backbone_design_0.trb .
     """

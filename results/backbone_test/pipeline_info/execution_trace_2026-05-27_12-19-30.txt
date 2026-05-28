@@ -1,2 +1,0 @@
-task_id	hash	native_id	name	status	exit	submit	duration	realtime	%cpu	peak_rss	peak_vmem	rchar	wchar
-1	61/16a606	710197	BACKBONE:BACKBONE_DESIGN (test_interface.pdb)	COMPLETED	0	2026-05-27 12:19:34.302	21.2s	21.2s	0.2%	32 MB	1.8 GB	154.1 KB	13 KB
