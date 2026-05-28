@@ -37,7 +37,9 @@ with open(args.candidates_csv, newline="") as infile:
     reader = csv.DictReader(infile)
 
     for row in reader:
+        row["backbone_sequence"] = row.get("sequence", "NA")
         row["designed_sequence"] = designed_sequence
+        row["final_sequence"] = designed_sequence
         row["mpnn_score"] = mpnn_score
         row["pipeline_stage"] = "backbone_ready_for_structural_validation"
         row["status"] = "pending_structural_validation"

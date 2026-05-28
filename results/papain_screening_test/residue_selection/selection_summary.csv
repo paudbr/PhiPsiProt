@@ -1,0 +1,2 @@
+selection_mode,target_chain,positions,ligand_resname,interface_chain,distance_cutoff,selected_positions
+manual,A,25,26,27,NONE,NONE,6.0,25,26,27

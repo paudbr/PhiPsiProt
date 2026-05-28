@@ -1,0 +1,4 @@
+  File "/home/lgonlopez/storage/phipsiprot/PhiPsiProt/modules/local/biophysical_filter/bin/biophysical_filter.py", line 69
+    print(f"Processed {len(rows)} sequences")
+                                           ^
+SyntaxError: invalid syntax

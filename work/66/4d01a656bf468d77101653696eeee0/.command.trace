@@ -1,0 +1,17 @@
+nextflow.trace/v2
+realtime=3255
+%cpu=7449
+cpu_model=AMD Ryzen Threadripper 7980X 64-Cores
+rchar=70858350
+wchar=524
+syscr=48899
+syscw=22
+read_bytes=0
+write_bytes=36864
+%mem=14
+vmem=29748332
+rss=1195092
+peak_vmem=29749816
+peak_rss=1195092
+vol_ctxt=3250
+inv_ctxt=4

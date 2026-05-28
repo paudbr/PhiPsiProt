@@ -23,6 +23,7 @@ workflow SCREENING {
         params.distance_cutoff ?: 6.0
     )
 
+
     PYROSETTA_SCREENING(
         input_pdb,
         target_chain,
@@ -52,4 +53,5 @@ workflow SCREENING {
     selection_summary = RESIDUE_SELECTION.out[1]
     ranked_candidates = RANK_SCREENING.out
     final_screening_results = MERGE_SCREENING_RESULTS.out
+    
 }
