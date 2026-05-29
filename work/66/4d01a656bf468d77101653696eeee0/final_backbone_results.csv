@@ -1,2 +1,0 @@
-candidate_id,mode,method,pdb,sequence,status,backbone_sequence,designed_sequence,final_sequence,mpnn_score,pipeline_stage
-backbone_design_0,backbone,rfdiffusion,backbone_design_0.pdb,GGGG,pending_structural_validation,GGGG,GGSG,GGSG,1.9218,backbone_ready_for_structural_validation

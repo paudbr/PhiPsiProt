@@ -25,7 +25,6 @@ def extract_sequence(pdb_file):
             resname = line[17:20].strip()
             chain = line[21].strip()
             resnum = line[22:26].strip()
-
             key = (chain, resnum)
 
             if key in seen:
@@ -38,19 +37,22 @@ def extract_sequence(pdb_file):
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--pdb", required=True)
+parser.add_argument("--pdbs", nargs="+", required=True)
 parser.add_argument("--csv", required=True)
 parser.add_argument("--fasta", required=True)
 parser.add_argument("--samplesheet", required=True)
 args = parser.parse_args()
 
-pdb = Path(args.pdb)
-candidate_id = pdb.stem
-sequence = extract_sequence(pdb)
+pdbs = [Path(p) for p in args.pdbs]
 
-with open(args.csv, "w", newline="") as out:
-    writer = csv.writer(out)
-    writer.writerow([
+with open(args.csv, "w", newline="") as out_csv, \
+     open(args.fasta, "w") as out_fasta, \
+     open(args.samplesheet, "w", newline="") as out_samplesheet:
+
+    csv_writer = csv.writer(out_csv)
+    sample_writer = csv.writer(out_samplesheet)
+
+    csv_writer.writerow([
         "candidate_id",
         "mode",
         "method",
@@ -58,22 +60,28 @@ with open(args.csv, "w", newline="") as out:
         "sequence",
         "status",
     ])
-    writer.writerow([
-        candidate_id,
-        "backbone",
-        "rfdiffusion",
-        pdb.name,
-        sequence,
-        "ready_for_sequence_design",
-    ])
 
-with open(args.fasta, "w") as out:
-    out.write(f">{candidate_id}|rfdiffusion\n")
-    out.write(sequence + "\n")
+    sample_writer.writerow(["id", "fasta"])
 
-with open(args.samplesheet, "w", newline="") as out:
-    writer = csv.writer(out)
-    writer.writerow(["id", "fasta"])
-    writer.writerow([candidate_id, Path(args.fasta).name])
+    for pdb in sorted(pdbs):
+        candidate_id = pdb.stem
+        sequence = extract_sequence(pdb)
 
-print(f"Backbone summary written for {candidate_id}")
+        csv_writer.writerow([
+            candidate_id,
+            "backbone",
+            "rfdiffusion",
+            pdb.name,
+            sequence,
+            "ready_for_sequence_design",
+        ])
+
+        out_fasta.write(f">{candidate_id}|rfdiffusion\n")
+        out_fasta.write(sequence + "\n")
+
+        sample_writer.writerow([
+            candidate_id,
+            Path(args.fasta).name,
+        ])
+
+print(f"Backbone summary written for {len(pdbs)} candidates")

@@ -10,8 +10,8 @@ process BACKBONE_DESIGN {
     path input_pdb
 
     output:
-    path "backbone_design_0.pdb"
-    path "backbone_design_0.trb"
+    path "backbone_design_*.pdb"
+    path "backbone_design_*.trb"
 
     script:
     """
@@ -31,7 +31,7 @@ process BACKBONE_DESIGN {
 
     sudo chown -R \$(id -u):\$(id -g) rfdiffusion_output
 
-    cp rfdiffusion_output/backbone_design_0.pdb .
-    cp rfdiffusion_output/backbone_design_0.trb .
+    cp rfdiffusion_output/backbone_design_*.pdb .
+    cp rfdiffusion_output/backbone_design_*.trb .
     """
 }

@@ -1,13 +1,13 @@
 process BACKBONE_SUMMARY {
 
-    tag "$designed_pdb"
+    tag "backbone_summary"
 
     container 'quay.io/phipsiprot_backbone:dev'
 
     publishDir "${params.outdir}/backbone", mode: 'copy'
 
     input:
-    path designed_pdb
+    path designed_pdbs
 
     output:
     path "backbone_candidates.csv"
@@ -17,7 +17,7 @@ process BACKBONE_SUMMARY {
     script:
     """
     python $projectDir/bin/summarize_backbone_design.py \
-        --pdb $designed_pdb \
+        --pdbs ${designed_pdbs} \
         --csv backbone_candidates.csv \
         --fasta backbone_candidates.fasta \
         --samplesheet backbone_samplesheet.csv
