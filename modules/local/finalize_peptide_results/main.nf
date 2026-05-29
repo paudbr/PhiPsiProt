@@ -38,7 +38,7 @@ with open("$input_csv", newline="") as infile:
     	clean = {}
     	for col in final_columns:
         	clean[col] = row.get(col, "NA")
-    rows.append(clean)
+    	rows.append(clean)
 
 with open("final_peptide_candidates.csv", "w", newline="") as out:
     writer = csv.DictWriter(out, fieldnames=final_columns)

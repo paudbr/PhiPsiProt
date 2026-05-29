@@ -1,0 +1,4 @@
+pdb,mpnn_score,final_sequence,molecular_weight,gravy,aromaticity,isoelectric_point,binder_sequence,candidate_id,instability_index,binder_length,status
+binder_design_0.pdb,0.4774,AALAAALAERAAAAAEAAAAAAAAAAAAAL,2477.77,1.4367,0.0,4.53,AALAAALAERAAAAAEAAAAAAAAAAAAAL,binder_design_0,9.6667,30,pending_biophysical_filter
+binder_design_1.pdb,0.4863,ADLAEIDAALANAAAGAAAAAAAAAAAAAA,2451.64,1.2433,0.0,3.49,ADLAEIDAALANAAAGAAAAAAAAAAAAAA,binder_design_1,10.4267,30,pending_biophysical_filter
+binder_design_2.pdb,0.4648,ALDRPVTAPRSLAERLAAAAAAAAAAAAAL,2802.19,0.7667,0.0,9.56,ALDRPVTAPRSLAERLAAAAAAAAAAAAAL,binder_design_2,35.7167,30,pending_biophysical_filter

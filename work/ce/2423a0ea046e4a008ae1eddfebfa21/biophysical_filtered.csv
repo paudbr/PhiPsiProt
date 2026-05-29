@@ -1,2 +1,0 @@
-status,pdb,mpnn_score,binder_length,isoelectric_point,binder_sequence,gravy,aromaticity,molecular_weight,final_sequence,instability_index,candidate_id
-pending_biophysical_filter,binder_design_0.pdb,0.4721,30,12.0,SAAAAAAAAAARGAAARALIAAHLAALAAA,1.3433,0.0,2556.92,SAAAAAAAAAARGAAARALIAAHLAALAAA,1.1767,binder_design_0
