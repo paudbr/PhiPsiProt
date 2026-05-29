@@ -4,7 +4,7 @@ process LIGANDMPNN_DESIGN {
 
     executor 'local'
 
-    publishDir "${params.outdir}/ligandmpnn", mode: 'copy'
+    publishDir "${params.outdir}/designs/ligandmpnn", mode: 'copy'
 
     input:
     path designed_pdb

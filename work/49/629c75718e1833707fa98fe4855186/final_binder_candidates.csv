@@ -1,0 +1,2 @@
+candidate_id,pdb,binder_length,binder_sequence,final_sequence,mpnn_score,status
+binder_design_0,binder_design_0.pdb,30,SAAAAAAAAAARGAAARALIAAHLAALAAA,SAAAAAAAAAARGAAARALIAAHLAALAAA,0.4721,pending_biophysical_filter

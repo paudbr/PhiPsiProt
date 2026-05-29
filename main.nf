@@ -32,7 +32,6 @@ include { SCREENING } from './subworkflows/design_modes/screening'
 include { BACKBONE } from './subworkflows/design_modes/backbone'
 include { PEPTIDE_DESIGN } from './subworkflows/design_modes/peptide_design'
 include { ANTIBODY_DESIGN } from './subworkflows/design_modes/antibody_design'
-
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     COLABFOLD PARAMETER VALUES
@@ -382,8 +381,9 @@ workflow {
         return
     }
 
+
     if (design_mode == 'peptide_design') {
-        PEPTIDE_DESIGN(params.mode)
+        PEPTIDE_DESIGN(file(params.input_pdb))
         return
     }
 

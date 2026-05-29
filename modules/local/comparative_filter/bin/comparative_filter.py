@@ -100,7 +100,31 @@ with open(args.input_csv, newline="") as infile:
 
         rows.append(row)
 
-fieldnames = list(rows[0].keys())
+final_columns = [
+    "candidate_id",
+
+    "mpnn_score",
+
+    "molecular_weight",
+    "gravy",
+    "aromaticity",
+    "isoelectric_point",
+    "delta_instability_index",
+
+    "comparative_status",
+    "final_sequence",
+]
+
+clean_rows = []
+
+for row in rows:
+    clean_row = {}
+    for col in final_columns:
+        clean_row[col] = row.get(col, "NA")
+    clean_rows.append(clean_row)
+
+rows = clean_rows
+fieldnames = final_columns
 
 with open(args.output_csv, "w", newline="") as out:
     writer = csv.DictWriter(out, fieldnames=fieldnames)

@@ -1,0 +1,2 @@
+candidate_id,final_sequence,mpnn_score,molecular_weight,gravy,aromaticity,isoelectric_point,instability_index,status
+binder_design_0,SAAAAAAAAAARGAAARALIAAHLAALAAA,0.4721,2556.92,1.3433,0.0,12.0,1.1767,ready_for_structural_validation

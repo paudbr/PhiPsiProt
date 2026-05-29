@@ -4,7 +4,7 @@ process BACKBONE_SUMMARY {
 
     container 'quay.io/phipsiprot_backbone:dev'
 
-    publishDir "${params.outdir}/backbone", mode: 'copy'
+    publishDir "${params.outdir}/intermediate", mode: 'copy'
 
     input:
     path designed_pdbs

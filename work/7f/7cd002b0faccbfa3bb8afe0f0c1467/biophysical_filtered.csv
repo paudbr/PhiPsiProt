@@ -1,0 +1,2 @@
+molecular_weight,final_sequence,candidate_id,binder_length,pdb,status,mpnn_score,isoelectric_point,gravy,binder_sequence,aromaticity,instability_index
+2928.39,SAVTNEVNYKIVSAKVAARAAAALLAALAA,binder_design_0,30,binder_design_0.pdb,pending_biophysical_filter,0.4682,9.7,0.93,SAVTNEVNYKIVSAKVAARAAAALLAALAA,0.0333,-6.6633

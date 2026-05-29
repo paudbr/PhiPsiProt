@@ -4,7 +4,7 @@ process BACKBONE_DESIGN {
 
     executor 'local'
 
-    publishDir "${params.outdir}/backbone", mode: 'copy'
+    publishDir "${params.outdir}/designs/backbones", mode: 'copy'
 
     input:
     path input_pdb
@@ -27,7 +27,10 @@ process BACKBONE_DESIGN {
         inference.input_pdb=/input/\$(basename \$INPUT_PDB) \
         inference.num_designs=${params.num_designs ?: 1} \
         'contigmap.contigs=[${params.contig ?: "4-4"}]' \
-        diffuser.partial_T=${params.partial_T ?: 1}
+        diffuser.T=${params.diffusion_T ?: 50} \
+        denoiser.noise_scale_ca=${params.noise_scale_ca ?: 1.0} \
+        denoiser.noise_scale_frame=${params.noise_scale_frame ?: 1.0} \
+        ${params.final_step ? "inference.final_step=${params.final_step}" : ""}
 
     sudo chown -R \$(id -u):\$(id -g) rfdiffusion_output
 

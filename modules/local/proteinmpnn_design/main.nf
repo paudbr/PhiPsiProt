@@ -4,7 +4,7 @@ process PROTEINMPNN_DESIGN {
 
     executor 'local'
 
-    publishDir "${params.outdir}/proteinmpnn", mode: 'copy'
+    publishDir "${params.outdir}/designs/proteinmpnn", mode: 'copy'
 
     input:
     path designed_pdb
