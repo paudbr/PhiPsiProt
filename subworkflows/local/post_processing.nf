@@ -155,6 +155,7 @@ workflow POST_PROCESSING {
         ch_multiqc_report = MULTIQC.out.report.toList()
     }
 
+
     emit:
     versions       = ch_versions
     multiqc_report = ch_multiqc_report

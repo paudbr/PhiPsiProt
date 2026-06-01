@@ -1,0 +1,1 @@
+nextflow run main.nf --input /mnt/data_local/pipes/structural/PhiPsiProt_structural/samplesheet.csv --outdir /mnt/alphafold3_db/test_Dsup/outdir_esm_chai_af3/ -profile docker --structural_tools ESM,Chai,AF3 --mode structural --use_gpu true -resume

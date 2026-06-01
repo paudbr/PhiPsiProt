@@ -58,6 +58,11 @@
                     "description": "Run on CPUs (default) or GPUs",
                     "fa_icon": "fas fa-microchip"
                 },
+                "generate_metrics_report": {
+                    "type": "boolean",
+                    "description": "generate metrics report",
+                    "fa_icon": "fas fa-microchip"
+                },
                 "save_intermediates": {
                     "type": "boolean",
                     "description": "Keep raw intermediate files",
@@ -670,7 +675,7 @@
                 },
                 "alphafold3_params_path": {
                     "type": "string",
-                    "description": "Path to the Alphafold3 parameters",
+                    "description": "Path to the Alphafold3 parameters (full incluying af3.bin)",
                     "fa_icon": "fas fa-folder-open"
                 },
                 "alphafold3_mgnify_path": {

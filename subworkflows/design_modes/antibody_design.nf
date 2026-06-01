@@ -1,4 +1,4 @@
-include { DESIGN_DUMMY } from '../../modules/local/design_dummy/main'
+include { DESIGN_DUMMY } from '../../modules/local/design_dummy_ab/main'
 
 workflow ANTIBODY_DESIGN {
 
@@ -6,5 +6,5 @@ workflow ANTIBODY_DESIGN {
     mode
 
     main:
-    DESIGN_DUMMY(mode)
+    DESIGN_DUMMY_AB(mode)
 }

@@ -65,11 +65,13 @@ workflow CHAI1 {
     MMCIF2PDB_MODELS
         .out
         .pdb
-        .map { it ->
-            def meta   = it[0].clone()
-            meta.model = "chai1"
-            def files  = (it[1] instanceof List) ? it[1] : [ it[1] ]
-            [ meta, files ]
+        .flatMap { meta, files ->
+            def fileList = (files instanceof List) ? files : [ files ]
+            fileList.collect { f ->
+                def m = meta.clone()
+                m.model = "alphafold3"
+                [ m, f ]
+            }
         }
         .set { ch_pdb_final }
 
@@ -111,12 +113,27 @@ workflow CHAI1 {
         }
         .set { ch_multiqc_report }
 
+     RUN_CHAI1
+        .out
+        .iptms
+        .map { it ->
+            def meta   = it[0].clone()
+            meta.model = "chai1"
+            [ meta, it[1] ]
+        }
+        .set { ch_iptms_final }
+
+
     emit:
-    top_ranked_pdb = ch_top_ranked_pdb // channel: [ meta, /path/to/*.pdb ]
-    pdb            = ch_pdb_final      // channel: [ meta, /path/to/*.pdb, ..., /path/to/*.pdb ]
-    ptms           = ch_ptms_final     // channel: [ meta, /path/to/*_ptm.tsv ] — replaces msa + pae
-    multiqc_report = ch_multiqc_report // channel: /path/to/multiqc_report.html
-    versions       = ch_versions       // channel: [ path(versions.yml) ]
+    top_ranked_pdb = ch_top_ranked_pdb
+    pdb            = ch_pdb_final
+    ptms           = ch_ptms_final
+    iptms          = ch_iptms_final    // ← nuevo: [ meta, *_iptm.tsv ] optional
+    plddt          = RUN_CHAI1.out.multiqc  // ← nuevo: [ meta, *_plddt.tsv ] por sample
+    multiqc_report = ch_multiqc_report
+    raw            = RUN_CHAI1.out.raw 
+    versions       = ch_versions
+
 }
 
 /*

@@ -24,6 +24,7 @@ include { MMCIF2PDB as MMCIF2PDB_MODELS     } from '../modules/local/mmcif2pdb/m
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
+
 workflow ALPHAFOLD3 {
 
     take:
@@ -61,6 +62,8 @@ workflow ALPHAFOLD3 {
     )
     ch_versions = ch_versions.mix(RUN_ALPHAFOLD3.out.versions)
 
+
+
     // Convert mmcif to pdbs
     RUN_ALPHAFOLD3
             .out
@@ -87,11 +90,13 @@ workflow ALPHAFOLD3 {
     MMCIF2PDB_MODELS
         .out
         .pdb
-        .map { it ->
-            def meta   = it[0].clone();
-            meta.model = "alphafold3";
-            def files = (it[1] instanceof List) ? it[1] : [ it[1] ]
-            [ meta, files ]
+        .flatMap { meta, files ->
+            def fileList = (files instanceof List) ? files : [ files ]
+            fileList.collect { f ->
+                def m = meta.clone()
+                m.model = "alphafold3"
+                [ m, f ]
+            }
         }
         .set { ch_pdb_final }
 
@@ -146,6 +151,19 @@ workflow ALPHAFOLD3 {
         }
         .set { ch_pae_final }
 
+
+        // Añadir antes del bloque emit:
+    RUN_ALPHAFOLD3
+        .out
+        .multiqc                        // tuple val(meta), path(*_plddt.tsv)
+        .map { meta, f ->
+            def m = meta.clone()
+            m.model = "alphafold3"
+            [ m, f ]
+        }
+        .set { ch_plddt_final }
+
+
     emit:
     top_ranked_pdb = ch_top_ranked_pdb // channel: [ id, /path/to/*.pdb ]
     pdb            = ch_pdb_final      // channel: [ meta, /path/to/*.pdb, ...,/path/to/*.pdb ]
@@ -153,6 +171,8 @@ workflow ALPHAFOLD3 {
     pae            = ch_pae_final      // channel: [ meta, path/to/*_pae.tsv ]
     multiqc_report = ch_multiqc_report // channel: /path/to/multiqc_report.html
     versions       = ch_versions       // channel: [ path(versions.yml) ]
+    plddt          = ch_plddt_final
+
 }
 
 /*

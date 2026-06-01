@@ -1,0 +1,445 @@
+jun-01 06:42:18.504 [main] DEBUG nextflow.cli.Launcher - Setting http proxy: ProxyConfig[protocol=http; host=10.15.206.126; port=3128]
+jun-01 06:42:18.527 [main] DEBUG nextflow.cli.Launcher - Setting https proxy: ProxyConfig[protocol=https; host=10.15.206.126; port=3128]
+jun-01 06:42:18.528 [main] DEBUG nextflow.cli.Launcher - $> nextflow run ../main.nf --input /mnt/data_local/pipes/structural/PhiPsiProt_structural/samplesheet_papain.csv --outdir /mnt/alphafold3_db/test_papain/outdir_af3/ -profile docker --structural_tools AF3 --mode structural --use_gpu true -work-dir /mnt/alphafold3_db/work -resume
+jun-01 06:42:18.582 [main] DEBUG nextflow.cli.CmdRun - N E X T F L O W  ~  version 25.10.4
+jun-01 06:42:18.596 [main] DEBUG nextflow.plugin.PluginsFacade - Setting up plugin manager > mode=prod; embedded=false; plugins-dir=/home/paula/.nextflow/plugins; core-plugins: nf-amazon@3.4.4,nf-azure@1.20.2,nf-cloudcache@0.5.0,nf-codecommit@0.5.0,nf-console@1.3.0,nf-google@1.23.5,nf-k8s@1.2.2,nf-tower@1.17.5,nf-wave@1.16.1
+jun-01 06:42:18.614 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+jun-01 06:42:18.614 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+jun-01 06:42:18.617 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.12.0 in 'deployment' mode
+jun-01 06:42:18.629 [main] DEBUG nextflow.util.RetryConfig - Missing nextflow session - using default retry config
+jun-01 06:42:18.723 [main] INFO  org.pf4j.AbstractPluginManager - No plugins
+jun-01 06:42:18.745 [main] DEBUG nextflow.config.ConfigBuilder - Found config base: /mnt/data_local/pipes/structural/PhiPsiProt_structural/nextflow.config
+jun-01 06:42:18.747 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /mnt/data_local/pipes/structural/PhiPsiProt_structural/nextflow.config
+jun-01 06:42:18.769 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `docker`
+jun-01 06:42:20.095 [main] DEBUG nextflow.config.ConfigBuilder - Available config profiles: [uzl_omics, denbi_qbic, mjolnir_globe, uppmax, incliva, uge, icr_alma, rosalind_uge, lugh, mccleary, test_split_fasta, unibe_ibu, czbiohub_aws, jax, roslin, iris, tes, scw, test_full_boltz, tigem, tubingen_apg, vsc_calcua, pdc_kth, humantechnopole, test_alphafold2_split, stjude, daisybio, eddie, medair, biowulf, bi, test_full_colabfold_webserver, cedars, charliecloud, seattlechildrens, rosalind, cfc, emulate_amd64, uzh, ccga_dx, crick, test_rosettafold_all_atom, ku_sund_danhead, marvin, shifter, biohpc_gen, mana, wehi, arcc, test_full_helixfold3, imperial, maestro, cannon, nci_gadi, test_rosettafold2na, eva_grace, googlebatch, sahmri, kaust, alliance_canada, cambridge, jex, test_helixfold3, test_full_colabfold_multimer, cheaha, nyu_hpc, test, test_full_alphafold2_multimer, gpu, seg_globe, mssm, sanger, test_full_rosettafold2na, pasteur, einstein, ethz_euler, tuos_stanage, test_colabfold_webserver, azurebatch, crukmi, csiro_petrichor, wave, docker, hypatia, psmn, test_full_alphafold2_split, fgcz, conda, mpcdf_viper, dirac, uw_hyak_pedslabs, binac2, genouest, unsw_katana, utd_juno, test_boltz, seawulf, lovelace, test_alphafold3_standard, uct_hpc, aws_tower, bih, cfc_dev, ifb_core, embl_hd, mcw_rcc, alice, giga, ilifu, ki_luria, test_colabfold_local, vai, test_full_esmfold_multimer, unc_longleaf, apollo, test_full_alphafold2_standard, ipop_up, ceci_nic5, ccga_cau, mahuika, apptainer, bigpurple, adcra, pawsey_setonix, vsc_kul_uhasselt, purdue_gautschi, pawsey_nimbus, rki, ucl_myriad, fred_hutch, icr_davros, ceres, purdue_negishi, munin, hasta, shu_bmrc, ebi_codon_slurm, ebc, lrz_cm4, purdue_bell, mamba, york_viking, unc_lccc, awsbatch, wustl_htcf, ceci_dragon2, genotoul, abims, janelia, nu_genomics, oist, arm64, mpcdf, leicester, vsc_ugent, test_alphafold3_download, create, sage, podman, ebi_codon, xanadu, marjorie, computerome, ucd_sonic, test_alphafold2_download, dkfz, bluebear, m3c, test_full, imb, ucl_cscluster, seadragon, qmul_apocrita, engaging, gis, eva, unity, cropdiversityhpc, nygc, test_esmfold, crg, singularity, test_colabfold_download, self_hosted_runner, tufts, debug, hki_genie, test_full_rosettafold_all_atom, cbe, test_full_colabfold_local, test_full_esmfold, phoenix, uod_hpc, fub_curta, fsu_draco]
+jun-01 06:42:20.127 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins declared=[nf-schema@2.6.1]
+jun-01 06:42:20.128 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins default=[]
+jun-01 06:42:20.129 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins resolved requirement=[nf-schema@2.6.1]
+jun-01 06:42:20.349 [main] DEBUG n.plugin.HttpPluginRepository - Registry request: https://registry.nextflow.io/api/v1/plugins/dependencies?plugins=nf-schema%402.6.1&nextflowVersion=25.10.4
+- code: 200
+- body: {"plugins":[{"id":"nf-schema","releases":[{"version":"2.6.1","url":"https://registry.nextflow.io/api/v1/plugins/nf-schema/2.6.1/download/nf-schema-2.6.1.zip","date":"2025-10-27T10:50:21.364829Z","sha512sum":"467832f2987f90e2d2aa8e6d8387e45d4a0406ce8b5579a71fcd506155b85491bc6e978a536d767508a8ed1a4610a60c1f0cd3d9dc226f4fea1ce2973a23d043","requires":">=25.10.0","dependsOn":[],"status":"PUBLISHED"}],"projectUrl":"https://github.com/nextflow-io/nf-schema","provider":"nextflow-io"}]}
+jun-01 06:42:20.376 [main] DEBUG nextflow.plugin.PluginUpdater - Installing plugin nf-schema version: 2.6.1
+jun-01 06:42:20.382 [main] INFO  org.pf4j.AbstractPluginManager - Plugin 'nf-schema@2.6.1' resolved
+jun-01 06:42:20.382 [main] INFO  org.pf4j.AbstractPluginManager - Start plugin 'nf-schema@2.6.1'
+jun-01 06:42:20.386 [main] DEBUG nextflow.plugin.BasePlugin - Plugin started nf-schema@2.6.1
+jun-01 06:42:20.391 [main] DEBUG n.secret.LocalSecretsProvider - Secrets store: /home/paula/.nextflow/secrets/store.json
+jun-01 06:42:20.394 [main] DEBUG nextflow.secret.SecretsLoader - Discovered secrets providers: [nextflow.secret.LocalSecretsProvider@6d7b2319] - activable => nextflow.secret.LocalSecretsProvider@6d7b2319
+jun-01 06:42:20.396 [main] DEBUG nextflow.cli.CmdRun - Applied DSL=2 from script declaration
+jun-01 06:42:20.408 [main] DEBUG nextflow.cli.CmdRun - Launching `../main.nf` [astonishing_mandelbrot] DSL2 - revision: 870df31d2a
+jun-01 06:42:20.458 [main] DEBUG nextflow.Session - Session UUID: d8d0d0f3-e978-4cd1-968f-ed0455d9e16b
+jun-01 06:42:20.459 [main] DEBUG nextflow.Session - Run name: astonishing_mandelbrot
+jun-01 06:42:20.459 [main] DEBUG nextflow.Session - Executor pool size: 32
+jun-01 06:42:20.464 [main] DEBUG nextflow.file.FilePorter - File porter settings maxRetries=3; maxTransfers=50; pollTimeout=null
+jun-01 06:42:20.467 [main] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'FileTransfer' minSize=10; maxSize=96; workQueue=LinkedBlockingQueue[-1]; allowCoreThreadTimeout=false
+jun-01 06:42:20.486 [main] DEBUG nextflow.cli.CmdRun - 
+  Version: 25.10.4 build 11173
+  Created: 10-02-2026 15:17 UTC 
+  System: Linux 6.8.0-117-generic
+  Runtime: Groovy 4.0.28 on OpenJDK 64-Bit Server VM 17.0.18-internal+0-adhoc.conda.src
+  Encoding: UTF-8 (UTF-8)
+  Process: 1588050@FRS-BINF-01 [127.0.1.1]
+  CPUs: 32 - Mem: 82.4 GB (67.3 GB) - Swap: 4 GB (4 GB)
+jun-01 06:42:20.504 [main] DEBUG nextflow.Session - Work-dir: /mnt/alphafold3_db/work [ext2/ext3]
+jun-01 06:42:20.527 [main] DEBUG nextflow.executor.ExecutorFactory - Extension executors providers=[]
+jun-01 06:42:20.536 [main] DEBUG nextflow.Session - Observer factory (v2): LinObserverFactory
+jun-01 06:42:20.538 [main] DEBUG nextflow.Session - Observer factory (v2): DefaultObserverFactory
+jun-01 06:42:20.552 [main] DEBUG nextflow.Session - Observer factory (v2): ValidationObserverFactory
+jun-01 06:42:20.587 [main] DEBUG nextflow.cache.CacheFactory - Using Nextflow cache factory: nextflow.cache.DefaultCacheFactory
+jun-01 06:42:20.594 [main] DEBUG nextflow.util.CustomThreadPool - Creating default thread pool > poolSize: 33; maxThreads: 1000
+jun-01 06:42:20.656 [main] DEBUG nextflow.Session - Session start
+jun-01 06:42:20.661 [main] DEBUG nextflow.trace.TraceFileObserver - Workflow started -- trace file: /mnt/alphafold3_db/test_papain/outdir_af3/pipeline_info/execution_trace_2026-06-01_06-42-19.txt
+jun-01 06:42:20.876 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+jun-01 06:42:22.251 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryLog:paramsSummaryLog]; plugin Id: nf-schema
+jun-01 06:42:22.262 [main] DEBUG n.validation.config.ValidationConfig - Set `validation.monochromeLogs` to false
+jun-01 06:42:22.264 [main] DEBUG n.validation.config.ValidationConfig - Added the following parameters to the ignored parameters: [genomes]
+jun-01 06:42:22.270 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [validateParameters:validateParameters]; plugin Id: nf-schema
+jun-01 06:42:22.272 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
+jun-01 06:42:22.274 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
+jun-01 06:42:22.274 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [samplesheetToList:samplesheetToList]; plugin Id: nf-schema
+jun-01 06:42:22.274 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
+jun-01 06:42:22.482 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryLog:paramsSummaryLog]; plugin Id: nf-schema
+jun-01 06:42:22.483 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [validateParameters:validateParameters]; plugin Id: nf-schema
+jun-01 06:42:22.483 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
+jun-01 06:42:22.484 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
+jun-01 06:42:22.485 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [samplesheetToList:samplesheetToList]; plugin Id: nf-schema
+jun-01 06:42:22.485 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
+jun-01 06:42:22.626 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
+jun-01 06:42:22.697 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryLog:paramsSummaryLog]; plugin Id: nf-schema
+jun-01 06:42:22.698 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [validateParameters:validateParameters]; plugin Id: nf-schema
+jun-01 06:42:22.698 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
+jun-01 06:42:22.710 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
+jun-01 06:42:22.711 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [samplesheetToList:samplesheetToList]; plugin Id: nf-schema
+jun-01 06:42:22.711 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
+jun-01 06:42:23.053 [main] INFO  nextflow.Nextflow - 
+-[2m----------------------------------------------------[0m-
+                                        [0;32m,--.[0;30m/[0;32m,-.[0m
+[0;34m        ___     __   __   __   ___     [0;32m/,-._.--~'[0m
+[0;34m  |\ | |__  __ /  ` /  \ |__) |__         [0;33m}  {[0m
+[0;34m  | \| |       \__, \__/ |  \ |___     [0;32m\`-._,-`-,[0m
+                                        [0;32m`._,._,'[0m
+[0;35m  nf-core/proteinfold 2.0.0[0m
+-[2m----------------------------------------------------[0m-
+
+jun-01 06:42:23.079 [main] INFO  nextflow.Nextflow - [1mGlobal options[0m
+  [0;34minput                           : [0;32m/mnt/data_local/pipes/structural/PhiPsiProt_structural/samplesheet_papain.csv[0m
+  [0;34moutdir                          : [0;32m/mnt/alphafold3_db/test_papain/outdir_af3/[0m
+  [0;34muse_gpu                         : [0;32mtrue[0m
+  [0;34mgenerate_metrics_report         : [0;32mtrue[0m
+
+[1mColabFold options[0m
+  [0;34mcolabfold_db_load_mode          : [0;32m0[0m
+
+[1mAlphaFold3 DBs and parameters links options[0m
+  [0;34malphafold3_small_bfd_path       : [0;32m/mnt/alphafold3_db/AF3_FINAL_DB//small_bfd/*[0m
+  [0;34malphafold3_params_path          : [0;32m/mnt/alphafold3_db/AF3_FINAL_DB/params/af3.bin[0m
+  [0;34malphafold3_mgnify_path          : [0;32m/mnt/alphafold3_db/AF3_FINAL_DB//mgnify/*[0m
+  [0;34malphafold3_pdb_mmcif_path       : [0;32m/mnt/alphafold3_db/AF3_FINAL_DB//pdb_mmcif/mmcif_files[0m
+  [0;34malphafold3_uniref90_path        : [0;32m/mnt/alphafold3_db/AF3_FINAL_DB//uniref90/*[0m
+  [0;34malphafold3_pdb_seqres_path      : [0;32m/mnt/alphafold3_db/AF3_FINAL_DB//pdb_seqres/*[0m
+  [0;34malphafold3_uniprot_path         : [0;32m/mnt/alphafold3_db/AF3_FINAL_DB//uniprot/*[0m
+  [0;34malphafold3_rnacentral_path      : [0;32m/mnt/alphafold3_db/AF3_FINAL_DB//rnacentral/*[0m
+  [0;34malphafold3_nt_rna_path          : [0;32m/mnt/alphafold3_db/AF3_FINAL_DB//nt_rna/*[0m
+  [0;34malphafold3_rfam_path            : [0;32m/mnt/alphafold3_db/AF3_FINAL_DB//rfam/*[0m
+
+[1mColabFold DBs and parameters paths options[0m
+  [0;34mcolabfold_alphafold2_params_tags: [0;32m[alphafold2_multimer_v1:alphafold_params_colab_2021-10-27, alphafold2_multimer_v2:alphafold_params_colab_2022-03-02, alphafold2_multimer_v3:alphafold_params_colab_2022-12-06, alphafold2_ptm:alphafold_params_2021-07-14][0m
+
+[1mGeneric options[0m
+  [0;34mtrace_report_suffix             : [0;32m2026-06-01_06-42-19[0m
+
+[1mCore Nextflow options[0m
+  [0;34mrunName                         : [0;32mastonishing_mandelbrot[0m
+  [0;34mcontainerEngine                 : [0;32mdocker[0m
+  [0;34mlaunchDir                       : [0;32m/mnt/data_local/pipes/structural/PhiPsiProt_structural/run_B_af[0m
+  [0;34mworkDir                         : [0;32m/mnt/alphafold3_db/work[0m
+  [0;34mprojectDir                      : [0;32m/mnt/data_local/pipes/structural/PhiPsiProt_structural[0m
+  [0;34muserName                        : [0;32mpaula[0m
+  [0;34mprofile                         : [0;32mdocker[0m
+  [0;34mconfigFiles                     : [0;32m/mnt/data_local/pipes/structural/PhiPsiProt_structural/nextflow.config[0m
+
+!! Only displaying parameters that differ from the pipeline defaults !!
+-[2m----------------------------------------------------[0m-
+jun-01 06:42:23.080 [main] INFO  nextflow.Nextflow - 
+* The pipeline
+    https://doi.org/10.5281/zenodo.7629996
+
+* The nf-core framework
+    https://doi.org/10.1038/s41587-020-0439-x
+
+* Software dependencies
+    https://github.com/nf-core/proteinfold/blob/master/CITATIONS.md
+
+jun-01 06:42:23.083 [main] DEBUG n.v.parameters.ParameterValidator - Starting parameters validation
+jun-01 06:42:23.187 [main] DEBUG n.v.v.evaluators.SchemaEvaluator - Started validating /mnt/data_local/pipes/structural/PhiPsiProt_structural/samplesheet_papain.csv
+jun-01 06:42:23.211 [main] DEBUG n.v.v.evaluators.SchemaEvaluator - Validation of file '/mnt/data_local/pipes/structural/PhiPsiProt_structural/samplesheet_papain.csv' passed!
+jun-01 06:42:23.230 [main] WARN  n.v.logging.ValidationLogger - The following invalid input values have been detected:
+
+* --colabfold_alphafold2_params_tags.alphafold2_multimer_v3: alphafold_params_colab_2022-12-06
+* --colabfold_alphafold2_params_tags.alphafold2_multimer_v2: alphafold_params_colab_2022-03-02
+* --colabfold_alphafold2_params_tags.alphafold2_multimer_v1: alphafold_params_colab_2021-10-27
+* --colabfold_alphafold2_params_tags.alphafold2_ptm: alphafold_params_2021-07-14
+* --chai1_weights_path: /mnt/data_local/chai_cache/
+* --https_proxy: http://10.15.206.126:3128
+* --http_proxy: http://10.15.206.126:3128
+
+
+jun-01 06:42:23.232 [main] DEBUG n.v.parameters.ParameterValidator - Finishing parameters validation
+jun-01 06:42:23.285 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_single` matches labels `process_single` for process with name NFCORE_PROTEINFOLD:ALPHAFOLD3:FASTA_TO_ALPHAFOLD3_JSON
+jun-01 06:42:23.289 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+jun-01 06:42:23.289 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+jun-01 06:42:23.294 [main] DEBUG nextflow.executor.Executor - [warm up] executor > local
+jun-01 06:42:23.298 [main] DEBUG n.processor.LocalPollingMonitor - Creating local task monitor for executor 'local' > cpus=30; memory=82.4 GB; capacity=32; pollInterval=100ms; dumpInterval=5m
+jun-01 06:42:23.299 [main] DEBUG n.processor.TaskPollingMonitor - >>> barrier register (monitor: local)
+jun-01 06:42:23.311 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'NFCORE_PROTEINFOLD:ALPHAFOLD3:FASTA_TO_ALPHAFOLD3_JSON': maxForks=0; fair=false; array=0
+jun-01 06:42:23.337 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_medium` matches labels `process_medium,process_gpu` for process with name NFCORE_PROTEINFOLD:ALPHAFOLD3:RUN_ALPHAFOLD3
+jun-01 06:42:23.337 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_gpu` matches labels `process_medium,process_gpu` for process with name NFCORE_PROTEINFOLD:ALPHAFOLD3:RUN_ALPHAFOLD3
+jun-01 06:42:23.338 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withName:RUN_ALPHAFOLD3` matches process NFCORE_PROTEINFOLD:ALPHAFOLD3:RUN_ALPHAFOLD3
+jun-01 06:42:23.339 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+jun-01 06:42:23.340 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+jun-01 06:42:23.341 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'NFCORE_PROTEINFOLD:ALPHAFOLD3:RUN_ALPHAFOLD3': maxForks=1; fair=false; array=0
+jun-01 06:42:23.355 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_single` matches labels `process_single` for process with name NFCORE_PROTEINFOLD:ALPHAFOLD3:MMCIF2PDB_MODELS
+jun-01 06:42:23.357 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+jun-01 06:42:23.357 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+jun-01 06:42:23.358 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'NFCORE_PROTEINFOLD:ALPHAFOLD3:MMCIF2PDB_MODELS': maxForks=0; fair=false; array=0
+jun-01 06:42:23.366 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_single` matches labels `process_single` for process with name NFCORE_PROTEINFOLD:ALPHAFOLD3:MMCIF2PDB_TOP_RANKED
+jun-01 06:42:23.366 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withName:MMCIF2PDB_TOP_RANKED` matches process NFCORE_PROTEINFOLD:ALPHAFOLD3:MMCIF2PDB_TOP_RANKED
+jun-01 06:42:23.368 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+jun-01 06:42:23.368 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+jun-01 06:42:23.369 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'NFCORE_PROTEINFOLD:ALPHAFOLD3:MMCIF2PDB_TOP_RANKED': maxForks=0; fair=false; array=0
+jun-01 06:42:23.408 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_single` matches labels `process_single` for process with name NFCORE_PROTEINFOLD:METRICS_REPORT:COLLECT_METRICS
+jun-01 06:42:23.410 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+jun-01 06:42:23.410 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+jun-01 06:42:23.411 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'NFCORE_PROTEINFOLD:METRICS_REPORT:COLLECT_METRICS': maxForks=0; fair=false; array=0
+jun-01 06:42:23.417 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_single` matches labels `process_single` for process with name NFCORE_PROTEINFOLD:METRICS_REPORT:EXTRACT_CHAI_ALL_MODELS
+jun-01 06:42:23.419 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+jun-01 06:42:23.419 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+jun-01 06:42:23.420 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'NFCORE_PROTEINFOLD:METRICS_REPORT:EXTRACT_CHAI_ALL_MODELS': maxForks=0; fair=false; array=0
+jun-01 06:42:23.431 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_single` matches labels `process_single` for process with name NFCORE_PROTEINFOLD:METRICS_REPORT:MERGE_CHAI_SCORES
+jun-01 06:42:23.433 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+jun-01 06:42:23.433 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+jun-01 06:42:23.434 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'NFCORE_PROTEINFOLD:METRICS_REPORT:MERGE_CHAI_SCORES': maxForks=0; fair=false; array=0
+jun-01 06:42:23.444 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_single` matches labels `process_single` for process with name NFCORE_PROTEINFOLD:METRICS_REPORT:GENERATE_METRICS_REPORT
+jun-01 06:42:23.445 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+jun-01 06:42:23.445 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+jun-01 06:42:23.446 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'NFCORE_PROTEINFOLD:METRICS_REPORT:GENERATE_METRICS_REPORT': maxForks=0; fair=false; array=0
+jun-01 06:42:23.457 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_single` matches labels `process_single` for process with name NFCORE_PROTEINFOLD:POST_PROCESSING:GENERATE_REPORT
+jun-01 06:42:23.458 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withName:GENERATE_REPORT` matches process NFCORE_PROTEINFOLD:POST_PROCESSING:GENERATE_REPORT
+jun-01 06:42:23.459 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+jun-01 06:42:23.459 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+jun-01 06:42:23.459 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'NFCORE_PROTEINFOLD:POST_PROCESSING:GENERATE_REPORT': maxForks=0; fair=false; array=0
+jun-01 06:42:23.517 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_single` matches labels `process_single` for process with name NFCORE_PROTEINFOLD:POST_PROCESSING:MULTIQC
+jun-01 06:42:23.518 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withName:MULTIQC` matches process NFCORE_PROTEINFOLD:POST_PROCESSING:MULTIQC
+jun-01 06:42:23.519 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+jun-01 06:42:23.519 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+jun-01 06:42:23.520 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'NFCORE_PROTEINFOLD:POST_PROCESSING:MULTIQC': maxForks=0; fair=false; array=0
+jun-01 06:42:23.532 [main] DEBUG nextflow.Session - Config process names validation disabled as requested
+jun-01 06:42:23.534 [main] DEBUG nextflow.Session - Igniting dataflow network (51)
+jun-01 06:42:23.538 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > NFCORE_PROTEINFOLD:ALPHAFOLD3:FASTA_TO_ALPHAFOLD3_JSON
+jun-01 06:42:23.538 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > NFCORE_PROTEINFOLD:ALPHAFOLD3:RUN_ALPHAFOLD3
+jun-01 06:42:23.538 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > NFCORE_PROTEINFOLD:ALPHAFOLD3:MMCIF2PDB_MODELS
+jun-01 06:42:23.538 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > NFCORE_PROTEINFOLD:ALPHAFOLD3:MMCIF2PDB_TOP_RANKED
+jun-01 06:42:23.539 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > NFCORE_PROTEINFOLD:METRICS_REPORT:COLLECT_METRICS
+jun-01 06:42:23.539 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > NFCORE_PROTEINFOLD:METRICS_REPORT:EXTRACT_CHAI_ALL_MODELS
+jun-01 06:42:23.539 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > NFCORE_PROTEINFOLD:METRICS_REPORT:MERGE_CHAI_SCORES
+jun-01 06:42:23.539 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > NFCORE_PROTEINFOLD:METRICS_REPORT:GENERATE_METRICS_REPORT
+jun-01 06:42:23.539 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > NFCORE_PROTEINFOLD:POST_PROCESSING:GENERATE_REPORT
+jun-01 06:42:23.539 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > NFCORE_PROTEINFOLD:POST_PROCESSING:MULTIQC
+jun-01 06:42:23.540 [main] DEBUG nextflow.script.ScriptRunner - Parsed script files:
+  Script_ac258ef1994281e8: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/nf-core/untar/main.nf
+  Script_05b48b08afa37f78: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/local/metrics_report/main.nf
+  Script_b4971a8adbe8ce0c: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/local/prepare_esmfold_dbs.nf
+  Script_16e0fd4c6c397609: /mnt/data_local/pipes/structural/PhiPsiProt_structural/workflows/chai1.nf
+  Script_15db0e8d9062b311: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/multifasta_to_singlefasta/main.nf
+  Script_220b170b361e8403: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/run_alphafold2_pred/main.nf
+  Script_8f8c7d0f2a4c48da: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/compare_structures/main.nf
+  Script_9815173de1637996: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/run_esmfold/main.nf
+  Script_5e7ac9f4ba5137ff: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/run_alphafold2_msa/main.nf
+  Script_873c0131ae8ce821: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/nf-core/multiqc/main.nf
+  Script_cb150fca414734aa: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/download_pdbmmcif/main.nf
+  Script_fbc7130024ee091d: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/local/aria2_uncompress.nf
+  Script_312cceb1f1600bd8: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/mmcif2pdb/main.nf
+  Script_0e71ed64d05e63f3: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/nf-core/gunzip/main.nf
+  Script_18e86abc9794b520: /mnt/data_local/pipes/structural/PhiPsiProt_structural/workflows/esmfold.nf
+  Script_a7b23449dcde0af1: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/combine_uniprot/main.nf
+  Script_654860a90fc16ad7: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/collect_metrics/main.nf
+  Script_faaba73886a1075c: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/nf-core/foldseek/easysearch/main.nf
+  Script_1809358c99d7cc3b: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/generate_report/main.nf
+  Script_a9bdbb0df6378d1d: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/nf-core/aria2/main.nf
+  Script_36f0db057009fef5: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/generate_metrics_report/main.nf
+  Script_50f5adeb8d2f6adb: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/run_alphafold3/main.nf
+  Script_081a99adc3498595: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/nf-core/unzip/main.nf
+  Script_4f612cfd8c52e8cd: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/nf-core/utils_nextflow_pipeline/main.nf
+  Script_c7d0da8873969bc3: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/local/post_processing.nf
+  Script_5977f542cd315b9b: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/nf-core/utils_nfcore_pipeline/main.nf
+  Script_91c5f8a10030881d: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/local/prepare_alphafold3_dbs.nf
+  Script_5dec716b325c4e6b: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/local/utils_nfcore_proteinfold_pipeline/main.nf
+  Script_623dc2cc517aadc9: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/run_alphafold2/main.nf
+  Script_4430c69877d0df70: /mnt/data_local/pipes/structural/PhiPsiProt_structural/main.nf
+  Script_f12f92c9c1c048fc: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/local/prepare_alphafold2_dbs.nf
+  Script_30eec5531e89f777: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/zstd_decompress/main.nf
+  Script_ecef9394b6a46342: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/download_pdbmmcif_af3/main.nf
+  Script_1d06c4c2cdff57e4: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/run_chai1/main.nf
+  Script_0e522e239c72fa00: /mnt/data_local/pipes/structural/PhiPsiProt_structural/workflows/alphafold2.nf
+  Script_1a2037a6183f7e1a: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/nf-core/utils_nfschema_plugin/main.nf
+  Script_e72d28d41417e65a: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/fasta_to_alphafold3_json/main.nf
+  Script_4329d7e6e5202b0f: /mnt/data_local/pipes/structural/PhiPsiProt_structural/workflows/alphafold3.nf
+jun-01 06:42:23.540 [main] DEBUG nextflow.script.ScriptRunner - > Awaiting termination 
+jun-01 06:42:23.540 [main] DEBUG nextflow.Session - Session await
+jun-01 06:42:23.632 [Actor Thread 19] DEBUG nextflow.sort.BigSort - Sort completed -- entries: 1; slices: 1; internal sort time: 0.001 s; external sort time: 0.002 s; total time: 0.003 s
+jun-01 06:42:23.632 [Actor Thread 18] DEBUG nextflow.sort.BigSort - Sort completed -- entries: 1; slices: 1; internal sort time: 0.001 s; external sort time: 0.002 s; total time: 0.003 s
+jun-01 06:42:23.632 [Actor Thread 18] DEBUG nextflow.file.FileCollector - >> temp file exists? false
+jun-01 06:42:23.632 [Actor Thread 19] DEBUG nextflow.file.FileCollector - >> temp file exists? false
+jun-01 06:42:23.632 [Actor Thread 18] DEBUG nextflow.file.FileCollector - Missed collect-file cache -- cause: java.nio.file.NoSuchFileException: /mnt/alphafold3_db/work/collect-file/62bfc27d4adaf6a45aa665a10b85559f
+jun-01 06:42:23.632 [Actor Thread 19] DEBUG nextflow.file.FileCollector - Missed collect-file cache -- cause: java.nio.file.NoSuchFileException: /mnt/alphafold3_db/work/collect-file/5083c6426b06233274c3394ba9e3c9c7
+jun-01 06:42:23.638 [Actor Thread 19] DEBUG nextflow.file.FileCollector - Saved collect-files list to: /mnt/alphafold3_db/work/collect-file/5083c6426b06233274c3394ba9e3c9c7
+jun-01 06:42:23.638 [Actor Thread 18] DEBUG nextflow.file.FileCollector - Saved collect-files list to: /mnt/alphafold3_db/work/collect-file/62bfc27d4adaf6a45aa665a10b85559f
+jun-01 06:42:23.642 [Actor Thread 19] DEBUG nextflow.file.FileCollector - Deleting file collector temp dir: /mnt/data_local/tmp/nxf-3202081357232786991
+jun-01 06:42:23.642 [Actor Thread 18] DEBUG nextflow.file.FileCollector - Deleting file collector temp dir: /mnt/data_local/tmp/nxf-8773854708474196266
+jun-01 06:42:23.672 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-01 06:42:23.674 [Task submitter] INFO  nextflow.Session - [54/e315c6] Submitted process > NFCORE_PROTEINFOLD:ALPHAFOLD3:FASTA_TO_ALPHAFOLD3_JSON (Papain_01)
+jun-01 06:42:24.638 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 1; name: NFCORE_PROTEINFOLD:ALPHAFOLD3:FASTA_TO_ALPHAFOLD3_JSON (Papain_01); status: COMPLETED; exit: 0; error: -; workDir: /mnt/alphafold3_db/work/54/e315c66afb37831508fb4cf75d371b]
+jun-01 06:42:24.639 [Task monitor] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'TaskFinalizer' minSize=10; maxSize=96; workQueue=LinkedBlockingQueue[-1]; allowCoreThreadTimeout=false
+jun-01 06:42:24.653 [TaskFinalizer-1] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'PublishDir' minSize=10; maxSize=96; workQueue=LinkedBlockingQueue[-1]; allowCoreThreadTimeout=false
+jun-01 06:42:24.671 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-01 06:42:24.672 [Task submitter] INFO  nextflow.Session - [ee/5f33eb] Submitted process > NFCORE_PROTEINFOLD:ALPHAFOLD3:RUN_ALPHAFOLD3 (Papain_01)
+jun-01 06:42:27.529 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 2; name: NFCORE_PROTEINFOLD:ALPHAFOLD3:RUN_ALPHAFOLD3 (Papain_01); status: COMPLETED; exit: 1; error: -; workDir: /mnt/alphafold3_db/work/ee/5f33eb7d82550c1e8dc801c416b96a]
+jun-01 06:42:27.532 [TaskFinalizer-2] DEBUG nextflow.processor.TaskProcessor - Handling unexpected condition for
+  task: name=NFCORE_PROTEINFOLD:ALPHAFOLD3:RUN_ALPHAFOLD3 (Papain_01); work-dir=/mnt/alphafold3_db/work/ee/5f33eb7d82550c1e8dc801c416b96a
+  error [nextflow.exception.ProcessFailedException]: Process `NFCORE_PROTEINFOLD:ALPHAFOLD3:RUN_ALPHAFOLD3 (Papain_01)` terminated with an error exit status (1)
+jun-01 06:42:27.543 [TaskFinalizer-2] ERROR nextflow.processor.TaskProcessor - Error executing process > 'NFCORE_PROTEINFOLD:ALPHAFOLD3:RUN_ALPHAFOLD3 (Papain_01)'
+
+Caused by:
+  Process `NFCORE_PROTEINFOLD:ALPHAFOLD3:RUN_ALPHAFOLD3 (Papain_01)` terminated with an error exit status (1)
+
+
+Command executed:
+
+  # Check database files exist and set variables
+  pdb_seqres=$(ls -v ./pdb_seqres/pdb_seqres.txt ./pdb_seqres/pdb_seqres_2022_09_28.fasta 2>/dev/null | tail -n 1 || echo "")
+  if [[ -z "$pdb_seqres" ]]; then
+      echo "ERROR: No pdb_seqres file found"
+      exit 1
+  fi
+  
+  uniref90=$(ls -v ./uniref90/uniref90*.fa ./uniref90/uniref90*.fasta 2>/dev/null | tail -n 1 || echo "")
+  if [[ -z "$uniref90" ]]; then
+      echo "ERROR: No uniref90 file found"
+      exit 1
+  fi
+  
+  mgnify=$(ls -v ./mgnify/mgy_clusters*.fa ./mgnify/mgnify_clusters*.fasta 2>/dev/null | tail -n 1 || echo "")
+  if [[ -z "$mgnify" ]]; then
+      echo "ERROR: No mgnify file found"
+      exit 1
+  fi
+  
+  uniprot=$(ls -v ./uniprot/uniprot.fasta ./uniprot/uniprot*.fa 2>/dev/null | tail -n 1 || echo "")
+  if [[ -z "$uniprot" ]]; then
+      echo "ERROR: No uniprot file found"
+      exit 1
+  fi
+  
+  python3 /app/alphafold/run_alphafold.py \
+      --json_path=papain_01.json \
+      --model_dir=./params \
+      --uniref90_database_path=$uniref90 \
+      --mgnify_database_path=$mgnify \
+      --pdb_database_path=./mmcif_files \
+      --small_bfd_database_path=./small_bfd/bfd-first_non_consensus_sequences.fasta \
+      --uniprot_cluster_annot_database_path=$uniprot \
+      --seqres_database_path=$pdb_seqres \
+      --output_dir=$PWD \
+  
+  
+  ### Move the rest of the models and rename them according to their rank
+  name=$(jq -r '.name' papain_01.json)
+  
+  ## Copy top ranked model to root
+  cp -n "${name}/${name}_model.cif" "Papain_01_alphafold3.cif"
+  
+  ## Sort the rows by ranking_score in descending order
+  sorted_csv=$(head -n 1 "${name}/ranking_scores.csv"; tail -n +2 "${name}/ranking_scores.csv" | sort -t, -k3 -nr)
+  rank=0
+  
+  ## Create raw directory for intermediate files
+  mkdir -p raw
+  
+  ## Generate files with rank tag in raw directory
+  echo "$sorted_csv" | tail -n +2 | while IFS=',' read -r seed sample ranking_score; do
+  cp -n "${name}/seed-${seed}_sample-${sample}/model.cif" "raw/seed_${seed}_sample_${sample}_ranked_${rank}.cif"
+  rank=$((rank + 1))
+  done
+  
+  extract_metrics.py --name Papain_01 \
+      --jsons papain_01/papain_01_data.json papain_01/papain_01_summary_confidences.json papain_01/papain_01_confidences.json \
+      --structs raw/*ranked_*.cif
+  
+  mv "Papain_01_msa.tsv" "Papain_01_alphafold3_msa.tsv"
+  
+  ## Move alphafold3 output directory to raw for save_intermediates
+  mv ${name}/* raw/
+  
+  cat <<-END_VERSIONS > versions.yml
+  "NFCORE_PROTEINFOLD:ALPHAFOLD3:RUN_ALPHAFOLD3":
+      python: $(python3 --version | sed 's/Python //g')
+      alphafold3: $(cd /app/alphafold && git rev-parse HEAD 2>/dev/null || echo "unknown")
+      jax: $(python3 -c "import jax; print(jax.__version__)" 2>/dev/null || echo "unknown")
+      jaxlib: $(python3 -c "import jaxlib; print(jaxlib.__version__)" 2>/dev/null || echo "unknown")
+      numpy: $(python3 -c "import numpy; print(numpy.__version__)" 2>/dev/null || echo "unknown")
+      biopython: $(python3 -c "import Bio; print(Bio.__version__)" 2>/dev/null || echo "unknown")
+      hmmer: $(hmmsearch -h | grep -o '^# HMMER [0-9.]*' | sed 's/^# HMMER //' || echo "unknown")
+      rdkit: $(python3 -c "import rdkit; print(rdkit.__version__)" 2>/dev/null || echo "unknown")
+  END_VERSIONS
+
+Command exit status:
+  1
+
+Command output:
+  Running AlphaFold 3. Please note that standard AlphaFold 3 model parameters are
+  only available under terms of use provided at
+  https://github.com/google-deepmind/alphafold3/blob/main/WEIGHTS_TERMS_OF_USE.md.
+  If you do not agree to these terms and are using AlphaFold 3 derived model
+  parameters, cancel execution of AlphaFold 3 inference with CTRL-C, and do not
+  use the model parameters.
+
+Command error:
+  [GPU LOCK] Acquired GPU lock
+  I0601 06:42:27.018527 140636001796288 folding_input.py:1044] Detected papain_01.json is an AlphaFold 3 JSON since the top-level is not a list.
+  2026-06-01 06:42:27.198804: W external/xla/xla/service/platform_util.cc:206] unable to create StreamExecutor for CUDA:0: CUDA error: : CUDA_ERROR_NOT_SUPPORTED: operation not supported
+  Traceback (most recent call last):
+    File "/alphafold3_venv/lib/python3.11/site-packages/jax/_src/xla_bridge.py", line 885, in backends
+  Running AlphaFold 3. Please note that standard AlphaFold 3 model parameters are
+  only available under terms of use provided at
+  https://github.com/google-deepmind/alphafold3/blob/main/WEIGHTS_TERMS_OF_USE.md.
+  If you do not agree to these terms and are using AlphaFold 3 derived model
+  parameters, cancel execution of AlphaFold 3 inference with CTRL-C, and do not
+  use the model parameters.
+      backend = _init_backend(platform)
+                ^^^^^^^^^^^^^^^^^^^^^^^
+    File "/alphafold3_venv/lib/python3.11/site-packages/jax/_src/xla_bridge.py", line 971, in _init_backend
+      backend = registration.factory()
+                ^^^^^^^^^^^^^^^^^^^^^^
+    File "/alphafold3_venv/lib/python3.11/site-packages/jax/_src/xla_bridge.py", line 671, in factory
+      return xla_client.make_c_api_client(plugin_name, updated_options, None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "/alphafold3_venv/lib/python3.11/site-packages/jaxlib/xla_client.py", line 200, in make_c_api_client
+      return _xla.get_c_api_client(plugin_name, options, distributed_client)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  jaxlib.xla_extension.XlaRuntimeError: INTERNAL: no supported devices found for platform CUDA
+  
+  During handling of the above exception, another exception occurred:
+  
+  Traceback (most recent call last):
+    File "/app/alphafold/run_alphafold.py", line 678, in <module>
+      app.run(main)
+    File "/alphafold3_venv/lib/python3.11/site-packages/absl/app.py", line 308, in run
+      _run_main(main, args)
+    File "/alphafold3_venv/lib/python3.11/site-packages/absl/app.py", line 254, in _run_main
+      sys.exit(main(argv))
+               ^^^^^^^^^^
+    File "/app/alphafold/run_alphafold.py", line 643, in main
+      devices = jax.local_devices(backend='gpu')
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "/alphafold3_venv/lib/python3.11/site-packages/jax/_src/xla_bridge.py", line 1141, in local_devices
+      process_index = get_backend(backend).process_index()
+                      ^^^^^^^^^^^^^^^^^^^^
+    File "/alphafold3_venv/lib/python3.11/site-packages/jax/_src/xla_bridge.py", line 1017, in get_backend
+      return _get_backend_uncached(platform)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "/alphafold3_venv/lib/python3.11/site-packages/jax/_src/xla_bridge.py", line 996, in _get_backend_uncached
+      bs = backends()
+           ^^^^^^^^^^
+    File "/alphafold3_venv/lib/python3.11/site-packages/jax/_src/xla_bridge.py", line 901, in backends
+      raise RuntimeError(err_msg)
+  RuntimeError: Unable to initialize backend 'cuda': INTERNAL: no supported devices found for platform CUDA (you may need to uninstall the failing plugin package, or set JAX_PLATFORMS=cpu to skip this backend.)
+  [GPU LOCK] Released GPU lock
+
+Work dir:
+  /mnt/alphafold3_db/work/ee/5f33eb7d82550c1e8dc801c416b96a
+
+Container:
+  quay.io/nf-core/proteinfold_alphafold3_standard:2.0.0
+
+Tip: when you have fixed the problem you can continue the execution adding the option `-resume` to the run command line
+jun-01 06:42:27.546 [TaskFinalizer-2] INFO  nextflow.Session - Execution cancelled -- Finishing pending tasks before exit
+jun-01 06:42:27.546 [Actor Thread 18] DEBUG nextflow.sort.BigSort - Sort completed -- entries: 2; slices: 1; internal sort time: 0.001 s; external sort time: 0.0 s; total time: 0.001 s
+jun-01 06:42:27.549 [Actor Thread 18] DEBUG nextflow.file.FileCollector - >> temp file exists? false
+jun-01 06:42:27.549 [Actor Thread 18] DEBUG nextflow.file.FileCollector - Missed collect-file cache -- cause: java.nio.file.NoSuchFileException: /mnt/alphafold3_db/work/collect-file/551c92701cf16d79d90b260b54f81ab6
+jun-01 06:42:27.552 [TaskFinalizer-2] ERROR nextflow.Nextflow - Pipeline failed. Please refer to troubleshooting docs: https://nf-co.re/docs/usage/troubleshooting
+jun-01 06:42:27.552 [main] DEBUG nextflow.Session - Session await > all processes finished
+jun-01 06:42:27.553 [Task monitor] DEBUG n.processor.TaskPollingMonitor - <<< barrier arrives (monitor: local) - terminating tasks monitor poll loop
+jun-01 06:42:27.553 [main] DEBUG nextflow.Session - Session await > all barriers passed
+jun-01 06:42:27.555 [Actor Thread 18] DEBUG nextflow.file.FileCollector - Saved collect-files list to: /mnt/alphafold3_db/work/collect-file/551c92701cf16d79d90b260b54f81ab6
+jun-01 06:42:27.556 [Actor Thread 18] DEBUG nextflow.file.FileCollector - Deleting file collector temp dir: /mnt/data_local/tmp/nxf-6302206345071552166
+jun-01 06:42:27.557 [main] DEBUG nextflow.util.ThreadPoolManager - Thread pool 'TaskFinalizer' shutdown completed (hard=false)
+jun-01 06:42:27.557 [main] DEBUG nextflow.util.ThreadPoolManager - Thread pool 'PublishDir' shutdown completed (hard=false)
+jun-01 06:42:27.559 [main] INFO  nextflow.Nextflow - -[0;35m[nf-core/proteinfold][0;31m Pipeline completed with errors[0m-
+jun-01 06:42:27.563 [main] DEBUG n.trace.WorkflowStatsObserver - Workflow completed > WorkflowStats[succeededCount=1; failedCount=1; ignoredCount=0; cachedCount=0; pendingCount=0; submittedCount=0; runningCount=0; retriesCount=0; abortedCount=0; succeedDuration=388ms; failedDuration=16.8s; cachedDuration=0ms;loadCpus=0; loadMemory=0; peakRunning=1; peakCpus=6; peakMemory=36 GB; ]
+jun-01 06:42:27.777 [main] DEBUG nextflow.trace.ReportObserver - Workflow completed -- rendering execution report
+jun-01 06:42:27.980 [main] DEBUG nextflow.trace.TimelineObserver - Workflow completed -- rendering execution timeline
+jun-01 06:42:28.005 [main] DEBUG nextflow.trace.TraceFileObserver - Workflow completed -- saving trace file
+jun-01 06:42:28.011 [main] DEBUG nextflow.cache.CacheDB - Closing CacheDB done
+jun-01 06:42:28.026 [main] INFO  org.pf4j.AbstractPluginManager - Stop plugin 'nf-schema@2.6.1'
+jun-01 06:42:28.026 [main] DEBUG nextflow.plugin.BasePlugin - Plugin stopped nf-schema
+jun-01 06:42:28.026 [main] DEBUG nextflow.util.ThreadPoolManager - Thread pool 'FileTransfer' shutdown completed (hard=false)
+jun-01 06:42:28.027 [main] DEBUG nextflow.script.ScriptRunner - > Execution complete -- Goodbye
