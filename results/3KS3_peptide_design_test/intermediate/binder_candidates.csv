@@ -1,0 +1,4 @@
+candidate_id,mode,method,pdb,binder_length,status
+binder_design_0,binder,rfdiffusion,binder_design_0.pdb,287,ready_for_sequence_design
+binder_design_1,binder,rfdiffusion,binder_design_1.pdb,287,ready_for_sequence_design
+binder_design_2,binder,rfdiffusion,binder_design_2.pdb,287,ready_for_sequence_design

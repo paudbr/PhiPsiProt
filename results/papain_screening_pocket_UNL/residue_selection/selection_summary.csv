@@ -1,0 +1,2 @@
+selection_mode,target_chain,positions,ligand_resname,interface_chain,distance_cutoff,selected_positions
+pocket,A,ALL,UNL,NONE,6.0,19,22,23,24,25,26,65,158,159,160

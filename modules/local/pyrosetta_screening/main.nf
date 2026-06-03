@@ -2,7 +2,7 @@ process PYROSETTA_SCREENING {
 
     tag "$input_pdb"
 
-    container 'quay.io/phipsiprot_pyrosetta:dev'
+    container 'quay.io/phipsiprot/pyrosetta:dev'
 
     publishDir "${params.outdir}/screening", mode: 'copy'
 
@@ -29,7 +29,7 @@ process PYROSETTA_SCREENING {
         exit 1
     fi
 
-    python $projectDir/bin/run_pyrosetta_screening.py \
+    python3  $projectDir/bin/run_pyrosetta_screening.py \
         --input_pdb $input_pdb \
         --target_chain ${target_chain ?: 'ALL'} \
         --positions "\$POSITIONS" \

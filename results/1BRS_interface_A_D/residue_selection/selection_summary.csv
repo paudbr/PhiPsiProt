@@ -1,0 +1,2 @@
+selection_mode,target_chain,positions,ligand_resname,interface_chain,distance_cutoff,selected_positions
+interface,A,ALL,NONE,D,6.0,27,31,35,37,38,39,55,56,57,58,59,60,61,62,73,75,82,83,84,85,87,101,102,103,104,106

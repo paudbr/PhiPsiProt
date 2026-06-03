@@ -1,0 +1,4 @@
+candidate_id,final_sequence,mpnn_score,molecular_weight,gravy,aromaticity,isoelectric_point,instability_index,status
+binder_design_0,AINSSDAAALREALKAKGEDPSGLKIDDFK,0.4856,3131.45,-0.5133,0.0333,4.93,13.99,ready_for_structural_validation
+binder_design_1,SLEEREARRAALAAARAAAAAAAAAAAAAL,0.4895,2807.13,0.5433,0.0,9.17,39.6267,ready_for_structural_validation
+binder_design_2,GAPPSRAEISAALAAEAAAAAAAAAAAAAA,0.4833,2505.74,0.92,0.0,4.53,38.9367,ready_for_structural_validation

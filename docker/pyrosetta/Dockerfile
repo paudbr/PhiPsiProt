@@ -1,14 +1,18 @@
-FROM python:3.11-slim
+FROM ubuntu:24.04
 
-WORKDIR /app
+ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y \
-    build-essential \
-    git \
-    wget \
-    procps \
+    python3 \
+    python3-pip \
+    ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir --timeout 100 --retries 10 pandas biopython
+COPY pyrosetta-*.whl /tmp/
 
-CMD ["python"]
+RUN pip3 install --break-system-packages numpy \
+    && pip3 install --break-system-packages /tmp/pyrosetta-*.whl \
+    && rm /tmp/pyrosetta-*.whl
+
+WORKDIR /data
+CMD  ["/bin/bash"]

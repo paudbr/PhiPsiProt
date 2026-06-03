@@ -80,9 +80,7 @@ workflow NFCORE_PROTEINFOLD {
     PEPTIDE_DESIGN(params.mode)
     }
 
-    if (params.mode == 'antibody_design') {
-    ANTIBODY_DESIGN(params.mode)
-    }
+
 
     else if (params.mode != 'structural') {
         error "Unknown mode: ${params.mode}"
@@ -388,7 +386,10 @@ workflow {
     }
 
     if (design_mode == 'antibody_design') {
-        ANTIBODY_DESIGN(params.mode)
+        ANTIBODY_DESIGN(
+            file(params.input_pdb),
+            file(params.antibody_framework)
+        )
         return
     }
 

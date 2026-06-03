@@ -1,0 +1,17 @@
+candidate_id,chain,position,sequence_index,wildtype,mutant,mutation,ddg,wt_score,mutant_score,input_pdb,fasta_id,structural_score,final_score,status,selection_mode,selected_positions,ligand_resname,interface_chain,distance_cutoff,pipeline_stage
+screening_000007,A,10,10,K,H,KA10H,-6.6,238.7891,232.1891,1PPN.pdb,screening_000007|KA10H,NA,-6.6,pending_structural_validation,manual,10,NONE,NONE,6.0,screening_ready_for_structural_validation
+screening_000011,A,10,10,K,N,KA10N,-6.5073,238.7891,232.2818,1PPN.pdb,screening_000011|KA10N,NA,-6.5073,pending_structural_validation,manual,10,NONE,NONE,6.0,screening_ready_for_structural_validation
+screening_000019,A,10,10,K,Y,KA10Y,-5.9314,238.7891,232.8577,1PPN.pdb,screening_000019|KA10Y,NA,-5.9314,pending_structural_validation,manual,10,NONE,NONE,6.0,screening_ready_for_structural_validation
+screening_000005,A,10,10,K,F,KA10F,-5.5726,238.7891,233.2165,1PPN.pdb,screening_000005|KA10F,NA,-5.5726,pending_structural_validation,manual,10,NONE,NONE,6.0,screening_ready_for_structural_validation
+screening_000003,A,10,10,K,D,KA10D,-5.4806,238.7891,233.3085,1PPN.pdb,screening_000003|KA10D,NA,-5.4806,pending_structural_validation,manual,10,NONE,NONE,6.0,screening_ready_for_structural_validation
+screening_000013,A,10,10,K,Q,KA10Q,-5.1652,238.7891,233.6239,1PPN.pdb,screening_000013|KA10Q,NA,-5.1652,pending_structural_validation,manual,10,NONE,NONE,6.0,screening_ready_for_structural_validation
+screening_000004,A,10,10,K,E,KA10E,-4.8071,238.7891,233.982,1PPN.pdb,screening_000004|KA10E,NA,-4.8071,pending_structural_validation,manual,10,NONE,NONE,6.0,screening_ready_for_structural_validation
+screening_000001,A,10,10,K,A,KA10A,-4.8032,238.7891,233.986,1PPN.pdb,screening_000001|KA10A,NA,-4.8032,pending_structural_validation,manual,10,NONE,NONE,6.0,screening_ready_for_structural_validation
+screening_000015,A,10,10,K,S,KA10S,-4.4608,238.7891,234.3283,1PPN.pdb,screening_000015|KA10S,NA,-4.4608,pending_structural_validation,manual,10,NONE,NONE,6.0,screening_ready_for_structural_validation
+screening_000014,A,10,10,K,R,KA10R,-3.9565,238.7891,234.8327,1PPN.pdb,screening_000014|KA10R,NA,-3.9565,pending_structural_validation,manual,10,NONE,NONE,6.0,screening_ready_for_structural_validation
+screening_000010,A,10,10,K,M,KA10M,-3.6747,238.7891,235.1144,1PPN.pdb,screening_000010|KA10M,NA,-3.6747,pending_structural_validation,manual,10,NONE,NONE,6.0,screening_ready_for_structural_validation
+screening_000018,A,10,10,K,W,KA10W,-3.4726,238.7891,235.3165,1PPN.pdb,screening_000018|KA10W,NA,-3.4726,pending_structural_validation,manual,10,NONE,NONE,6.0,screening_ready_for_structural_validation
+screening_000009,A,10,10,K,L,KA10L,-3.4542,238.7891,235.3349,1PPN.pdb,screening_000009|KA10L,NA,-3.4542,pending_structural_validation,manual,10,NONE,NONE,6.0,screening_ready_for_structural_validation
+screening_000006,A,10,10,K,G,KA10G,-3.0887,238.7891,235.7004,1PPN.pdb,screening_000006|KA10G,NA,-3.0887,pending_structural_validation,manual,10,NONE,NONE,6.0,screening_ready_for_structural_validation
+screening_000002,A,10,10,K,C,KA10C,-3.0765,238.7891,235.7126,1PPN.pdb,screening_000002|KA10C,NA,-3.0765,pending_structural_validation,manual,10,NONE,NONE,6.0,screening_ready_for_structural_validation
+screening_000016,A,10,10,K,T,KA10T,-2.674,238.7891,236.1151,1PPN.pdb,screening_000016|KA10T,NA,-2.674,pending_structural_validation,manual,10,NONE,NONE,6.0,screening_ready_for_structural_validation

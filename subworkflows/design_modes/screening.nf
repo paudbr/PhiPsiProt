@@ -3,6 +3,9 @@ include { DDG_FILTER } from '../../modules/local/ddg_filter/main'
 include { RESIDUE_SELECTION } from '../../modules/local/residue_selection/main'
 include { RANK_SCREENING } from '../../modules/local/ranking/main'
 include { MERGE_SCREENING_RESULTS } from '../../modules/local/merge_screening_results/main'
+include { SCREENING_PLOTS } from '../../modules/local/screening_plots/main'
+include { MULTIQC_SCREENING } from '../../modules/local/multiqc_screening/main'
+include { SCREENING_REPORT } from '../../modules/local/screening_report/main'
 
 workflow SCREENING {
 
@@ -14,15 +17,14 @@ workflow SCREENING {
     main:
 
     RESIDUE_SELECTION(
-        input_pdb,
-        target_chain,
-        positions,
-        params.selection_mode ?: 'manual',
-        params.ligand_resname ?: '',
-        params.interface_chain ?: '',
-        params.distance_cutoff ?: 6.0
+    	input_pdb,
+    	params.target_chain ?: 'A',
+    	params.positions ?: 'ALL',
+    	params.selection_mode ?: 'manual',
+    	params.ligand_resname ?: '',
+    	params.interface_chain ?: '',
+    	params.distance_cutoff ?: 6.0
     )
-
 
     PYROSETTA_SCREENING(
         input_pdb,
@@ -38,10 +40,18 @@ workflow SCREENING {
     DDG_FILTER.out[0]
     )
 
+    SCREENING_PLOTS(RANK_SCREENING.out)
+    
     MERGE_SCREENING_RESULTS(
     RANK_SCREENING.out,
     RESIDUE_SELECTION.out[1]
     )
+    
+    SCREENING_REPORT(
+    	MERGE_SCREENING_RESULTS.out,
+    	SCREENING_PLOTS.out.collect()
+    )    
+
 
     emit:
     selected_positions = RESIDUE_SELECTION.out[0]
@@ -55,3 +65,4 @@ workflow SCREENING {
     final_screening_results = MERGE_SCREENING_RESULTS.out
     
 }
+ 

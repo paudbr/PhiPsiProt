@@ -4,6 +4,7 @@ include { LIGANDMPNN_DESIGN } from '../../modules/local/ligandmpnn_design/main'
 include { MERGE_BINDER_RESULTS } from '../../modules/local/merge_binder_results/main'
 include { BIOPHYSICAL_FILTER } from '../../modules/local/biophysical_filter/main'
 include { FINALIZE_PEPTIDE_RESULTS } from '../../modules/local/finalize_peptide_results/main'
+
 workflow PEPTIDE_DESIGN {
 
     take:
@@ -27,6 +28,7 @@ workflow PEPTIDE_DESIGN {
     BIOPHYSICAL_FILTER(MERGE_BINDER_RESULTS.out)
 
     FINALIZE_PEPTIDE_RESULTS(BIOPHYSICAL_FILTER.out)
+
     emit:
     final_peptide_candidates = FINALIZE_PEPTIDE_RESULTS.out
 }

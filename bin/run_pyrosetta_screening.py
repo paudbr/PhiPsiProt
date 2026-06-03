@@ -4,6 +4,9 @@ import argparse
 import csv
 from pathlib import Path
 
+import pyrosetta
+from pyrosetta.toolbox import mutate_residue
+
 AA3_TO_1 = {
     "ALA": "A", "ARG": "R", "ASN": "N", "ASP": "D",
     "CYS": "C", "GLN": "Q", "GLU": "E", "GLY": "G",
@@ -33,12 +36,10 @@ def parse_pdb_residues(pdb_path):
                 continue
 
             key = (chain, resnum, icode)
-
             if key in seen:
                 continue
 
             seen.add(key)
-
             residues.append({
                 "chain": chain,
                 "position": resnum,
@@ -58,26 +59,36 @@ def write_fasta_record(handle, header, sequence):
 
 def main():
     parser = argparse.ArgumentParser()
-
     parser.add_argument("--input_pdb", required=True)
     parser.add_argument("--target_chain", default="ALL")
     parser.add_argument("--positions", default="ALL")
     parser.add_argument("--output", required=True)
     parser.add_argument("--fasta_output", required=True)
-
     args = parser.parse_args()
 
     pdb = Path(args.input_pdb)
 
+    clean_pdb = Path("clean_input_for_pyrosetta.pdb")
+    with open(pdb) as fin, open(clean_pdb, "w") as fout:
+        for line in fin:
+            if line.startswith("ATOM"):
+                fout.write(line)
+        fout.write("END\n")
+
+    pyrosetta.init("-mute all -ignore_unrecognized_res true")
+    pose = pyrosetta.pose_from_pdb(str(clean_pdb))
+
+
+    scorefxn = pyrosetta.get_fa_scorefxn()
+
+    wt_score = scorefxn(pose)
+
     all_residues = parse_pdb_residues(pdb)
 
     if args.target_chain == "ALL":
-        raise ValueError("For FASTA generation, please provide --target_chain, e.g. --target_chain A")
+        raise ValueError("Please provide --target_chain, e.g. --target_chain A")
 
-    chain_residues = [
-        r for r in all_residues
-        if r["chain"] == args.target_chain
-    ]
+    chain_residues = [r for r in all_residues if r["chain"] == args.target_chain]
 
     if not chain_residues:
         raise ValueError(f"No residues found for chain {args.target_chain}")
@@ -110,6 +121,8 @@ def main():
             "mutant",
             "mutation",
             "ddg",
+            "wt_score",
+            "mutant_score",
             "input_pdb",
             "fasta_id",
         ])
@@ -118,14 +131,28 @@ def main():
 
         for res in mutable_residues:
             wt = res["wildtype"]
+            chain = res["chain"]
+            pdb_resnum = int(res["position"])
             seq_index = position_to_index[res["position"]]
+
+            pose_index = pose.pdb_info().pdb2pose(chain, pdb_resnum)
+
+            if pose_index == 0:
+                print(f"WARNING: could not map {chain}{pdb_resnum} to pose index")
+                continue
 
             for mut in STANDARD_AA:
                 if mut == wt:
                     continue
 
-                mutation = f"{wt}{res['chain']}{res['position']}{mut}"
+                mutation = f"{wt}{chain}{res['position']}{mut}"
                 candidate_id = f"screening_{counter:06d}"
+
+                mutant_pose = pose.clone()
+                mutate_residue(mutant_pose, pose_index, mut)
+
+                mutant_score = scorefxn(mutant_pose)
+                ddg = mutant_score - wt_score
 
                 mutant_sequence = list(wt_sequence)
                 mutant_sequence[seq_index] = mut
@@ -135,19 +162,20 @@ def main():
 
                 writer.writerow([
                     candidate_id,
-                    res["chain"],
+                    chain,
                     res["position"],
                     seq_index + 1,
                     wt,
                     mut,
                     mutation,
-                    "NA",
+                    round(ddg, 4),
+                    round(wt_score, 4),
+                    round(mutant_score, 4),
                     pdb.name,
                     fasta_id,
                 ])
 
                 write_fasta_record(out_fasta, fasta_id, mutant_sequence)
-
                 counter += 1
 
 

@@ -40,6 +40,14 @@ with open(args.input, newline="") as infile:
 
         rows.append(row)
 
+
+rows.sort(
+    key=lambda x: float(x["final_score"])
+    if x["final_score"] != "NA"
+    else 999999
+)
+
+
 with open(args.output, "w", newline="") as outfile:
 
     writer = csv.DictWriter(outfile, fieldnames=fieldnames)

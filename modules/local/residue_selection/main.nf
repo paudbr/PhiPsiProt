@@ -20,19 +20,32 @@ process RESIDUE_SELECTION {
     path "selection_summary.csv"
 
     script:
+    def mode = selection_mode ?: 'manual'
+    def chain = target_chain ?: 'A'
+    def cutoff = distance_cutoff ?: 6.0
+    def pos = positions ?: 'ALL'
+
+    def optional_args = ""
+    if (mode == 'manual') {
+        optional_args += " --positions ${pos}"
+    }
+    if (mode == 'pocket') {
+        optional_args += " --ligand_resname ${ligand_resname}"
+    }
+    if (mode == 'interface') {
+        optional_args += " --interface_chain ${interface_chain}"
+    }
+
     """
-    python $projectDir/bin/select_mutable_residues.py \
+    python3 $projectDir/bin/select_mutable_residues.py \
         --input_pdb $input_pdb \
-        --target_chain ${target_chain ?: 'A'} \
-        --positions ${positions ?: 'ALL'} \
-        --selection_mode ${selection_mode ?: 'manual'} \
-        --ligand_resname ${ligand_resname ?: ''} \
-        --interface_chain ${interface_chain ?: ''} \
-        --distance_cutoff ${distance_cutoff ?: 6.0} \
+        --target_chain ${chain} \
+        --selection_mode ${mode} \
+        --distance_cutoff ${cutoff} \
+        ${optional_args} \
         --output selected_positions.txt
 
     echo "selection_mode,target_chain,positions,ligand_resname,interface_chain,distance_cutoff,selected_positions" > selection_summary.csv
-    echo "${selection_mode ?: 'manual'},${target_chain ?: 'A'},${positions ?: 'ALL'},${ligand_resname ?: 'NONE'},${interface_chain ?: 'NONE'},${distance_cutoff ?: 6.0},\$(cat selected_positions.txt)" >> selection_summary.csv
-
+    echo "${mode},${chain},${pos},${ligand_resname ?: 'NONE'},${interface_chain ?: 'NONE'},${cutoff},\$(cat selected_positions.txt)" >> selection_summary.csv
     """
 }
