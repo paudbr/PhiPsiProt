@@ -40,6 +40,7 @@ RUN pip install --no-cache-dir \
     google-api-python-client \
     six \
     pytest \
+    matplotlib \
     torch torchvision torchaudio
 
 # =========================

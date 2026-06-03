@@ -43,6 +43,10 @@ workflow ALPHAFOLD3 {
     ch_top_ranked_pdb = channel.empty()
     ch_msa_final      = channel.empty()
     ch_multiqc_report = channel.empty()
+    ch_pae_final      = channel.empty()
+    ch_plddt_final    = channel.empty()
+    ch_ptms_final     = channel.empty()
+    ch_iptms_final    = channel.empty()
 
     FASTA_TO_ALPHAFOLD3_JSON(ch_samplesheet)
     ch_versions       = ch_versions.mix(FASTA_TO_ALPHAFOLD3_JSON.out.versions)
@@ -163,6 +167,26 @@ workflow ALPHAFOLD3 {
         }
         .set { ch_plddt_final }
 
+    RUN_ALPHAFOLD3
+        .out
+        .ptms
+        .map { meta, f ->
+            def m = meta.clone()
+            m.model = "alphafold3"
+            [ m, f ]
+        }
+        .set { ch_ptms_final }
+
+    RUN_ALPHAFOLD3
+        .out
+        .iptms
+        .map { meta, f ->
+            def m = meta.clone()
+            m.model = "alphafold3"
+            [ m, f ]
+        }
+        .set { ch_iptms_final }
+
 
     emit:
     top_ranked_pdb = ch_top_ranked_pdb // channel: [ id, /path/to/*.pdb ]
@@ -172,6 +196,8 @@ workflow ALPHAFOLD3 {
     multiqc_report = ch_multiqc_report // channel: /path/to/multiqc_report.html
     versions       = ch_versions       // channel: [ path(versions.yml) ]
     plddt          = ch_plddt_final
+    ptms           = ch_ptms_final
+    iptms          = ch_iptms_final
 
 }
 

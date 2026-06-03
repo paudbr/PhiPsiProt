@@ -9,4 +9,7 @@ workflow SATURATION {
 
     main:
     PYROSETTA_SATURATION(input_pdb, target_chain, positions)
+
+    emit:
+    candidates = PYROSETTA_SATURATION.out
 }

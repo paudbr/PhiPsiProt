@@ -1,0 +1,1 @@
+nextflow run main.nf -profile docker --input /mnt/data_local/pipes/structural/PhiPsiProt/test_samplesheet.csv --outdir /mnt/data_local/pipes/structural/test_Dsup/outdir/ --structural_tools ESM,Chai

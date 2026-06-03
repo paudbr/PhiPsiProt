@@ -25,7 +25,7 @@ process RUN_ALPHAFOLD3 {
     tuple val(meta), path ("${meta.id}_alphafold3_msa.tsv") , emit: msa
     tuple val(meta), path ("${meta.id}_0_pae.tsv")          , emit: pae
     tuple val(meta), path ("${meta.id}_ptm.tsv")            , emit: ptms
-    tuple val(meta), path ("${meta.id}_iptm.tsv")           , optional: true, emit: iptms
+    tuple val(meta), path ("${meta.id}_iptm.tsv")           , emit: iptms
     path "versions.yml"                                     , emit: versions
 
     when:
@@ -100,6 +100,7 @@ process RUN_ALPHAFOLD3 {
     extract_metrics.py --name ${prefix} \\
         --jsons ${af3_id}/${af3_id}_data.json ${af3_id}/${af3_id}_summary_confidences.json ${af3_id}/${af3_id}_confidences.json \\
         --structs raw/*ranked_*.cif
+    touch "${prefix}_ptm.tsv" "${prefix}_iptm.tsv"
 
     mv "${prefix}_msa.tsv" "${meta.id}_alphafold3_msa.tsv"
 

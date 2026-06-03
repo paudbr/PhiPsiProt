@@ -74,6 +74,59 @@ EOF
     """
 }
 
+process MERGE_AF3_SCORES {
+    tag "$meta.id"
+    label 'process_single'
+
+    input:
+    tuple val(meta), path(ptm_file), path(iptm_file)
+
+    output:
+    path "${meta.id}_af3_scores.tsv"
+
+    script:
+    """
+    python3 - << 'EOF'
+import os
+
+prefix = "${meta.id}_af3"
+ptm_f  = "${ptm_file}"
+iptm_f = "${iptm_file}"
+
+TAB = chr(9)
+NL  = chr(10)
+
+def read_val(path):
+    if not os.path.isfile(path) or os.path.getsize(path) == 0:
+        return None
+    with open(path) as f:
+        content = f.read().strip()
+    lines = content.splitlines()
+    if len(lines) == 1:
+        try:
+            return float(lines[0])
+        except ValueError:
+            return None
+    for line in lines[1:]:
+        parts = line.split()
+        if parts:
+            try:
+                return float(parts[-1])
+            except ValueError:
+                pass
+    return None
+
+ptm  = read_val(ptm_f)
+iptm = read_val(iptm_f)
+
+with open(f"{prefix}_scores.tsv", "w") as fh:
+    fh.write("metric" + TAB + "value" + NL)
+    if ptm  is not None: fh.write("ptm"  + TAB + f"{ptm:.4f}"  + NL)
+    if iptm is not None: fh.write("iptm" + TAB + f"{iptm:.4f}" + NL)
+EOF
+    """
+}
+
 process TAG_AF3_PLDDT {
     tag "$meta.id"
     input:  tuple val(meta), path(tsv)
@@ -94,6 +147,8 @@ workflow METRICS_REPORT {
     ch_chai_pdb 
     ch_chai_raw
     ch_af3_plddt
+    ch_af3_ptm
+    ch_af3_iptm
 
     main:
 
@@ -141,6 +196,14 @@ workflow METRICS_REPORT {
     TAG_AF3_PLDDT( ch_af3_plddt )
 
     ch_all_plddt = ch_all_plddt.mix( TAG_AF3_PLDDT.out )
+
+    MERGE_AF3_SCORES(
+        ch_af3_ptm
+            .map  { meta, f -> [ meta.id, meta, f ] }
+            .join ( ch_af3_iptm.map { meta, f -> [ meta.id, f ] } )
+            .map  { id, meta, ptm, iptm -> [ meta, ptm, iptm ] }
+    )
+    ch_all_scores = ch_all_scores.mix( MERGE_AF3_SCORES.out )
 
     EXTRACT_CHAI_ALL_MODELS( ch_chai_raw )
 

@@ -6,7 +6,7 @@ process RUN_BOLTZ {
     label 'process_medium'
     label 'process_gpu'
 
-    container "nf-core/proteinfold_boltz:2.0.0"
+    container "quay.io/nf-core/proteinfold_boltz:2.0.0"
 
     input:
     tuple val(meta), path(fasta), path(files)
@@ -54,7 +54,8 @@ process RUN_BOLTZ {
         echo ">>> MIG mode detected. Mocking pynvml.nvmlDeviceGetNumGpuCores to avoid errors in Boltz. See https://github.com/nf-core/proteinfold/issues/417"
         boltz_wrapper.py predict "${fasta}" --output_format "pdb" ${args} --cache ./
     else
-        boltz predict "${fasta}" --output_format "pdb" ${args} --cache ./
+        
+        boltz predict "${fasta}" --output_format "pdb" ${args} --cache ./ 
     fi
 
     cp boltz_results_*/predictions/${meta.id}/*_0.pdb ./${meta.id}_boltz.pdb

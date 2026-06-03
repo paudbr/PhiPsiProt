@@ -18,6 +18,7 @@ nextflow.enable.dsl=2
 include { PREPARE_ALPHAFOLD2_DBS } from './subworkflows/local/prepare_alphafold2_dbs'
 include { PREPARE_ALPHAFOLD3_DBS } from './subworkflows/local/prepare_alphafold3_dbs'
 include { PREPARE_ESMFOLD_DBS }    from './subworkflows/local/prepare_esmfold_dbs'
+include { PREPARE_BOLTZ_DBS }      from './subworkflows/local/prepare_boltz_dbs'
 
 include { ALPHAFOLD2 } from './workflows/alphafold2'
 include { ALPHAFOLD3 } from './workflows/alphafold3'
@@ -29,6 +30,12 @@ include { PIPELINE_COMPLETION }     from './subworkflows/local/utils_nfcore_prot
 
 include { POST_PROCESSING } from './subworkflows/local/post_processing'
 include { METRICS_REPORT }  from './subworkflows/local/metrics_report'
+include { DOCKING_COFOLDING } from './subworkflows/local/docking_cofolding'
+
+include { SATURATION      } from './subworkflows/design_modes/saturation'
+include { BACKBONE        } from './subworkflows/design_modes/backbone'
+include { PEPTIDE_DESIGN  } from './subworkflows/design_modes/peptide_design'
+include { ANTIBODY_DESIGN } from './subworkflows/design_modes/antibody_design'
 
 workflow NFCORE_PROTEINFOLD {
 
@@ -42,6 +49,7 @@ workflow NFCORE_PROTEINFOLD {
     ch_versions         = channel.empty()
     ch_report_input     = channel.empty()
     ch_top_ranked_model = channel.empty()
+    ch_design_candidates = channel.empty()
 
     def requested_modes = params.structural_tools.toLowerCase().split(",").collect { it.trim() }
     def requested_modes_size = requested_modes.size()
@@ -58,14 +66,17 @@ workflow NFCORE_PROTEINFOLD {
     */
     if (params.mode == 'screening') {
         SATURATION(file(params.input_pdb), params.target_chain, params.positions)
+        ch_design_candidates = SATURATION.out.candidates
     }
 
     else if (params.mode == 'backbone') {
         BACKBONE(params.mode)
+        ch_design_candidates = BACKBONE.out.candidates
     }
 
     else if (params.mode == 'peptide_design') {
         PEPTIDE_DESIGN(params.mode)
+        ch_design_candidates = PEPTIDE_DESIGN.out.candidates
     }
 
     else if (params.mode == 'antibody_design') {
@@ -74,6 +85,95 @@ workflow NFCORE_PROTEINFOLD {
 
     else if (params.mode != 'structural') {
         error "Unknown mode: ${params.mode}"
+    }
+
+    /*
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    INTERMEDIATE LIGAND FILTER
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    */
+    if (params.ligand) {
+        if (!params.ligand_candidates_csv && params.mode == 'structural') {
+            error "Ligand filtering needs --ligand_candidates_csv when --mode structural is used."
+        }
+        if (params.ligand && !params.receptor_sequence) {
+    error "Ligand cofold mode needs --receptor_sequence"
+        }
+        if (!params.ligand_reference_pdb) {
+            error "Ligand filtering needs --ligand_reference_pdb."
+        }
+        if (!params.pocket_residues) {
+            error "Ligand filtering needs --pocket_residues, for example A5,A4,A10,A238,A239,A240,A241,A242,A243,A100."
+        }
+
+
+
+        PREPARE_BOLTZ_DBS(
+            params.boltz_db,
+            params.boltz_ccd_path,
+            params.boltz_model_path,
+            params.boltz2_aff_path,
+            params.boltz2_conf_path,
+            params.boltz2_mols_path,
+            params.boltz_ccd_link,
+            params.boltz_model_link,
+            params.boltz2_aff_link,
+            params.boltz2_conf_link,
+            params.boltz2_mols_link
+        )
+        ch_versions = ch_versions.mix(PREPARE_BOLTZ_DBS.out.versions)
+
+        ch_ligand_candidates = params.ligand_candidates_csv ?
+            channel.value(file(params.ligand_candidates_csv, checkIfExists: true)) :
+            ch_design_candidates
+
+        ch_ligand_reference = channel.value(file(params.ligand_reference_pdb, checkIfExists: true))
+        ch_ligand_file = params.ligand_file ?
+            channel.value(file(params.ligand_file, checkIfExists: true)) :
+            ch_dummy_file
+        
+        def is_prot_prot = params.docking_tool in ['haddock3', 'rosettadock']
+
+        if (is_prot_prot) {
+
+            PREPARE_ESMFOLD_DBS(
+                params.esmfold_db,
+                params.esmfold_params_path,
+                params.esmfold_3B_v1,
+                params.esm2_t36_3B_UR50D,
+                params.esm2_t36_3B_UR50D_contact_regression
+            )
+        }
+
+        // Canal de params de ESMFold — reutiliza si ya estaba preparado
+        ch_esmfold_params = (is_prot_prot)
+            ? PREPARE_ESMFOLD_DBS.out.params   
+            : (is_prot_prot)
+                ? PREPARE_ESMFOLD_DBS.out.params   
+                : channel.empty()
+
+        DOCKING_COFOLDING(
+            ch_ligand_candidates,
+            ch_ligand_reference,
+            params.receptor_sequence,
+            ch_ligand_file,
+            PREPARE_BOLTZ_DBS.out.boltz_model,
+            PREPARE_BOLTZ_DBS.out.boltz_ccd,
+            PREPARE_BOLTZ_DBS.out.boltz2_aff,
+            PREPARE_BOLTZ_DBS.out.boltz2_conf,
+            PREPARE_BOLTZ_DBS.out.boltz2_mols,
+            ch_esmfold_params,               // ← NUEVO
+            params.esmfold_num_recycles      // ← NUEVO
+        )
+
+        ch_versions = ch_versions.mix(DOCKING_COFOLDING.out.versions)
+
+         
+         
+        ch_samplesheet = DOCKING_COFOLDING.out.samplesheet
+    }
+    else {
+    ch_samplesheet = samplesheet  // el original
     }
 
     /*
@@ -135,6 +235,16 @@ workflow NFCORE_PROTEINFOLD {
         ch_versions = ch_versions.mix(ALPHAFOLD2.out.versions)
 
         ch_top_ranked_model = ch_top_ranked_model.mix(ALPHAFOLD2.out.top_ranked_pdb)
+
+        ch_report_input = ch_report_input.mix(
+            ALPHAFOLD2.out.pdb
+                .map { meta, files ->
+                    def fileList = (files instanceof List) ? files.flatten() : [ files ]
+                    [ meta, fileList.sort { a, b -> a.name <=> b.name }.take(5) ]
+                }
+                .join(ALPHAFOLD2.out.msa)
+                .join(ALPHAFOLD2.out.pae)
+        )
     }
 
     /*
@@ -183,6 +293,16 @@ workflow NFCORE_PROTEINFOLD {
         ch_versions = ch_versions.mix(ALPHAFOLD3.out.versions)
 
         ch_top_ranked_model = ch_top_ranked_model.mix(ALPHAFOLD3.out.top_ranked_pdb)
+
+        ch_report_input = ch_report_input.mix(
+            ALPHAFOLD3.out.pdb
+                .groupTuple()
+                .map { meta, files ->
+                    [ meta, files.flatten().sort { a, b -> a.name <=> b.name }.take(5) ]
+                }
+                .join(ALPHAFOLD3.out.msa)
+                .join(ALPHAFOLD3.out.pae)
+        )
     }
 
     /*
@@ -211,6 +331,12 @@ workflow NFCORE_PROTEINFOLD {
         ch_versions = ch_versions.mix(ESMFOLD.out.versions)
 
         ch_top_ranked_model = ch_top_ranked_model.mix(ESMFOLD.out.pdb)
+
+        ch_report_input = ch_report_input.mix(
+            ESMFOLD.out.pdb
+                .combine(ch_dummy_file)
+                .combine(ch_dummy_file_pae)
+        )
     }
 
     /*
@@ -229,6 +355,12 @@ workflow NFCORE_PROTEINFOLD {
         ch_versions = ch_versions.mix(CHAI1.out.versions)
 
         ch_top_ranked_model = ch_top_ranked_model.mix(CHAI1.out.top_ranked_pdb)
+
+        ch_report_input = ch_report_input.mix(
+            CHAI1.out.pdb
+                .combine(ch_dummy_file)
+                .combine(ch_dummy_file_pae)
+        )
     }
 
     /*
@@ -253,18 +385,22 @@ workflow NFCORE_PROTEINFOLD {
 
         ch_mr_chai_raw   = requested_modes.contains("chai") ? CHAI1.out.raw  : Channel.empty() 
         ch_mr_af3_plddt = requested_modes.contains("af3") ? ALPHAFOLD3.out.plddt : Channel.empty() 
+        ch_mr_af3_ptm   = requested_modes.contains("af3") ? ALPHAFOLD3.out.ptms   : Channel.empty()
+        ch_mr_af3_iptm  = requested_modes.contains("af3") ? ALPHAFOLD3.out.iptms  : Channel.empty()
 
 
         METRICS_REPORT(
             ch_mr_af2_pdb,
             ch_mr_af3_pdb,
             ch_mr_esm_pdb,
-            ch_mr_chai_pdb,   
             ch_mr_chai_plddt,
             ch_mr_chai_ptm,
             ch_mr_chai_iptm,
+            ch_mr_chai_pdb,
             ch_mr_chai_raw,
-            ch_mr_af3_plddt
+            ch_mr_af3_plddt,
+            ch_mr_af3_ptm,
+            ch_mr_af3_iptm
         )
         metrics_report_ch = METRICS_REPORT.out.report
 

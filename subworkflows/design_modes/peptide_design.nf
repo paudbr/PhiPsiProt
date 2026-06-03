@@ -7,4 +7,7 @@ workflow PEPTIDE_DESIGN {
 
     main:
     DESIGN_DUMMY(mode)
+
+    emit:
+    candidates = DESIGN_DUMMY.out
 }

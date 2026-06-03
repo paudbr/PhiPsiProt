@@ -1,0 +1,14 @@
+nextflow run main.nf -profile docker \
+  --input "/mnt/data_local/pipes/structural/PhiPsiProt_structural/samplesheet_ca.csv" \
+  --ligand true \
+  --docking_tool haddock3 \
+  --ligand_candidates_csv "/mnt/alphafold3_db/test_ligand/final_binder_candidates.csv" \
+  --outdir "/mnt/alphafold3_db/test_ligand/output/" \
+  --structural_tools AF3 \
+  --use_gpu true \
+  --boltz_model boltz1 \
+  --use_msa_server true \
+  --ligand_filter_runs 3 \
+  --receptor_sequence "/mnt/alphafold3_db/test_ligand/ca.fa" \
+  --ligand_reference_pdb "/mnt/alphafold3_db/test_ligand/3KS3.pdb" \
+  --pocket_residues "A5,A4,A10,A238,A239,A240,A241,A242,A243,A100" \

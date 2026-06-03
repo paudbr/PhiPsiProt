@@ -7,4 +7,7 @@ workflow BACKBONE {
 
     main:
     DESIGN_DUMMY(mode)
+
+    emit:
+    candidates = DESIGN_DUMMY.out
 }

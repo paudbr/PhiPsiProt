@@ -63,6 +63,79 @@
                     "description": "generate metrics report",
                     "fa_icon": "fas fa-microchip"
                 },
+                "ligand": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Run the optional intermediate ligand filtering step before structural validation."
+                },
+                "docking_tool": {
+                    "type": "string",
+                    "default": "gnina",
+                    "enum": ["gnina", "haddock3", "rosettadock"],
+                    "description": "Docking tool to use for ligand/binder filtering",
+                    "fa_icon": "fas fa-puzzle-piece"
+                },
+
+                "ligand_candidates_csv": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "CSV with binder candidates to score with GNINA and Boltz-2 when --ligand is enabled."
+                },
+                "ligand_reference_pdb": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "Reference receptor/original PDB used to generate the GNINA box and baseline scores."
+                },
+                "ligand_file": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "Optional ligand file for GNINA. If omitted, the ligand is extracted from ligand_reference_pdb by ligand_resname."
+                },
+                "ligand_resname": {
+                    "type": "string",
+                    "default": "GOL",
+                    "description": "Residue name to extract as ligand from ligand_reference_pdb when ligand_file is not provided."
+                },
+                "ligand_ccd": {
+                    "type": "string",
+                    "description": "CCD code for the ligand chain used by Boltz-2 ligand cofolding."
+                },
+                "ligand_smiles": {
+                    "type": "string",
+                    "description": "SMILES string for the ligand chain used by Boltz-2 ligand cofolding."
+                },
+                "pocket_residues": {
+                    "type": "string",
+                    "description": "Comma-separated pocket residues used to generate the GNINA box, for example A5,A4,A10."
+                },
+                "ligand_filter_runs": {
+                    "type": "integer",
+                    "default": 3,
+                    "minimum": 1,
+                    "description": "Number of GNINA/Boltz-2 replicate runs per candidate."
+                },
+                "gnina_box_size": {
+                    "type": "number",
+                    "default": 20,
+                    "description": "GNINA cubic box size in Angstrom."
+                },
+                "gnina_exhaustiveness": {
+                    "type": "integer",
+                    "default": 8,
+                    "minimum": 1,
+                    "description": "GNINA exhaustiveness."
+                },
+                "gnina_num_modes": {
+                    "type": "integer",
+                    "default": 9,
+                    "minimum": 1,
+                    "description": "Number of docking poses requested from GNINA."
+                },
+                "gnina_seed": {
+                    "type": "integer",
+                    "default": 1000,
+                    "description": "Base random seed for GNINA replicates."
+                },
                 "save_intermediates": {
                     "type": "boolean",
                     "description": "Keep raw intermediate files",
