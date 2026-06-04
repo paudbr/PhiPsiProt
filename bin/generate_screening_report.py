@@ -11,6 +11,73 @@ def img_to_base64(path):
         return base64.b64encode(f.read()).decode("utf-8")
 
 
+def to_float(value):
+    try:
+        if value in ["", "NA", None]:
+            return None
+        return float(value)
+    except Exception:
+        return None
+
+
+def fmt_metric(value):
+    if isinstance(value, (int, float)):
+        return f"{value:.3f}"
+    return str(value)
+
+def css_delta(value, good_if_positive=True):
+    v = to_float(value)
+    if v is None:
+        return ""
+    if good_if_positive:
+        return "good" if v > 0 else "bad" if v < 0 else ""
+    return "good" if v < 0 else "bad" if v > 0 else ""
+
+def css_ddg(value):
+    v = to_float(value)
+    if v is None:
+        return ""
+    if v < 0:
+        return "good"
+    if v > 0:
+        return "bad"
+    return ""
+
+
+def css_final_score(value):
+    v = to_float(value)
+    if v is None:
+        return ""
+    if v < 0:
+        return "good"
+    if v > 0:
+        return "bad"
+    return ""
+
+def top_candidate_summary(rows):
+    if not rows:
+        return ""
+
+    r = rows[0]
+
+    mutation = r.get("mutation", "NA")
+    ddg = r.get("ddg", "NA")
+    final_score = r.get("final_score", "NA")
+    dsol = r.get("delta_solubility_score", "NA")
+    dinst = r.get("delta_instability_index", "NA")
+
+    return f"""
+    <section class="card">
+        <h2>Top candidate summary</h2>
+        <p class="note">
+            <b>{mutation}</b> is the highest ranked candidate.
+            It has ΔΔG = <b>{ddg}</b> and final score = <b>{final_score}</b>.
+            Relative to WT, ΔSolubility = <b>{dsol}</b> and
+            ΔInstability = <b>{dinst}</b>.
+        </p>
+    </section>
+    """
+
 parser = argparse.ArgumentParser()
 parser.add_argument("--results_csv", required=True)
 parser.add_argument("--plots_dir", required=True)
@@ -26,18 +93,32 @@ rows = []
 with open(results_csv, newline="") as f:
     reader = csv.DictReader(f)
     for row in reader:
-        try:
-            row["ddg_float"] = float(row["ddg"])
-            rows.append(row)
-        except Exception:
-            pass
+        ddg = to_float(row.get("ddg"))
+        final_score = to_float(row.get("final_score"))
 
-rows = sorted(rows, key=lambda r: r["ddg_float"])
+        if ddg is None:
+            continue
+
+        row["ddg_float"] = ddg
+        row["final_score_float"] = final_score if final_score is not None else ddg
+        rows.append(row)
+
+# Final ranking uses the combined score when available
+rows = sorted(rows, key=lambda r: r["final_score_float"])
 top10 = rows[:10]
+display_rows = rows
 
-best = rows[0]["ddg_float"] if rows else "NA"
-worst = rows[-1]["ddg_float"] if rows else "NA"
-mean = sum(r["ddg_float"] for r in rows) / len(rows) if rows else "NA"
+
+best_ddg = min((r["ddg_float"] for r in rows), default="NA")
+worst_ddg = max((r["ddg_float"] for r in rows), default="NA")
+mean_ddg = (
+    sum(r["ddg_float"] for r in rows) / len(rows)
+    if rows else "NA"
+)
+best_final_score = (
+    rows[0]["final_score_float"]
+    if rows else "NA"
+)
 
 plot_files = [
     ("ddg_ranking_barplot.png", "PyRosetta ΔΔG ranking"),
@@ -58,17 +139,21 @@ for filename, title in plot_files:
         """
 
 table_rows = ""
-for r in top10:
+for r in display_rows:
     table_rows += f"""
     <tr>
         <td>{r.get("candidate_id", "")}</td>
         <td>{r.get("mutation", "")}</td>
+        <td>{r.get("position", "")}</td>
         <td>{r.get("wildtype", "")}</td>
         <td>{r.get("mutant", "")}</td>
-        <td>{r.get("position", "")}</td>
-        <td>{r.get("ddg", "")}</td>
-        <td>{r.get("wt_score", "")}</td>
-        <td>{r.get("mutant_score", "")}</td>
+        <td class="{css_ddg(r.get("ddg"))}">{r.get("ddg", "")}</td>
+        <td class="{css_final_score(r.get("final_score"))}">{r.get("final_score", "")}</td>
+        <td class="{css_delta(r.get("delta_solubility_score"), True)}">{r.get("delta_solubility_score", "")}</td>
+        <td class="{css_delta(r.get("delta_instability_index"), False)}">{r.get("delta_instability_index", "")}</td>
+        <td class="{css_delta(r.get("delta_gravy"), False)}">{r.get("delta_gravy", "")}</td>
+        <td>{r.get("isoelectric_point", "")}</td>
+        <td>{r.get("molecular_weight", "")}</td>
     </tr>
     """
 
@@ -141,6 +226,7 @@ table {{
     width: 100%;
     border-collapse: collapse;
     margin-top: 12px;
+    font-size: 14px;
 }}
 th {{
     background: #e5e7eb;
@@ -151,6 +237,21 @@ td {{
     border-bottom: 1px solid #e5e7eb;
     padding: 9px;
 }}
+
+.table-container {{
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: 700px;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+}}
+
+thead th {{
+    position: sticky;
+    top: 0;
+    background: #e5e7eb;
+    z-index: 2;
+}}
 .badge {{
     display: inline-block;
     background: #dcfce7;
@@ -158,6 +259,20 @@ td {{
     padding: 6px 10px;
     border-radius: 999px;
     font-weight: bold;
+}}
+
+.good {{
+    color: #15803d;
+    font-weight: bold;
+}}
+
+.bad {{
+    color: #dc2626;
+    font-weight: bold;
+}}
+.note {{
+    color: #475569;
+    line-height: 1.5;
 }}
 footer {{
     color: #64748b;
@@ -170,50 +285,82 @@ footer {{
 
 <header>
     <h1>PhiPsiProt Mutational Screening Report</h1>
-    <p>PyRosetta ΔΔG screening and candidate ranking</p>
+    <p>PyRosetta ΔΔG screening with biophysical candidate prioritization</p>
 </header>
 
 <div class="container">
 
     <div class="summary">
         <div class="metric">
-            <div class="label">Candidates after filtering</div>
+            <div class="label">Candidates ranked</div>
             <div class="value">{len(rows)}</div>
         </div>
         <div class="metric">
             <div class="label">Best ΔΔG</div>
-            <div class="value">{best:.3f}</div>
-        </div>
-        <div class="metric">
-            <div class="label">Worst ΔΔG</div>
-            <div class="value">{worst:.3f}</div>
+            <div class="value">{fmt_metric(best_ddg)}</div>
         </div>
         <div class="metric">
             <div class="label">Mean ΔΔG</div>
-            <div class="value">{mean:.3f}</div>
+            <div class="value">{fmt_metric(mean_ddg)}</div>
+        </div>
+        <div class="metric">
+            <div class="label">Best final score</div>
+            <div class="value">{fmt_metric(best_final_score)}</div>
         </div>
     </div>
-
+    {top_candidate_summary(rows)}
     <section class="card">
-        <h2>Top stabilizing mutations</h2>
-        <p><span class="badge">Lower ΔΔG = more stabilizing</span></p>
+        <h2>Top ranked mutations</h2>
+        <p><span class="badge">Lower final score = better combined candidate</span></p>
+        <p class="note">
+            The final score combines PyRosetta ΔΔG with biophysical penalties,
+            including instability and solubility. ΔΔG remains the main driver,
+            while biophysical properties help prioritize more developable candidates.
+        </p>
+
+        <div class="table-container">
         <table>
             <thead>
                 <tr>
                     <th>Candidate</th>
                     <th>Mutation</th>
+                    <th>Position</th>
                     <th>WT</th>
                     <th>Mutant</th>
-                    <th>Position</th>
                     <th>ΔΔG</th>
-                    <th>WT score</th>
-                    <th>Mutant score</th>
+                    <th>Final score</th>
+                    <th>ΔSolubility</th>
+                    <th>ΔInstability</th>
+                    <th>ΔGRAVY</th>
+                    <th>pI</th>
+                    <th>MW</th>
                 </tr>
             </thead>
             <tbody>
                 {table_rows}
             </tbody>
         </table>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Biophysical descriptors</h2>
+        <p class="note">
+            <b>Solubility score:</b> simple sequence-based proxy where higher values are better.<br>
+            <b>Instability index:</b> values below 40 are generally considered more stable.<br>
+            <b>GRAVY:</b> negative values indicate more hydrophilic sequences; positive values indicate more hydrophobic sequences.<br>
+            <b>pI:</b> predicted isoelectric point of the mutated sequence.<br>
+            <b>MW:</b> molecular weight of the mutated sequence.
+        </p>
+    </section>
+
+    <section class="card">
+        <h2>How to interpret this table</h2>
+        <p class="note">
+            Green values indicate favorable changes. Red values indicate potentially unfavorable changes.
+            Negative ΔΔG and lower final score are preferred. Positive ΔSolubility is preferred.
+            Negative ΔInstability and negative ΔGRAVY are generally preferred.
+        </p>
     </section>
 
     {plots_html}

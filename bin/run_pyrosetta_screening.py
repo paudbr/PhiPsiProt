@@ -3,7 +3,6 @@
 import argparse
 import csv
 from pathlib import Path
-
 import pyrosetta
 from pyrosetta.toolbox import mutate_residue
 
@@ -120,11 +119,14 @@ def main():
             "wildtype",
             "mutant",
             "mutation",
+            "num_mutations",
             "ddg",
             "wt_score",
             "mutant_score",
             "input_pdb",
             "fasta_id",
+            "sequence",
+            "wt_sequence"
         ])
 
         counter = 1
@@ -168,11 +170,14 @@ def main():
                     wt,
                     mut,
                     mutation,
+                    1,
                     round(ddg, 4),
                     round(wt_score, 4),
                     round(mutant_score, 4),
                     pdb.name,
                     fasta_id,
+                    mutant_sequence,
+                    wt_sequence,
                 ])
 
                 write_fasta_record(out_fasta, fasta_id, mutant_sequence)

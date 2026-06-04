@@ -15,7 +15,6 @@ process PYROSETTA_SCREENING {
     path "candidates.csv"
     path "candidates.fasta"
 
-
     script:
     """
     if [ -f "${positions}" ]; then
@@ -25,16 +24,15 @@ process PYROSETTA_SCREENING {
     fi
 
     if [ -z "\$POSITIONS" ]; then
-        echo "ERROR: No mutable positions selected. Check selection_mode, ligand_resname/interface_chain, and distance_cutoff." >&2
+        echo "ERROR: No mutable positions selected. Check selection_mode, ligand_resname/interface_chain, pocket_rank and distance_cutoff." >&2
         exit 1
     fi
 
-    python3  $projectDir/bin/run_pyrosetta_screening.py \
+    python3 $projectDir/bin/run_pyrosetta_screening.py \
         --input_pdb $input_pdb \
-        --target_chain ${target_chain ?: 'ALL'} \
+        --target_chain ${target_chain ?: 'A'} \
         --positions "\$POSITIONS" \
         --output candidates.csv \
         --fasta_output candidates.fasta
     """
-    
 }

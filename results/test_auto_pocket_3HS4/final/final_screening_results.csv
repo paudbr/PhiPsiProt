@@ -1,0 +1,1 @@
+candidate_id,chain,position,sequence_index,wildtype,mutant,num_mutations,mutation,ddg,wt_score,mutant_score,input_pdb,fasta_id,sequence,gravy,aromaticity,instability_index,molecular_weight,isoelectric_point,solubility_score,biophysical_status,structural_score,final_score,status,selection_mode,selected_positions,ligand_resname,interface_chain,distance_cutoff,pipeline_stage

@@ -1,3 +1,23 @@
+/*
+===============================================================================
+RESIDUE_SELECTION
+
+Purpose:
+Select mutable residues for mutational screening.
+
+Modes:
+- manual: user-defined positions
+- pocket: residues near a ligand
+- interface: residues near another chain
+- all: all residues in target chain
+
+Outputs:
+- selected_positions.txt
+- selection_summary.csv
+===============================================================================
+*/
+
+
 process RESIDUE_SELECTION {
 
     tag "$input_pdb"

@@ -1,0 +1,42 @@
+HEADER
+HEADER This is a pdb format file writen by the programm fpocket.                 
+HEADER It represents the atoms contacted by the voronoi vertices of the pocket.  
+HEADER                                                                           
+HEADER Information about the pocket     2:
+HEADER 0  - Pocket Score                      : 0.4771
+HEADER 1  - Drug Score                        : 0.6450
+HEADER 2  - Number of alpha spheres           :    23
+HEADER 3  - Mean alpha-sphere radius          : 3.8910
+HEADER 4  - Mean alpha-sphere Solvent Acc.    : 0.4436
+HEADER 5  - Mean B-factor of pocket residues  : 0.0000
+HEADER 6  - Hydrophobicity Score              : 31.5000
+HEADER 7  - Polarity Score                    :     5
+HEADER 8  - Amino Acid based volume Score     : 3.9167
+HEADER 9  - Pocket volume (Monte Carlo)       : 282.1358
+HEADER 10 - Pocket volume (convex hull)       : 17.5025
+HEADER 11 - Charge Score                      :     1
+HEADER 12 - Local hydrophobic density Score   : 14.0000
+HEADER 13 - Number of apolar alpha sphere     :    15
+HEADER 14 - Proportion of apolar alpha sphere : 0.6522
+ATOM    718  NE2 GLN A  92      -7.841   3.905  10.933  0.00  0.00           N 0
+ATOM    960  CG2 VAL A 121      -9.852   3.270  14.949  0.00  0.00           C 0
+ATOM    738  CE1 HIS A  94      -7.946   0.393  13.481  0.00  0.00           C 0
+ATOM   1562  CD2 LEU A 198      -4.271   4.855  18.287  0.00  0.00           C 0
+ATOM    959  CG1 VAL A 121      -9.648   5.623  15.732  0.00  0.00           C 0
+ATOM   1043   CZ PHE A 131      -6.033   8.577  14.991  0.00  0.00           C 0
+ATOM   1556   CA LEU A 198      -2.981   2.543  19.857  0.00  0.00           C 0
+ATOM   1563    N THR A 199      -2.663   0.261  19.081  0.00  0.00           N 0
+ATOM   1647  CZ2 TRP A 209      -7.323  -0.325  20.826  0.00  0.00           C 0
+ATOM   1130  CG2 VAL A 143      -9.570   3.167  19.272  0.00  0.00           C 0
+ATOM   1575  OG1 THR A 200      -1.182   1.441  14.612  0.56  1.07           O 0
+ATOM   1561  CD1 LEU A 198      -1.933   5.697  17.857  0.00  0.00           C 0
+ATOM   1559   CB LEU A 198      -2.284   3.485  18.907  0.00  0.00           C 0
+ATOM   1580    O PRO A 201       1.675   3.584  14.505  0.61  4.29           O 0
+ATOM   1590   CD PRO A 202       1.603   6.001  15.725  0.00  0.00           C 0
+HETATM 2088   ZN ZN  A 301      -6.720  -1.684  15.288  0.00  0.00          ZN 0
+ATOM   1568  OG1 THR A 199      -3.567  -2.143  17.606  0.00  0.00           O 0
+ATOM    739  NE2 HIS A  94      -7.451  -0.821  13.649  0.00  0.00           N 0
+ATOM   1129  CG1 VAL A 143     -10.678   1.030  18.577  0.00  0.00           C 0
+ATOM   1649  CH2 TRP A 209      -8.286  -0.963  20.118  0.00  0.00           C 0
+TER
+END
