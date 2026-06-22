@@ -6,9 +6,11 @@ nextflow run main.nf -profile docker \
   --outdir "/mnt/alphafold3_db/test_ligand/output/" \
   --structural_tools AF3 \
   --use_gpu true \
-  --boltz_model boltz1 \
+  --boltz_model boltz2 \
+  --boltz_use_kernels false \
   --use_msa_server true \
-  --ligand_filter_runs 3 \
+  --ligand_filter_runs 1 \
   --receptor_sequence "/mnt/alphafold3_db/test_ligand/ca.fa" \
   --ligand_reference_pdb "/mnt/alphafold3_db/test_ligand/3KS3.pdb" \
   --pocket_residues "A5,A4,A10,A238,A239,A240,A241,A242,A243,A100" \
+  -resume

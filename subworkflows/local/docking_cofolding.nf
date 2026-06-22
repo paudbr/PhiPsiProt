@@ -1,15 +1,17 @@
-include { RUN_GNINA_LIGAND_FILTER          } from '../../modules/local/run_gnina_ligand_filter/main'
-include { CANDIDATES_TO_BOLTZ              } from '../../modules/local/candidates_to_boltz/main'
-include { RUN_BOLTZ as RUN_BOLTZ_LIGAND    } from '../../modules/local/run_boltz/main'
-include { BOLTZ_LIGAND_SUMMARY             } from '../../modules/local/boltz_ligand_summary/main'
-include { CANDIDATES_TO_COFOLD_SAMPLESHEET } from '../../modules/local/candidates_to_cofold_samplesheet/main'
-include { CANDIDATES_CSV_TO_FASTA } from '../../modules/local/candidates_csv_to_fasta/main'
-include { ESMFOLD                          } from '../../workflows/esmfold'
-include { RUN_HADDOCK3                     } from '../../modules/local/run_haddock3/main'
-include { RUN_ROSETTADOCK                  } from '../../modules/local/run_rosettadock/main'
-
-include {GENERATE_HADDOCK_AIRS             } from '../../modules/local/generate_haddock_airs/main'
-
+include { RUN_GNINA_LIGAND_FILTER                  } from '../../modules/local/run_gnina_ligand_filter/main'
+include { CANDIDATES_TO_BOLTZ                      } from '../../modules/local/candidates_to_boltz/main'
+include { CANDIDATES_SMILES_TO_BOLTZ               } from '../../modules/local/candidates_smiles_to_boltz/main'
+include { RUN_BOLTZ as RUN_BOLTZ_LIGAND            } from '../../modules/local/run_boltz/main'
+include { RUN_BOLTZ as RUN_BOLTZ_SM               } from '../../modules/local/run_boltz/main'
+include { BOLTZ_LIGAND_SUMMARY                     } from '../../modules/local/boltz_ligand_summary/main'
+include { BOLTZ_LIGAND_SUMMARY as BOLTZ_SM_SUMMARY } from '../../modules/local/boltz_ligand_summary/main'
+include { CANDIDATES_TO_COFOLD_SAMPLESHEET         } from '../../modules/local/candidates_to_cofold_samplesheet/main'
+include { CANDIDATES_CSV_TO_FASTA                  } from '../../modules/local/candidates_csv_to_fasta/main'
+include { ESMFOLD                                  } from '../../workflows/esmfold'
+include { RUN_HADDOCK3                             } from '../../modules/local/run_haddock3/main'
+include { RUN_ROSETTADOCK                          } from '../../modules/local/run_rosettadock/main'
+include { GENERATE_HADDOCK_AIRS                    } from '../../modules/local/generate_haddock_airs/main'
+include { FILTER_DEGENERATE_CANDIDATES             } from '../../modules/local/filter_degenerate_candidates/main'
 
 workflow DOCKING_COFOLDING {
 
@@ -23,11 +25,11 @@ workflow DOCKING_COFOLDING {
     ch_boltz2_aff
     ch_boltz2_conf
     ch_boltz2_mols
-    esmfold_params       
-    esmfold_num_recycles 
+    esmfold_params
+    esmfold_num_recycles
 
     main:
-    ch_versions  = channel.empty()
+    ch_versions = channel.empty()
     def is_prot_prot = params.docking_tool in ['haddock3', 'rosettadock']
 
     // ──────────────────────────────────────────────────────────────
@@ -35,45 +37,37 @@ workflow DOCKING_COFOLDING {
     // ──────────────────────────────────────────────────────────────
     if (is_prot_prot) {
 
-        // Generar FASTAs — reutilizamos CANDIDATES_TO_BOLTZ para ambos
-        CANDIDATES_TO_BOLTZ(candidates_csv, receptor_sequence)
-        ch_versions = ch_versions.mix(CANDIDATES_TO_BOLTZ.out.versions)
+        // QC: filtrar candidatos degenerados antes de cualquier folding
+        FILTER_DEGENERATE_CANDIDATES(candidates_csv)
+        ch_candidates_clean = FILTER_DEGENERATE_CANDIDATES.out.clean
 
-        // Canal para Boltz2
-        ch_boltz_input = CANDIDATES_TO_BOLTZ.out.fasta
+        // Generar YAMLs para Boltz2
+        CANDIDATES_TO_BOLTZ(ch_candidates_clean, receptor_sequence)
+
+        ch_boltz_input = CANDIDATES_TO_BOLTZ.out.yaml
             .flatMap { files ->
                 def fileList = (files instanceof List) ? files.flatten() : [ files ]
-                fileList.collect { fasta ->
-                    def runId       = fasta.baseName
+                fileList.collect { yaml ->
+                    def runId       = yaml.baseName
                     def candidateId = runId.replaceFirst(/_rep\d+$/, '')
-                    [
-                        [ id: runId, candidate_id: candidateId, model: "boltz2_ligand" ],
-                        fasta,
-                        []
-                    ]
+                    [ [ id: runId, candidate_id: candidateId, model: "boltz2_ligand" ], yaml, [] ]
                 }
             }
 
-        
+        // Generar FASTAs para ESMFold
+        CANDIDATES_CSV_TO_FASTA(ch_candidates_clean)
 
-
-        //  REEMPLAZA POR ESTO:
-        ch_esmfold_samplesheet = CANDIDATES_CSV_TO_FASTA(candidates_csv)
+        ch_esmfold_samplesheet = CANDIDATES_CSV_TO_FASTA.out.fastas
+            .flatten()
             .map { fasta -> tuple([id: fasta.baseName], fasta) }
 
+        // ESMFold
         ESMFOLD(
             ch_esmfold_samplesheet,
-            ch_versions,
+            channel.empty(),
             esmfold_params,
             esmfold_num_recycles
         )
-        ch_versions = ch_versions.mix(ESMFOLD.out.versions)
-
-        ch_folded_pdbs =  ESMFOLD.out.pdb
-            .map { meta, pdb ->
-                def candidate_id = meta.id
-                [candidate_id, pdb]
-            }
 
         // Boltz2 co-folding + affinity
         RUN_BOLTZ_LIGAND(
@@ -84,84 +78,127 @@ workflow DOCKING_COFOLDING {
             ch_boltz2_conf,
             ch_boltz2_mols
         )
-        ch_versions = ch_versions.mix(RUN_BOLTZ_LIGAND.out.versions)
 
         BOLTZ_LIGAND_SUMMARY(
             RUN_BOLTZ_LIGAND.out.confidence
                 .map { meta, json -> json }
                 .collect()
         )
-        ch_versions = ch_versions.mix(BOLTZ_LIGAND_SUMMARY.out.versions)
 
         CANDIDATES_TO_COFOLD_SAMPLESHEET(
             BOLTZ_LIGAND_SUMMARY.out.summary,
-            candidates_csv,
+            ch_candidates_clean,
             receptor_sequence
         )
-        ch_versions = ch_versions.mix(CANDIDATES_TO_COFOLD_SAMPLESHEET.out.versions)
 
-        ch_haddock = ESMFOLD.out.pdb
-            .map { meta, pdb ->
-                def candidate_id = meta.id
-                tuple(candidate_id, pdb, file(params.reference_pdb))
-            }
-
+        // AIRs para HADDOCK3
         ch_air_input = ESMFOLD.out.pdb
             .map { meta, pdb ->
-                def candidate_id = meta.id
-                tuple(candidate_id, file(params.reference_pdb), pdb)
+                tuple(meta.id, file(params.ligand_reference_pdb), pdb)
             }
-        // Docking — when: en cada módulo controla cuál corre
-        GENERATE_HADDOCK_AIRS(
-            ch_air_input
+
+        GENERATE_HADDOCK_AIRS(ch_air_input)
+
+        // Join estructuras + restraints para HADDOCK3
+        ch_haddock_ready = ESMFOLD.out.pdb
+            .map { meta, pdb -> tuple(meta.id, pdb) }
+            .join(
+                GENERATE_HADDOCK_AIRS.out.airs
+                    .map { candidate_id, restraints, active, passive ->
+                        tuple(candidate_id, restraints)
+                    }
+            )
+            .map { candidate_id, binder_pdb, restraints ->
+                tuple(
+                    candidate_id,
+                    file(params.ligand_reference_pdb),
+                    binder_pdb,
+                    restraints
+                )
+            }
+
+        RUN_HADDOCK3(ch_haddock_ready)
+
+        // Acumular versiones — un solo mix al final
+        ch_versions = channel.empty().mix(
+            FILTER_DEGENERATE_CANDIDATES.out.versions,
+            CANDIDATES_TO_BOLTZ.out.versions,
+            CANDIDATES_CSV_TO_FASTA.out.versions,
+            ESMFOLD.out.versions,
+            RUN_BOLTZ_LIGAND.out.versions,
+            BOLTZ_LIGAND_SUMMARY.out.versions,
+            CANDIDATES_TO_COFOLD_SAMPLESHEET.out.versions,
+            GENERATE_HADDOCK_AIRS.out.versions,
+            RUN_HADDOCK3.out.versions
         )
 
-        ch_restraints = GENERATE_HADDOCK_AIRS.out
-        .map { candidate_id, restraints, active, passive ->
-            tuple(candidate_id, restraints)
-        }
-
-        ch_haddock_ready = ch_haddock
-        .join(ch_restraints)
-        .map { cand, pdb, rest ->
-            tuple(cand[0], cand[1], cand[2], rest[1])
-        }
-
-        RUN_HADDOCK3(
-            ch_haddock_ready
-        )
-        ch_versions = ch_versions.mix(RUN_HADDOCK3.out.versions)
-
-        //RUN_ROSETTADOCK(
-            //ch_folded_pdbs,
-            //reference_pdb
-        //)
-        //ch_versions = ch_versions.mix(RUN_ROSETTADOCK.out.versions)
-
     // ──────────────────────────────────────────────────────────────
-    // RAMA SMALL MOLECULE: solo GNINA, sin ESMFold ni Boltz2
+    // RAMA SMALL MOLECULE: GNINA + Boltz2
     // ──────────────────────────────────────────────────────────────
+    }else if (params.mode != 'structural') {
+    // modos de diseño sin ligando: los candidatos son la entrada estructural
+    ch_samplesheet = ch_design_candidates
+        .splitFasta(record: [id: true, sequence: true])
+        .map { record -> tuple([id: record.id], record.sequence)}
+    
     } else {
-
+        // Docking clasico con GNINA
         RUN_GNINA_LIGAND_FILTER(
-            candidates_csv,
+            channel.fromPath(params.ligand_candidates_csv),
             reference_pdb,
             ligand_file
         )
-        ch_versions = ch_versions.mix(RUN_GNINA_LIGAND_FILTER.out.versions)
+
+        
+        // Leer el CSV (candidate_id,smiles_ligand) y construir un canal por ligando
+        ch_ligands = candidates_csv
+            .splitCsv(header: true)
+            .map { row ->
+                [ [ id: row.candidate_id, candidate_id: row.candidate_id, model: "boltz2_ligand" ],
+                  row.smiles_ligand ]
+            }
+
+        // Generar YAMLs de Boltz2 (receptor fijo + SMILES + affinity)
+        CANDIDATES_SMILES_TO_BOLTZ(ch_ligands, receptor_sequence, params.pocket_residues)
+
+        ch_boltz_input = CANDIDATES_SMILES_TO_BOLTZ.out.yaml
+            .map { meta, yaml -> [ meta, yaml, [] ] }
+
+        // Boltz2 co-folding + affinity (alias propio para evitar invocacion duplicada)
+        RUN_BOLTZ_SM(
+            ch_boltz_input,
+            ch_boltz_model,
+            ch_boltz_ccd,
+            ch_boltz2_aff,
+            ch_boltz2_conf,
+            ch_boltz2_mols
+        )
+
+        BOLTZ_SM_SUMMARY(
+            RUN_BOLTZ_SM.out.confidence
+                .map { meta, json -> json }
+                .collect()
+        )
+
+        ch_versions = RUN_GNINA_LIGAND_FILTER.out.versions
+
     }
 
     // ──────────────────────────────────────────────────────────────
     // Outputs — channel.empty() para la rama inactiva
     // ──────────────────────────────────────────────────────────────
     emit:
-    gnina_scores      = is_prot_prot ? channel.empty() : RUN_GNINA_LIGAND_FILTER.out.scores
-    gnina_summary     = is_prot_prot ? channel.empty() : RUN_GNINA_LIGAND_FILTER.out.summary
-    boltz_scores      = is_prot_prot ? BOLTZ_LIGAND_SUMMARY.out.scores      : channel.empty()
-    boltz_summary     = is_prot_prot ? BOLTZ_LIGAND_SUMMARY.out.summary     : channel.empty()
-    boltz_pdb         = is_prot_prot ? RUN_BOLTZ_LIGAND.out.pdb             : channel.empty()
-    haddock_scores    = params.docking_tool == 'haddock3'    ? RUN_HADDOCK3.out.scores    : channel.empty()
-    //rosetta_scores    = params.docking_tool == 'rosettadock' ? RUN_ROSETTADOCK.out.scores : channel.empty()
-    samplesheet       = is_prot_prot ? CANDIDATES_TO_COFOLD_SAMPLESHEET.out.samplesheet  : channel.empty()
-    versions          = ch_versions
+            // --- métricas crudas (small molecule: GNINA + Boltz van JUNTOS) ---
+            gnina_scores    = is_prot_prot ? channel.empty() : RUN_GNINA_LIGAND_FILTER.out.scores
+            gnina_summary   = is_prot_prot ? channel.empty() : RUN_GNINA_LIGAND_FILTER.out.summary
+            boltz_scores    = is_prot_prot ? BOLTZ_LIGAND_SUMMARY.out.scores  : BOLTZ_SM_SUMMARY.out.scores
+            boltz_summary   = is_prot_prot ? BOLTZ_LIGAND_SUMMARY.out.summary : BOLTZ_SM_SUMMARY.out.summary
+            boltz_dirs      = is_prot_prot ? RUN_BOLTZ_LIGAND.out.intermediates.map { meta, dir -> dir }
+                                        : RUN_BOLTZ_SM.out.intermediates.map { meta, dir -> dir }
+            boltz_pdb       = is_prot_prot ? RUN_BOLTZ_LIGAND.out.pdb : RUN_BOLTZ_SM.out.pdb
+
+            // --- prot-prot ---
+            haddock_scores  = params.docking_tool == 'haddock3' ? RUN_HADDOCK3.out.scores : channel.empty()
+            samplesheet     = is_prot_prot ? CANDIDATES_TO_COFOLD_SAMPLESHEET.out.samplesheet : channel.empty()
+            versions        = ch_versions
 }

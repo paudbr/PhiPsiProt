@@ -1,0 +1,57 @@
+%%metro title: PhiPsiProt
+%%metro style: light
+%%metro line: cascade | Cascade: RFDifussion → ProteinMPNN → ESMFold → Chai-1 → Report | #7c3aed
+%%metro line: structural | Structural: AF2 / AF3 / ESMFold / Chai-1 → Report | #2563eb
+%%metro file: input_in | CSV
+%%metro file: cascade_out | HTML
+%%metro file: struct_out | HTML
+%%metro logo: ./docs/images/PhiPsiProt_logo.png
+
+graph LR
+    input_in[ ]
+    mode{Mode}
+    input_in -->|cascade,structural| mode
+
+    subgraph BB [Backbone · stabilisation (cascade)]
+        filt[Filter degenerate]
+        fastas[CSV → FASTAs]
+        esm1[Run ESMFold]
+        met1[Structural metrics]
+        rank1[Rank ESMFold]
+        chai1[Run Chai-1]
+        met2[Structural metrics]
+        rank2[Rank Chai]
+        cascade_out[ ]
+
+        filt -->|cascade| fastas
+        fastas -->|cascade| esm1
+        esm1 -->|cascade| met1
+        ref -->|cascade| met1
+        met1 -->|cascade| rank1
+        rank1 -->|cascade| chai1
+        chai1 -->|cascade| met2
+        ref -->|cascade| met2
+        met2 -->|cascade| rank2
+        rank2 -->|cascade| cascade_out
+    end
+
+    subgraph ST [Structural · (default)]
+        af2[AlphaFold2]
+        af3[AlphaFold3]
+        esm[ESMFold]
+        chai[Chai-1]
+        mr[Metrics report]
+        struct_out[ ]
+
+        af2 -->|structural| mr
+        af3 -->|structural| mr
+        esm -->|structural| mr
+        chai -->|structural| mr
+        mr -->|structural| struct_out
+    end
+
+    mode -->|cascade| filt
+    mode -->|structural| af2
+    mode -->|structural| af3
+    mode -->|structural| esm
+    mode -->|structural| chai

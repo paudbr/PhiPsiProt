@@ -1,0 +1,1 @@
+nf-metro render --title PhiPsiProt --theme light full_pipeline.mmd -o pipeline.svg

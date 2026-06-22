@@ -8,17 +8,11 @@ nextflow.enable.dsl=2
 ----------------------------------------------------------------------------------------
 */
 
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS / WORKFLOWS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-
 include { PREPARE_ALPHAFOLD2_DBS } from './subworkflows/local/prepare_alphafold2_dbs'
 include { PREPARE_ALPHAFOLD3_DBS } from './subworkflows/local/prepare_alphafold3_dbs'
 include { PREPARE_ESMFOLD_DBS }    from './subworkflows/local/prepare_esmfold_dbs'
 include { PREPARE_BOLTZ_DBS }      from './subworkflows/local/prepare_boltz_dbs'
+include { CANDIDATES_SMILES_TO_AF3_FASTA } from './modules/local/candidates_smiles_to_af3_fasta/main'
 
 include { ALPHAFOLD2 } from './workflows/alphafold2'
 include { ALPHAFOLD3 } from './workflows/alphafold3'
@@ -36,6 +30,10 @@ include { SATURATION      } from './subworkflows/design_modes/saturation'
 include { BACKBONE        } from './subworkflows/design_modes/backbone'
 include { PEPTIDE_DESIGN  } from './subworkflows/design_modes/peptide_design'
 include { ANTIBODY_DESIGN } from './subworkflows/design_modes/antibody_design'
+include { COLLECT_AND_RANK } from './modules/local/collect_and_rank/main'
+
+// Cascada de cribado por métricas estructurales (ESM -> Chai, ranking por YAML)
+include { CASCADE } from './subworkflows/design_modes/cascade'
 
 workflow NFCORE_PROTEINFOLD {
 
@@ -56,8 +54,13 @@ workflow NFCORE_PROTEINFOLD {
 
     def metrics_enabled = params.generate_metrics_report
 
-    ch_dummy_file     = channel.fromPath("$projectDir/assets/NO_FILE")
-    ch_dummy_file_pae = channel.fromPath("$projectDir/assets/NO_FILE_PAE")
+    // ¿Corremos la cascada? Activa con --cascade y modo de diseño backbone.
+    // En modo cascada NO corren los bloques paralelos af2/af3/esm/chai ni
+    // METRICS_REPORT: la cascada hace ESM+Chai por dentro y saca su propio report.
+    def run_cascade = params.cascade && params.mode == 'backbone'
+
+    ch_dummy_file     = channel.value(file("$projectDir/assets/NO_FILE"))
+    ch_dummy_file_pae = channel.value(file("$projectDir/assets/NO_FILE_PAE"))
 
     /*
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -68,23 +71,38 @@ workflow NFCORE_PROTEINFOLD {
         SATURATION(file(params.input_pdb), params.target_chain, params.positions)
         ch_design_candidates = SATURATION.out.candidates
     }
-
     else if (params.mode == 'backbone') {
         BACKBONE(params.mode)
         ch_design_candidates = BACKBONE.out.candidates
     }
-
     else if (params.mode == 'peptide_design') {
         PEPTIDE_DESIGN(params.mode)
         ch_design_candidates = PEPTIDE_DESIGN.out.candidates
     }
-
     else if (params.mode == 'antibody_design') {
         ANTIBODY_DESIGN(params.mode)
     }
-
     else if (params.mode != 'structural') {
         error "Unknown mode: ${params.mode}"
+    }
+
+    /*
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    CASCADE  (cribado estructural + ranking por YAML, sin AF3)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Resultado: ranking/esm/ranked.csv, ranking/chai/ranked.csv y
+    cascade_report/PhiPsiProt_cascade_report.html
+    */
+    ch_design_candidates = params.input_csv ?
+        channel.value(file(params.input_csv, checkIfExists: true)) :
+        ch_design_candidates
+    if (run_cascade) {
+        CASCADE(
+            ch_design_candidates,   // CSV de BACKBONE (id,sequence,...)
+            ch_versions
+        )
+        ch_versions = ch_versions.mix(CASCADE.out.versions)
+        // La cascada produce su propio ranking y report; no alimenta AF3.
     }
 
     /*
@@ -92,12 +110,12 @@ workflow NFCORE_PROTEINFOLD {
     INTERMEDIATE LIGAND FILTER
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     */
-    if (params.ligand) {
+    else if (params.ligand) {
         if (!params.ligand_candidates_csv && params.mode == 'structural') {
             error "Ligand filtering needs --ligand_candidates_csv when --mode structural is used."
         }
         if (params.ligand && !params.receptor_sequence) {
-    error "Ligand cofold mode needs --receptor_sequence"
+            error "Ligand cofold mode needs --receptor_sequence"
         }
         if (!params.ligand_reference_pdb) {
             error "Ligand filtering needs --ligand_reference_pdb."
@@ -105,8 +123,6 @@ workflow NFCORE_PROTEINFOLD {
         if (!params.pocket_residues) {
             error "Ligand filtering needs --pocket_residues, for example A5,A4,A10,A238,A239,A240,A241,A242,A243,A100."
         }
-
-
 
         PREPARE_BOLTZ_DBS(
             params.boltz_db,
@@ -131,11 +147,10 @@ workflow NFCORE_PROTEINFOLD {
         ch_ligand_file = params.ligand_file ?
             channel.value(file(params.ligand_file, checkIfExists: true)) :
             ch_dummy_file
-        
+
         def is_prot_prot = params.docking_tool in ['haddock3', 'rosettadock']
 
         if (is_prot_prot) {
-
             PREPARE_ESMFOLD_DBS(
                 params.esmfold_db,
                 params.esmfold_params_path,
@@ -143,45 +158,71 @@ workflow NFCORE_PROTEINFOLD {
                 params.esm2_t36_3B_UR50D,
                 params.esm2_t36_3B_UR50D_contact_regression
             )
+            ch_esmfold_params = PREPARE_ESMFOLD_DBS.out.params
+        } else {
+            ch_esmfold_params = channel.empty()
         }
-
-        // Canal de params de ESMFold — reutiliza si ya estaba preparado
-        ch_esmfold_params = (is_prot_prot)
-            ? PREPARE_ESMFOLD_DBS.out.params   
-            : (is_prot_prot)
-                ? PREPARE_ESMFOLD_DBS.out.params   
-                : channel.empty()
+        def receptor_seq_str = params.receptor_sequence
+            ? "python3 ${projectDir}/bin/parse_fasta.py ${params.receptor_sequence}".execute().text.trim()
+            : ''
+        ch_receptor_seq = Channel.value(receptor_seq_str)
 
         DOCKING_COFOLDING(
             ch_ligand_candidates,
             ch_ligand_reference,
-            params.receptor_sequence,
+            ch_receptor_seq,
             ch_ligand_file,
             PREPARE_BOLTZ_DBS.out.boltz_model,
             PREPARE_BOLTZ_DBS.out.boltz_ccd,
             PREPARE_BOLTZ_DBS.out.boltz2_aff,
             PREPARE_BOLTZ_DBS.out.boltz2_conf,
             PREPARE_BOLTZ_DBS.out.boltz2_mols,
-            ch_esmfold_params,               // ← NUEVO
-            params.esmfold_num_recycles      // ← NUEVO
+            ch_esmfold_params,
+            params.esmfold_num_recycles
         )
-
         ch_versions = ch_versions.mix(DOCKING_COFOLDING.out.versions)
 
-         
-         
-        ch_samplesheet = DOCKING_COFOLDING.out.samplesheet
-    }
-    else {
-    ch_samplesheet = samplesheet  // el original
+        DOCKING_COFOLDING.out.gnina_summary.view { "GNINA summary: $it" }
+        DOCKING_COFOLDING.out.gnina_scores.view { "GNINA scores: $it" }
+
+        if (is_prot_prot) {
+            ch_samplesheet = DOCKING_COFOLDING.out.samplesheet
+                .splitCsv(header: true)
+                .map { row -> tuple([id: row.id], file(row.fasta)) }
+        } else {
+            ch_scoring_config = channel.value(
+                file(params.scoring_config, checkIfExists: true)
+            )
+
+            COLLECT_AND_RANK(
+                DOCKING_COFOLDING.out.gnina_scores,
+                DOCKING_COFOLDING.out.boltz_dirs.collect(),
+                ch_scoring_config,
+                ch_ligand_candidates
+            )
+            ch_versions = ch_versions.mix(COLLECT_AND_RANK.out.versions)
+
+            ch_lig = COLLECT_AND_RANK.out.ranked
+                .splitCsv(header: true, sep: '\t')
+                .filter { row -> row.in_top_n == 'yes' }
+                .map { row -> [ [id: row.candidate_id], row.smiles ] }
+
+            CANDIDATES_SMILES_TO_AF3_FASTA(ch_lig, ch_receptor_seq)
+
+            ch_samplesheet = CANDIDATES_SMILES_TO_AF3_FASTA.out.fasta
+            ch_versions = ch_versions.mix(CANDIDATES_SMILES_TO_AF3_FASTA.out.versions)
+        }
+
+    } else {
+        ch_samplesheet = samplesheet  // el original
     }
 
     /*
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ALPHAFOLD2
+    ALPHAFOLD2   (no corre en modo cascada)
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     */
-    if (requested_modes.contains("af2")) {
+    if (!run_cascade && requested_modes.contains("af2")) {
 
         PREPARE_ALPHAFOLD2_DBS(
             params.alphafold2_db,
@@ -233,7 +274,6 @@ workflow NFCORE_PROTEINFOLD {
 
         ch_multiqc = ch_multiqc.mix(ALPHAFOLD2.out.multiqc_report.collect())
         ch_versions = ch_versions.mix(ALPHAFOLD2.out.versions)
-
         ch_top_ranked_model = ch_top_ranked_model.mix(ALPHAFOLD2.out.top_ranked_pdb)
 
         ch_report_input = ch_report_input.mix(
@@ -249,10 +289,10 @@ workflow NFCORE_PROTEINFOLD {
 
     /*
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ALPHAFOLD3
+    ALPHAFOLD3   (no corre en modo cascada)
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     */
-    if (requested_modes.contains("af3")) {
+    if (!run_cascade && requested_modes.contains("af3")) {
 
         PREPARE_ALPHAFOLD3_DBS(
             params.alphafold3_db,
@@ -291,7 +331,6 @@ workflow NFCORE_PROTEINFOLD {
 
         ch_multiqc = ch_multiqc.mix(ALPHAFOLD3.out.multiqc_report)
         ch_versions = ch_versions.mix(ALPHAFOLD3.out.versions)
-
         ch_top_ranked_model = ch_top_ranked_model.mix(ALPHAFOLD3.out.top_ranked_pdb)
 
         ch_report_input = ch_report_input.mix(
@@ -307,10 +346,10 @@ workflow NFCORE_PROTEINFOLD {
 
     /*
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ESMFOLD
+    ESMFOLD   (no corre en modo cascada; la cascada lo hace por dentro)
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     */
-    if (requested_modes.contains("esm")) {
+    if (!run_cascade && requested_modes.contains("esm")) {
 
         PREPARE_ESMFOLD_DBS(
             params.esmfold_db,
@@ -329,7 +368,6 @@ workflow NFCORE_PROTEINFOLD {
 
         ch_multiqc = ch_multiqc.mix(ESMFOLD.out.multiqc_report.collect())
         ch_versions = ch_versions.mix(ESMFOLD.out.versions)
-
         ch_top_ranked_model = ch_top_ranked_model.mix(ESMFOLD.out.pdb)
 
         ch_report_input = ch_report_input.mix(
@@ -341,10 +379,10 @@ workflow NFCORE_PROTEINFOLD {
 
     /*
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    CHAI1
+    CHAI1   (no corre en modo cascada; la cascada lo hace por dentro)
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     */
-    if (requested_modes.contains("chai")) {
+    if (!run_cascade && requested_modes.contains("chai")) {
 
         CHAI1(
             ch_samplesheet,
@@ -353,7 +391,6 @@ workflow NFCORE_PROTEINFOLD {
 
         ch_multiqc = ch_multiqc.mix(CHAI1.out.multiqc_report)
         ch_versions = ch_versions.mix(CHAI1.out.versions)
-
         ch_top_ranked_model = ch_top_ranked_model.mix(CHAI1.out.top_ranked_pdb)
 
         ch_report_input = ch_report_input.mix(
@@ -365,29 +402,24 @@ workflow NFCORE_PROTEINFOLD {
 
     /*
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    METRICS REPORT (FIXED)
+    METRICS REPORT   (no corre en modo cascada; la cascada saca su propio report)
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     */
-
-    if (metrics_enabled) {
+    if (metrics_enabled && !run_cascade) {
 
         ch_mr_af2_pdb  = requested_modes.contains("af2") ? ALPHAFOLD2.out.top_ranked_pdb : Channel.empty()
-
-        ch_mr_af3_pdb = requested_modes.contains("af3") ? ALPHAFOLD3.out.pdb : Channel.empty()
-
-
+        ch_mr_af3_pdb  = requested_modes.contains("af3") ? ALPHAFOLD3.out.pdb : Channel.empty()
         ch_mr_esm_pdb  = requested_modes.contains("esm") ? ESMFOLD.out.pdb : Channel.empty()
 
         ch_mr_chai_plddt = requested_modes.contains("chai") ? CHAI1.out.plddt : Channel.empty()
-        ch_mr_chai_pdb = requested_modes.contains("chai") ? CHAI1.out.pdb : Channel.empty()
+        ch_mr_chai_pdb   = requested_modes.contains("chai") ? CHAI1.out.pdb : Channel.empty()
         ch_mr_chai_ptm   = requested_modes.contains("chai") ? CHAI1.out.ptms   : Channel.empty()
         ch_mr_chai_iptm  = requested_modes.contains("chai") ? CHAI1.out.iptms  : Channel.empty()
+        ch_mr_chai_raw   = requested_modes.contains("chai") ? CHAI1.out.raw  : Channel.empty()
 
-        ch_mr_chai_raw   = requested_modes.contains("chai") ? CHAI1.out.raw  : Channel.empty() 
-        ch_mr_af3_plddt = requested_modes.contains("af3") ? ALPHAFOLD3.out.plddt : Channel.empty() 
+        ch_mr_af3_plddt = requested_modes.contains("af3") ? ALPHAFOLD3.out.plddt : Channel.empty()
         ch_mr_af3_ptm   = requested_modes.contains("af3") ? ALPHAFOLD3.out.ptms   : Channel.empty()
         ch_mr_af3_iptm  = requested_modes.contains("af3") ? ALPHAFOLD3.out.iptms  : Channel.empty()
-
 
         METRICS_REPORT(
             ch_mr_af2_pdb,
@@ -410,41 +442,42 @@ workflow NFCORE_PROTEINFOLD {
 
     /*
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    POSTPROCESSING
+    POSTPROCESSING   (no corre en modo cascada)
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     */
+    if (!run_cascade) {
+        ch_multiqc_config = channel.fromPath("$projectDir/assets/multiqc_config.yml", checkIfExists: true).first()
+        ch_multiqc_custom_config = params.multiqc_config ? channel.fromPath(params.multiqc_config).first() : channel.empty()
+        ch_multiqc_logo = params.multiqc_logo ? channel.fromPath(params.multiqc_logo).first() : channel.empty()
 
-    ch_multiqc_config = channel.fromPath("$projectDir/assets/multiqc_config.yml", checkIfExists: true).first()
-    ch_multiqc_custom_config = params.multiqc_config ? channel.fromPath(params.multiqc_config).first() : channel.empty()
-    ch_multiqc_logo = params.multiqc_logo ? channel.fromPath(params.multiqc_logo).first() : channel.empty()
+        ch_multiqc_methods_description =
+            params.multiqc_methods_description ?
+                file(params.multiqc_methods_description, checkIfExists: true) :
+                file("$projectDir/assets/methods_description_template.yml", checkIfExists: true)
 
-    ch_multiqc_methods_description =
-        params.multiqc_methods_description ?
-            file(params.multiqc_methods_description, checkIfExists: true) :
-            file("$projectDir/assets/methods_description_template.yml", checkIfExists: true)
+        ch_report_template     = channel.value(file("$projectDir/assets/report_template.html", checkIfExists: true))
+        ch_comparison_template = channel.value(file("$projectDir/assets/comparison_template.html", checkIfExists: true))
 
-    ch_report_template     = channel.value(file("$projectDir/assets/report_template.html", checkIfExists: true))
-    ch_comparison_template = channel.value(file("$projectDir/assets/comparison_template.html", checkIfExists: true))
-
-    POST_PROCESSING(
-        params.skip_visualisation,
-        requested_modes_size,
-        ch_report_input,
-        ch_report_template,
-        ch_comparison_template,
-        params.skip_foldseek,
-        params.foldseek_db,
-        params.foldseek_db_path,
-        params.skip_multiqc,
-        params.outdir,
-        ch_versions,
-        ch_multiqc,
-        ch_multiqc_config,
-        ch_multiqc_custom_config,
-        ch_multiqc_logo,
-        ch_multiqc_methods_description,
-        ch_top_ranked_model
-    )
+        POST_PROCESSING(
+            params.skip_visualisation,
+            requested_modes_size,
+            ch_report_input,
+            ch_report_template,
+            ch_comparison_template,
+            params.skip_foldseek,
+            params.foldseek_db,
+            params.foldseek_db_path,
+            params.skip_multiqc,
+            params.outdir,
+            ch_versions,
+            ch_multiqc,
+            ch_multiqc_config,
+            ch_multiqc_custom_config,
+            ch_multiqc_logo,
+            ch_multiqc_methods_description,
+            ch_top_ranked_model
+        )
+    }
 
     emit:
         multiqc_report  = ch_multiqc

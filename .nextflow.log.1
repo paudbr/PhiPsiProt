@@ -1,0 +1,639 @@
+jun-22 10:41:59.144 [main] DEBUG nextflow.cli.Launcher - Setting http proxy: ProxyConfig[protocol=http; host=10.15.206.126; port=3128]
+jun-22 10:41:59.169 [main] DEBUG nextflow.cli.Launcher - Setting https proxy: ProxyConfig[protocol=https; host=10.15.206.126; port=3128]
+jun-22 10:41:59.169 [main] DEBUG nextflow.cli.Launcher - $> nextflow run main.nf -profile docker --input /mnt/data_local/pipes/structural/PhiPsiProt_structural/samplesheet_ca.csv --input_pdb /mnt/alphafold3_db/test_modo3/3HS4.pdb --input_csv /mnt/alphafold3_db/test_modo3/top20_candidates.csv --mode backbone --cascade true --ligand false --col_seq final_sequence --outdir /mnt/alphafold3_db/test_modo3_new/output/ --use_gpu true --use_msa_server true -resume
+jun-22 10:41:59.340 [main] DEBUG nextflow.cli.CmdRun - N E X T F L O W  ~  version 25.10.4
+jun-22 10:41:59.356 [main] DEBUG nextflow.plugin.PluginsFacade - Setting up plugin manager > mode=prod; embedded=false; plugins-dir=/home/paula/.nextflow/plugins; core-plugins: nf-amazon@3.4.4,nf-azure@1.20.2,nf-cloudcache@0.5.0,nf-codecommit@0.5.0,nf-console@1.3.0,nf-google@1.23.5,nf-k8s@1.2.2,nf-tower@1.17.5,nf-wave@1.16.1
+jun-22 10:41:59.372 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+jun-22 10:41:59.373 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+jun-22 10:41:59.375 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.12.0 in 'deployment' mode
+jun-22 10:41:59.386 [main] DEBUG nextflow.util.RetryConfig - Missing nextflow session - using default retry config
+jun-22 10:41:59.490 [main] INFO  org.pf4j.AbstractPluginManager - No plugins
+jun-22 10:41:59.512 [main] DEBUG nextflow.config.ConfigBuilder - Found config local: /mnt/data_local/pipes/structural/PhiPsiProt_structural/nextflow.config
+jun-22 10:41:59.514 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /mnt/data_local/pipes/structural/PhiPsiProt_structural/nextflow.config
+jun-22 10:41:59.534 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `docker`
+jun-22 10:42:00.890 [main] DEBUG nextflow.config.ConfigBuilder - Available config profiles: [uzl_omics, denbi_qbic, mjolnir_globe, uppmax, incliva, uge, icr_alma, rosalind_uge, lugh, mccleary, test_split_fasta, unibe_ibu, czbiohub_aws, jax, roslin, iris, tes, scw, test_full_boltz, tigem, tubingen_apg, vsc_calcua, pdc_kth, humantechnopole, test_alphafold2_split, stjude, daisybio, eddie, medair, biowulf, bi, test_full_colabfold_webserver, cedars, charliecloud, seattlechildrens, rosalind, cfc, emulate_amd64, uzh, ccga_dx, crick, test_rosettafold_all_atom, ku_sund_danhead, marvin, shifter, biohpc_gen, mana, wehi, arcc, test_full_helixfold3, imperial, maestro, cannon, nci_gadi, test_rosettafold2na, eva_grace, googlebatch, sahmri, kaust, alliance_canada, cambridge, jex, test_helixfold3, test_full_colabfold_multimer, cheaha, nyu_hpc, test, test_full_alphafold2_multimer, gpu, seg_globe, mssm, sanger, test_full_rosettafold2na, pasteur, einstein, ethz_euler, tuos_stanage, test_colabfold_webserver, azurebatch, crukmi, csiro_petrichor, wave, docker, hypatia, psmn, test_full_alphafold2_split, fgcz, conda, mpcdf_viper, dirac, uw_hyak_pedslabs, binac2, genouest, unsw_katana, utd_juno, test_boltz, hazel, seawulf, lovelace, test_alphafold3_standard, uct_hpc, aws_tower, bih, cfc_dev, ifb_core, embl_hd, mcw_rcc, alice, giga, ilifu, ki_luria, test_colabfold_local, vai, test_full_esmfold_multimer, unc_longleaf, apollo, test_full_alphafold2_standard, ipop_up, ceci_nic5, ccga_cau, mahuika, apptainer, bigpurple, adcra, pawsey_setonix, vsc_kul_uhasselt, purdue_gautschi, pawsey_nimbus, rki, ucl_myriad, fred_hutch, icr_davros, ceres, purdue_negishi, munin, hasta, shu_bmrc, ebi_codon_slurm, ebc, lrz_cm4, purdue_bell, mamba, york_viking, unc_lccc, awsbatch, wustl_htcf, ceci_dragon2, genotoul, abims, janelia, nu_genomics, oist, arm64, mpcdf, leicester, vsc_ugent, test_alphafold3_download, create, sage, podman, ebi_codon, xanadu, marjorie, computerome, ucd_sonic, test_alphafold2_download, dkfz, bluebear, m3c, test_full, imb, ucl_cscluster, seadragon, qmul_apocrita, engaging, gis, eva, unity, cropdiversityhpc, nygc, test_esmfold, crg, singularity, test_colabfold_download, self_hosted_runner, tufts, debug, hki_genie, test_full_rosettafold_all_atom, cbe, test_full_colabfold_local, test_full_esmfold, phoenix, uod_hpc, fub_curta, fsu_draco]
+jun-22 10:42:00.927 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins declared=[nf-schema@2.6.1]
+jun-22 10:42:00.927 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins default=[]
+jun-22 10:42:00.928 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins resolved requirement=[nf-schema@2.6.1]
+jun-22 10:42:01.159 [main] DEBUG n.plugin.HttpPluginRepository - Registry request: https://registry.nextflow.io/api/v1/plugins/dependencies?plugins=nf-schema%402.6.1&nextflowVersion=25.10.4
+- code: 200
+- body: {"plugins":[{"id":"nf-schema","releases":[{"version":"2.6.1","url":"https://registry.nextflow.io/api/v1/plugins/nf-schema/2.6.1/download/nf-schema-2.6.1.zip","date":"2025-10-27T10:50:21.364829Z","sha512sum":"467832f2987f90e2d2aa8e6d8387e45d4a0406ce8b5579a71fcd506155b85491bc6e978a536d767508a8ed1a4610a60c1f0cd3d9dc226f4fea1ce2973a23d043","requires":">=25.10.0","dependsOn":[],"status":"PUBLISHED"}],"projectUrl":"https://github.com/nextflow-io/nf-schema","provider":"nextflow-io"}]}
+jun-22 10:42:01.190 [main] DEBUG nextflow.plugin.PluginUpdater - Installing plugin nf-schema version: 2.6.1
+jun-22 10:42:01.196 [main] INFO  org.pf4j.AbstractPluginManager - Plugin 'nf-schema@2.6.1' resolved
+jun-22 10:42:01.197 [main] INFO  org.pf4j.AbstractPluginManager - Start plugin 'nf-schema@2.6.1'
+jun-22 10:42:01.202 [main] DEBUG nextflow.plugin.BasePlugin - Plugin started nf-schema@2.6.1
+jun-22 10:42:01.207 [main] DEBUG n.secret.LocalSecretsProvider - Secrets store: /home/paula/.nextflow/secrets/store.json
+jun-22 10:42:01.209 [main] DEBUG nextflow.secret.SecretsLoader - Discovered secrets providers: [nextflow.secret.LocalSecretsProvider@62faf77] - activable => nextflow.secret.LocalSecretsProvider@62faf77
+jun-22 10:42:01.210 [main] DEBUG nextflow.cli.CmdRun - Applied DSL=2 from script declaration
+jun-22 10:42:01.222 [main] DEBUG nextflow.cli.CmdRun - Launching `main.nf` [wise_escher] DSL2 - revision: 42995afaaa
+jun-22 10:42:01.259 [main] DEBUG nextflow.Session - Session UUID: 8984d60f-c018-46ba-aac1-abac79fa6da9
+jun-22 10:42:01.259 [main] DEBUG nextflow.Session - Run name: wise_escher
+jun-22 10:42:01.260 [main] DEBUG nextflow.Session - Executor pool size: 32
+jun-22 10:42:01.266 [main] DEBUG nextflow.file.FilePorter - File porter settings maxRetries=3; maxTransfers=50; pollTimeout=null
+jun-22 10:42:01.269 [main] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'FileTransfer' minSize=10; maxSize=96; workQueue=LinkedBlockingQueue[-1]; allowCoreThreadTimeout=false
+jun-22 10:42:01.281 [main] DEBUG nextflow.cli.CmdRun - 
+  Version: 25.10.4 build 11173
+  Created: 10-02-2026 15:17 UTC (16:17 CEST)
+  System: Linux 6.8.0-117-generic
+  Runtime: Groovy 4.0.28 on OpenJDK 64-Bit Server VM 17.0.18-internal+0-adhoc.conda.src
+  Encoding: UTF-8 (UTF-8)
+  Process: 272313@FRS-BINF-01 [127.0.1.1]
+  CPUs: 32 - Mem: 82.4 GB (11.7 GB) - Swap: 4 GB (2.6 GB)
+jun-22 10:42:01.320 [main] DEBUG nextflow.Session - Work-dir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work [ext2/ext3]
+jun-22 10:42:01.345 [main] DEBUG nextflow.executor.ExecutorFactory - Extension executors providers=[]
+jun-22 10:42:01.355 [main] DEBUG nextflow.Session - Observer factory (v2): LinObserverFactory
+jun-22 10:42:01.357 [main] DEBUG nextflow.Session - Observer factory (v2): DefaultObserverFactory
+jun-22 10:42:01.370 [main] DEBUG nextflow.Session - Observer factory (v2): ValidationObserverFactory
+jun-22 10:42:01.400 [main] DEBUG nextflow.cache.CacheFactory - Using Nextflow cache factory: nextflow.cache.DefaultCacheFactory
+jun-22 10:42:01.408 [main] DEBUG nextflow.util.CustomThreadPool - Creating default thread pool > poolSize: 33; maxThreads: 1000
+jun-22 10:42:01.459 [main] DEBUG nextflow.Session - Session start
+jun-22 10:42:01.465 [main] DEBUG nextflow.trace.TraceFileObserver - Workflow started -- trace file: /mnt/alphafold3_db/test_modo3_new/output/pipeline_info/execution_trace_2026-06-22_10-42-00.txt
+jun-22 10:42:01.824 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+jun-22 10:42:03.404 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryLog:paramsSummaryLog]; plugin Id: nf-schema
+jun-22 10:42:03.410 [main] DEBUG n.validation.config.ValidationConfig - Set `validation.monochromeLogs` to false
+jun-22 10:42:03.411 [main] DEBUG n.validation.config.ValidationConfig - Added the following parameters to the ignored parameters: [genomes]
+jun-22 10:42:03.418 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [validateParameters:validateParameters]; plugin Id: nf-schema
+jun-22 10:42:03.419 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
+jun-22 10:42:03.421 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
+jun-22 10:42:03.421 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [samplesheetToList:samplesheetToList]; plugin Id: nf-schema
+jun-22 10:42:03.422 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
+jun-22 10:42:03.634 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryLog:paramsSummaryLog]; plugin Id: nf-schema
+jun-22 10:42:03.634 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [validateParameters:validateParameters]; plugin Id: nf-schema
+jun-22 10:42:03.635 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
+jun-22 10:42:03.636 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
+jun-22 10:42:03.636 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [samplesheetToList:samplesheetToList]; plugin Id: nf-schema
+jun-22 10:42:03.637 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
+jun-22 10:42:03.799 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
+jun-22 10:42:03.956 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryLog:paramsSummaryLog]; plugin Id: nf-schema
+jun-22 10:42:03.957 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [validateParameters:validateParameters]; plugin Id: nf-schema
+jun-22 10:42:03.957 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
+jun-22 10:42:03.958 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
+jun-22 10:42:03.958 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [samplesheetToList:samplesheetToList]; plugin Id: nf-schema
+jun-22 10:42:03.959 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
+jun-22 10:42:04.594 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryLog:paramsSummaryLog]; plugin Id: nf-schema
+jun-22 10:42:04.595 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [validateParameters:validateParameters]; plugin Id: nf-schema
+jun-22 10:42:04.595 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
+jun-22 10:42:04.596 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
+jun-22 10:42:04.597 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [samplesheetToList:samplesheetToList]; plugin Id: nf-schema
+jun-22 10:42:04.597 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
+jun-22 10:42:05.151 [main] INFO  nextflow.Nextflow - 
+-[2m----------------------------------------------------[0m-
+                                        [0;32m,--.[0;30m/[0;32m,-.[0m
+[0;34m        ___     __   __   __   ___     [0;32m/,-._.--~'[0m
+[0;34m  |\ | |__  __ /  ` /  \ |__) |__         [0;33m}  {[0m
+[0;34m  | \| |       \__, \__/ |  \ |___     [0;32m\`-._,-`-,[0m
+                                        [0;32m`._,._,'[0m
+[0;35m  nf-core/proteinfold 2.0.0[0m
+-[2m----------------------------------------------------[0m-
+
+jun-22 10:42:05.174 [main] INFO  nextflow.Nextflow - [1mGlobal options[0m
+  [0;34minput                           : [0;32m/mnt/data_local/pipes/structural/PhiPsiProt_structural/samplesheet_ca.csv[0m
+  [0;34moutdir                          : [0;32m/mnt/alphafold3_db/test_modo3_new/output/[0m
+  [0;34mmode                            : [0;32mbackbone[0m
+  [0;34muse_gpu                         : [0;32mtrue[0m
+  [0;34mgenerate_metrics_report         : [0;32mtrue[0m
+  [0;34mgnina_exhaustiveness            : [0;32m16[0m
+  [0;34muse_msa_server                  : [0;32mtrue[0m
+
+[1mColabFold options[0m
+  [0;34mcolabfold_db_load_mode          : [0;32m0[0m
+
+[1mAlphaFold3 DBs and parameters links options[0m
+  [0;34malphafold3_small_bfd_path       : [0;32m/mnt/alphafold3_db/AF3_FINAL_DB//small_bfd/*[0m
+  [0;34malphafold3_params_path          : [0;32m/mnt/alphafold3_db/AF3_FINAL_DB/params/af3.bin[0m
+  [0;34malphafold3_mgnify_path          : [0;32m/mnt/alphafold3_db/AF3_FINAL_DB//mgnify/*[0m
+  [0;34malphafold3_pdb_mmcif_path       : [0;32m/mnt/alphafold3_db/AF3_FINAL_DB//pdb_mmcif/mmcif_files[0m
+  [0;34malphafold3_uniref90_path        : [0;32m/mnt/alphafold3_db/AF3_FINAL_DB//uniref90/*[0m
+  [0;34malphafold3_pdb_seqres_path      : [0;32m/mnt/alphafold3_db/AF3_FINAL_DB//pdb_seqres/*[0m
+  [0;34malphafold3_uniprot_path         : [0;32m/mnt/alphafold3_db/AF3_FINAL_DB//uniprot/*[0m
+  [0;34malphafold3_rnacentral_path      : [0;32m/mnt/alphafold3_db/AF3_FINAL_DB//rnacentral/*[0m
+  [0;34malphafold3_nt_rna_path          : [0;32m/mnt/alphafold3_db/AF3_FINAL_DB//nt_rna/*[0m
+  [0;34malphafold3_rfam_path            : [0;32m/mnt/alphafold3_db/AF3_FINAL_DB//rfam/*[0m
+
+[1mColabFold DBs and parameters paths options[0m
+  [0;34mcolabfold_alphafold2_params_tags: [0;32m[alphafold2_multimer_v1:alphafold_params_colab_2021-10-27, alphafold2_multimer_v2:alphafold_params_colab_2022-03-02, alphafold2_multimer_v3:alphafold_params_colab_2022-12-06, alphafold2_ptm:alphafold_params_2021-07-14][0m
+
+[1mESMFold parameters paths options[0m
+  [0;34mesmfold_db                      : [0;32m/mnt/data_local/chai_cache/[0m
+  [0;34mesmfold_params_path             : [0;32m/mnt/data_local/chai_cache//params/*[0m
+
+[1mBoltz DBs and model paths options[0m
+  [0;34mboltz_db                        : [0;32m/mnt/alphafold3_db/BOLTZ2/[0m
+  [0;34mboltz_ccd_path                  : [0;32m/mnt/alphafold3_db/BOLTZ2//params/ccd.pkl[0m
+  [0;34mboltz_model_path                : [0;32m/mnt/alphafold3_db/BOLTZ2//params/boltz1_conf.ckpt[0m
+  [0;34mboltz2_aff_path                 : [0;32m/mnt/alphafold3_db/BOLTZ2//params/boltz2_aff.ckpt[0m
+  [0;34mboltz2_conf_path                : [0;32m/mnt/alphafold3_db/BOLTZ2//params/boltz2_conf.ckpt[0m
+  [0;34mboltz2_mols_path                : [0;32m/mnt/alphafold3_db/BOLTZ2//params/mols/[0m
+
+[1mGeneric options[0m
+  [0;34mtrace_report_suffix             : [0;32m2026-06-22_10-42-00[0m
+
+[1mCore Nextflow options[0m
+  [0;34mrunName                         : [0;32mwise_escher[0m
+  [0;34mcontainerEngine                 : [0;32mdocker[0m
+  [0;34mlaunchDir                       : [0;32m/mnt/data_local/pipes/structural/PhiPsiProt_structural[0m
+  [0;34mworkDir                         : [0;32m/mnt/data_local/pipes/structural/PhiPsiProt_structural/work[0m
+  [0;34mprojectDir                      : [0;32m/mnt/data_local/pipes/structural/PhiPsiProt_structural[0m
+  [0;34muserName                        : [0;32mpaula[0m
+  [0;34mprofile                         : [0;32mdocker[0m
+  [0;34mconfigFiles                     : [0;32m/mnt/data_local/pipes/structural/PhiPsiProt_structural/nextflow.config[0m
+
+!! Only displaying parameters that differ from the pipeline defaults !!
+-[2m----------------------------------------------------[0m-
+jun-22 10:42:05.175 [main] INFO  nextflow.Nextflow - 
+* The pipeline
+    https://doi.org/10.5281/zenodo.7629996
+
+* The nf-core framework
+    https://doi.org/10.1038/s41587-020-0439-x
+
+* Software dependencies
+    https://github.com/nf-core/proteinfold/blob/master/CITATIONS.md
+
+jun-22 10:42:05.178 [main] DEBUG n.v.parameters.ParameterValidator - Starting parameters validation
+jun-22 10:42:05.279 [main] DEBUG n.v.v.evaluators.SchemaEvaluator - Started validating /mnt/data_local/pipes/structural/PhiPsiProt_structural/samplesheet_ca.csv
+jun-22 10:42:05.303 [main] DEBUG n.v.v.evaluators.SchemaEvaluator - Validation of file '/mnt/data_local/pipes/structural/PhiPsiProt_structural/samplesheet_ca.csv' passed!
+jun-22 10:42:05.328 [main] WARN  n.v.logging.ValidationLogger - The following invalid input values have been detected:
+
+* --af3_top_n: 5
+* --esm_scrmsd_max: 
+* --binding_site_residues: 168,232,58,241,67,369,97
+* --binder_min_entropy: 2.5
+* --input_pdb: /mnt/alphafold3_db/test_modo3/3HS4.pdb
+* --rank_w_ptm: 0.5
+* --scoring_config: /mnt/data_local/pipes/structural/PhiPsiProt_structural/conf/scoring_config_structural.yaml
+* --metrics_relax: restrained
+* --colabfold_alphafold2_params_tags.alphafold2_multimer_v3: alphafold_params_colab_2022-12-06
+* --colabfold_alphafold2_params_tags.alphafold2_multimer_v2: alphafold_params_colab_2022-03-02
+* --colabfold_alphafold2_params_tags.alphafold2_multimer_v1: alphafold_params_colab_2021-10-27
+* --colabfold_alphafold2_params_tags.alphafold2_ptm: alphafold_params_2021-07-14
+* --rank_score_min: 
+* --metrics_ph: 7.0
+* --rank_w_plddt: 0.5
+* --binder_max_homopolymer: 5
+* --binder_max_single_aa: 0.40
+* --chai1_weights_path: /mnt/data_local/chai_cache/
+* --esm_plddt_min: 80
+* --https_proxy: http://10.15.206.126:3128
+* --cascade: true
+* --col_seq: final_sequence
+* --gnina_autobox_extend: true
+* --input_csv: /mnt/alphafold3_db/test_modo3/top20_candidates.csv
+* --gnina_autobox_add: 4
+* --http_proxy: http://10.15.206.126:3128
+* --chai_ptm_min: 0.7
+* --chai_plddt_min: 80
+
+
+jun-22 10:42:05.329 [main] DEBUG n.v.parameters.ParameterValidator - Finishing parameters validation
+jun-22 10:42:05.372 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+jun-22 10:42:05.372 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+jun-22 10:42:05.377 [main] DEBUG nextflow.executor.Executor - [warm up] executor > local
+jun-22 10:42:05.380 [main] DEBUG n.processor.LocalPollingMonitor - Creating local task monitor for executor 'local' > cpus=30; memory=82.4 GB; capacity=32; pollInterval=100ms; dumpInterval=5m
+jun-22 10:42:05.381 [main] DEBUG n.processor.TaskPollingMonitor - >>> barrier register (monitor: local)
+jun-22 10:42:05.391 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'NFCORE_PROTEINFOLD:BACKBONE:DESIGN_DUMMY': maxForks=0; fair=false; array=0
+jun-22 10:42:05.412 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_single` matches labels `process_single` for process with name NFCORE_PROTEINFOLD:CASCADE:FILTER_DEGENERATE_CANDIDATES
+jun-22 10:42:05.415 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+jun-22 10:42:05.415 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+jun-22 10:42:05.416 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'NFCORE_PROTEINFOLD:CASCADE:FILTER_DEGENERATE_CANDIDATES': maxForks=0; fair=false; array=0
+jun-22 10:42:05.427 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_single` matches labels `process_single` for process with name NFCORE_PROTEINFOLD:CASCADE:CSV_TO_FASTAS
+jun-22 10:42:05.429 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+jun-22 10:42:05.429 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+jun-22 10:42:05.430 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'NFCORE_PROTEINFOLD:CASCADE:CSV_TO_FASTAS': maxForks=0; fair=false; array=0
+jun-22 10:42:05.443 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_medium` matches labels `process_medium,process_gpu` for process with name NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD
+jun-22 10:42:05.443 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_gpu` matches labels `process_medium,process_gpu` for process with name NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD
+jun-22 10:42:05.455 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+jun-22 10:42:05.455 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+jun-22 10:42:05.457 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD': maxForks=1; fair=false; array=0
+jun-22 10:42:05.464 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_medium` matches labels `process_medium` for process with name NFCORE_PROTEINFOLD:CASCADE:REFERENCE_METRICS
+jun-22 10:42:05.466 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+jun-22 10:42:05.466 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+jun-22 10:42:05.466 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'NFCORE_PROTEINFOLD:CASCADE:REFERENCE_METRICS': maxForks=0; fair=false; array=0
+jun-22 10:42:05.495 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_medium` matches labels `process_medium` for process with name NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM
+jun-22 10:42:05.496 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+jun-22 10:42:05.497 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+jun-22 10:42:05.497 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM': maxForks=0; fair=false; array=0
+jun-22 10:42:05.508 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_single` matches labels `process_single` for process with name NFCORE_PROTEINFOLD:CASCADE:RANK_ESM
+jun-22 10:42:05.509 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+jun-22 10:42:05.510 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+jun-22 10:42:05.510 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'NFCORE_PROTEINFOLD:CASCADE:RANK_ESM': maxForks=0; fair=false; array=0
+jun-22 10:42:05.526 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_medium` matches labels `process_medium,process_gpu` for process with name NFCORE_PROTEINFOLD:CASCADE:RUN_CHAI1
+jun-22 10:42:05.526 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_gpu` matches labels `process_medium,process_gpu` for process with name NFCORE_PROTEINFOLD:CASCADE:RUN_CHAI1
+jun-22 10:42:05.527 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+jun-22 10:42:05.527 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+jun-22 10:42:05.528 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'NFCORE_PROTEINFOLD:CASCADE:RUN_CHAI1': maxForks=1; fair=false; array=0
+jun-22 10:42:05.533 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_medium` matches labels `process_medium` for process with name NFCORE_PROTEINFOLD:CASCADE:METRICS_CHAI
+jun-22 10:42:05.534 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+jun-22 10:42:05.535 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+jun-22 10:42:05.535 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'NFCORE_PROTEINFOLD:CASCADE:METRICS_CHAI': maxForks=0; fair=false; array=0
+jun-22 10:42:05.541 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_single` matches labels `process_single` for process with name NFCORE_PROTEINFOLD:CASCADE:RANK_CHAI
+jun-22 10:42:05.542 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+jun-22 10:42:05.542 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+jun-22 10:42:05.543 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'NFCORE_PROTEINFOLD:CASCADE:RANK_CHAI': maxForks=0; fair=false; array=0
+jun-22 10:42:05.549 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_single` matches labels `process_single` for process with name NFCORE_PROTEINFOLD:CASCADE:CASCADE_REPORT
+jun-22 10:42:05.550 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+jun-22 10:42:05.550 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+jun-22 10:42:05.551 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'NFCORE_PROTEINFOLD:CASCADE:CASCADE_REPORT': maxForks=0; fair=false; array=0
+jun-22 10:42:05.569 [main] DEBUG nextflow.Session - Config process names validation disabled as requested
+jun-22 10:42:05.571 [main] DEBUG nextflow.Session - Igniting dataflow network (28)
+jun-22 10:42:05.572 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > NFCORE_PROTEINFOLD:BACKBONE:DESIGN_DUMMY
+jun-22 10:42:05.572 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > NFCORE_PROTEINFOLD:CASCADE:FILTER_DEGENERATE_CANDIDATES
+jun-22 10:42:05.573 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > NFCORE_PROTEINFOLD:CASCADE:CSV_TO_FASTAS
+jun-22 10:42:05.573 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD
+jun-22 10:42:05.573 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > NFCORE_PROTEINFOLD:CASCADE:REFERENCE_METRICS
+jun-22 10:42:05.573 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM
+jun-22 10:42:05.573 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > NFCORE_PROTEINFOLD:CASCADE:RANK_ESM
+jun-22 10:42:05.573 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > NFCORE_PROTEINFOLD:CASCADE:RUN_CHAI1
+jun-22 10:42:05.573 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > NFCORE_PROTEINFOLD:CASCADE:METRICS_CHAI
+jun-22 10:42:05.573 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > NFCORE_PROTEINFOLD:CASCADE:RANK_CHAI
+jun-22 10:42:05.573 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > NFCORE_PROTEINFOLD:CASCADE:CASCADE_REPORT
+jun-22 10:42:05.574 [main] DEBUG nextflow.script.ScriptRunner - Parsed script files:
+  Script_ac258ef1994281e8: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/nf-core/untar/main.nf
+  Script_f0de76d74938b5d6: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/csv_to_fastas/main.nf
+  Script_8f8c7d0f2a4c48da: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/compare_structures/main.nf
+  Script_873c0131ae8ce821: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/nf-core/multiqc/main.nf
+  Script_ac9d71fcb22f44c0: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/design_modes/backbone.nf
+  Script_fbc7130024ee091d: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/local/aria2_uncompress.nf
+  Script_25bb15c7c90dc287: /mnt/data_local/pipes/structural/PhiPsiProt_structural/main.nf
+  Script_2037d748f5ce8809: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/generate_haddock_airs/main.nf
+  Script_3d51113ba66cc4b1: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/run_haddock3/main.nf
+  Script_302606cc29eae5b0: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/boltz_ligand_summary/main.nf
+  Script_a7b23449dcde0af1: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/combine_uniprot/main.nf
+  Script_654860a90fc16ad7: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/collect_metrics/main.nf
+  Script_1809358c99d7cc3b: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/generate_report/main.nf
+  Script_8a53967f0bf1cf09: /mnt/data_local/pipes/structural/PhiPsiProt_structural/workflows/alphafold3.nf
+  Script_8988a74ceda92929: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/local/prepare_boltz_dbs.nf
+  Script_2c2b2707b71b0054: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/run_alphafold3/main.nf
+  Script_9b217d62fa34839d: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/filter_degenerate_candidates/main.nf
+  Script_081a99adc3498595: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/nf-core/unzip/main.nf
+  Script_c7d0da8873969bc3: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/local/post_processing.nf
+  Script_ae69cc2c52a816f5: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/run_gnina_ligand_filter/main.nf
+  Script_db6c62ba45e69560: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/design_modes/saturation.nf
+  Script_ecb257cd0743e8de: /mnt/data_local/pipes/structural/PhiPsiProt_structural/workflows/chai1.nf
+  Script_e4d82ff15bbf6528: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/run_esmfold/main.nf
+  Script_71c8354a7a82b61c: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/design_dummy_ab/main.nf
+  Script_0451ebc6314a21c7: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/design_modes/peptide_design.nf
+  Script_1a2cd110b596c05c: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/design_modes/cascade.nf
+  Script_786cbedb142af3ec: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/local/metrics_report/main.nf
+  Script_0e522e239c72fa00: /mnt/data_local/pipes/structural/PhiPsiProt_structural/workflows/alphafold2.nf
+  Script_c4a99c56e524421f: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/local/docking_cofolding.nf
+  Script_74c5739bd6e3cc25: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/design_modes/antibody_design.nf
+  Script_7b61932d96c22ca1: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/candidates_to_cofold_samplesheet/main.nf
+  Script_b4971a8adbe8ce0c: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/local/prepare_esmfold_dbs.nf
+  Script_15db0e8d9062b311: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/multifasta_to_singlefasta/main.nf
+  Script_220b170b361e8403: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/run_alphafold2_pred/main.nf
+  Script_668e7ebd74c8366c: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/run_boltz/main.nf
+  Script_5e7ac9f4ba5137ff: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/run_alphafold2_msa/main.nf
+  Script_cb150fca414734aa: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/download_pdbmmcif/main.nf
+  Script_312cceb1f1600bd8: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/mmcif2pdb/main.nf
+  Script_18e86abc9794b520: /mnt/data_local/pipes/structural/PhiPsiProt_structural/workflows/esmfold.nf
+  Script_0e71ed64d05e63f3: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/nf-core/gunzip/main.nf
+  Script_015caf15048ee706: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/candidates_csv_to_fasta/main.nf
+  Script_9be7fc31dfb335e5: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/structural_metrics/main.nf
+  Script_8f98321fd3b51cb4: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/collect_and_rank_structural/main.nf
+  Script_faaba73886a1075c: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/nf-core/foldseek/easysearch/main.nf
+  Script_a9bdbb0df6378d1d: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/nf-core/aria2/main.nf
+  Script_36f0db057009fef5: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/generate_metrics_report/main.nf
+  Script_be798c5410f923bc: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/cascade_report/main.nf
+  Script_4f612cfd8c52e8cd: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/nf-core/utils_nextflow_pipeline/main.nf
+  Script_5977f542cd315b9b: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/nf-core/utils_nfcore_pipeline/main.nf
+  Script_7e57b39ebc555bb7: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/candidates_smiles_to_boltz/main.nf
+  Script_91c5f8a10030881d: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/local/prepare_alphafold3_dbs.nf
+  Script_261c7cfeafd47843: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/design_dummy/main.nf
+  Script_e718b87d0bf19a1b: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/run_rosettadock/main.nf
+  Script_5dec716b325c4e6b: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/local/utils_nfcore_proteinfold_pipeline/main.nf
+  Script_623dc2cc517aadc9: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/run_alphafold2/main.nf
+  Script_926dadd028e7989e: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/candidates_smiles_to_af3_fasta/main.nf
+  Script_b5d297c1b774a972: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/candidates_to_boltz/main.nf
+  Script_f12f92c9c1c048fc: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/local/prepare_alphafold2_dbs.nf
+  Script_30eec5531e89f777: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/zstd_decompress/main.nf
+  Script_f000123ea508d767: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/pyrosetta_saturation/main.nf
+  Script_ecef9394b6a46342: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/download_pdbmmcif_af3/main.nf
+  Script_1d06c4c2cdff57e4: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/run_chai1/main.nf
+  Script_1a2037a6183f7e1a: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/nf-core/utils_nfschema_plugin/main.nf
+  Script_4bfd17c6538724fc: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/collect_and_rank/main.nf
+  Script_e72d28d41417e65a: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/fasta_to_alphafold3_json/main.nf
+jun-22 10:42:05.574 [main] DEBUG nextflow.script.ScriptRunner - > Awaiting termination 
+jun-22 10:42:05.574 [main] DEBUG nextflow.Session - Session await
+jun-22 10:42:05.609 [Actor Thread 23] WARN  nextflow.script.ScriptBinding - Access to undefined parameter `seq_col` -- Initialise it to a default value eg. `params.seq_col = some_value`
+jun-22 10:42:05.669 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 10:42:05.672 [Task submitter] INFO  nextflow.Session - [01/e82029] Submitted process > NFCORE_PROTEINFOLD:BACKBONE:DESIGN_DUMMY (backbone)
+jun-22 10:42:05.682 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 10:42:05.682 [Task submitter] INFO  nextflow.Session - [31/d600e4] Submitted process > NFCORE_PROTEINFOLD:CASCADE:REFERENCE_METRICS (reference)
+jun-22 10:42:05.686 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 10:42:05.687 [Task submitter] INFO  nextflow.Session - [61/b81e12] Submitted process > NFCORE_PROTEINFOLD:CASCADE:FILTER_DEGENERATE_CANDIDATES (filter_degenerate)
+jun-22 10:42:06.615 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 2; name: NFCORE_PROTEINFOLD:BACKBONE:DESIGN_DUMMY (backbone); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/01/e82029772865e13e773638ff4eac58]
+jun-22 10:42:06.616 [Task monitor] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'TaskFinalizer' minSize=10; maxSize=96; workQueue=LinkedBlockingQueue[-1]; allowCoreThreadTimeout=false
+jun-22 10:42:06.627 [TaskFinalizer-1] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'PublishDir' minSize=10; maxSize=96; workQueue=LinkedBlockingQueue[-1]; allowCoreThreadTimeout=false
+jun-22 10:42:06.635 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 3; name: NFCORE_PROTEINFOLD:CASCADE:FILTER_DEGENERATE_CANDIDATES (filter_degenerate); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/61/b81e12f3e1af49f15673f48a14b04b]
+jun-22 10:42:06.636 [TaskFinalizer-2] DEBUG n.processor.TaskFileCollector - Process `NFCORE_PROTEINFOLD:CASCADE:FILTER_DEGENERATE_CANDIDATES (filter_degenerate)` is unable to find [UnixPath]: `/mnt/data_local/pipes/structural/PhiPsiProt_structural/work/61/b81e12f3e1af49f15673f48a14b04b/candidates_rejected.csv` (pattern: `candidates_rejected.csv`)
+jun-22 10:42:06.701 [TaskFinalizer-2] DEBUG nextflow.processor.TaskProcessor - Process NFCORE_PROTEINFOLD:CASCADE:FILTER_DEGENERATE_CANDIDATES > Skipping output binding because one or more optional files are missing: fileoutparam<1>
+jun-22 10:42:06.717 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 10:42:06.718 [Task submitter] INFO  nextflow.Session - [f9/03b200] Submitted process > NFCORE_PROTEINFOLD:CASCADE:CSV_TO_FASTAS (csv_to_fastas)
+jun-22 10:42:07.477 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 4; name: NFCORE_PROTEINFOLD:CASCADE:CSV_TO_FASTAS (csv_to_fastas); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/f9/03b200a883a953498a377b7854dcc8]
+jun-22 10:42:07.519 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 10:42:07.519 [Task submitter] INFO  nextflow.Session - [0d/a479c5] Submitted process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_3_mpnn_4)
+jun-22 10:42:55.528 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 20; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_3_mpnn_4); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/0d/a479c53c5ab42be57673ca893bc96b]
+jun-22 10:42:55.535 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 10:42:55.535 [Task submitter] INFO  nextflow.Session - [68/777ee4] Submitted process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_0_mpnn_4)
+jun-22 10:43:42.162 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 9; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_0_mpnn_4); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/68/777ee4812eefdfa023a6930bf3971e]
+jun-22 10:43:42.166 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 10:43:42.166 [Task submitter] INFO  nextflow.Session - [b9/5d5ccd] Submitted process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_2_mpnn_2)
+jun-22 10:44:28.486 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 15; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_2_mpnn_2); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/b9/5d5ccd1341d9ab543619ef6aa0b0a8]
+jun-22 10:44:28.491 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 10:44:28.491 [Task submitter] INFO  nextflow.Session - [7e/038295] Submitted process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_2_mpnn_4)
+jun-22 10:45:12.873 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 17; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_2_mpnn_4); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/7e/0382955987fb67a3cafacb0b06381d]
+jun-22 10:45:12.877 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 10:45:12.878 [Task submitter] INFO  nextflow.Session - [b4/d58058] Submitted process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_1_mpnn_0)
+jun-22 10:45:57.606 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 10; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_1_mpnn_0); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/b4/d58058f9bae3d007bf4c38e00c78e5]
+jun-22 10:45:57.610 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 10:45:57.611 [Task submitter] INFO  nextflow.Session - [84/19e68c] Submitted process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_3_mpnn_1)
+jun-22 10:46:03.717 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 1; name: NFCORE_PROTEINFOLD:CASCADE:REFERENCE_METRICS (reference); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/31/d600e4b836011b9289eff73915b28d]
+jun-22 10:46:04.722 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 10:46:04.722 [Task submitter] INFO  nextflow.Session - [d3/a34f5b] Submitted process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_1_mpnn_0)
+jun-22 10:46:42.557 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 18; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_3_mpnn_1); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/84/19e68cefc4c0c0970b6808616e5f37]
+jun-22 10:46:42.562 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 10:46:42.562 [Task submitter] INFO  nextflow.Session - [12/54e59e] Submitted process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_2_mpnn_0)
+jun-22 10:47:05.509 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 2 -- submitted tasks are shown below
+~> TaskHandler[id: 29; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_1_mpnn_0); status: RUNNING; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/d3/a34f5bfc41a84807290dab5a3b6467]
+~> TaskHandler[id: 13; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_2_mpnn_0); status: RUNNING; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/12/54e59ecf43f6a7933052db95b04e5e]
+jun-22 10:47:07.578 [Task submitter] DEBUG n.processor.TaskPollingMonitor - %% executor local > tasks in the submission queue: 18 -- tasks to be submitted are shown below
+~> TaskHandler[id: 8; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_0_mpnn_3); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/ea/98696cee82363aee09c94b622dbc1c]
+~> TaskHandler[id: 24; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_4_mpnn_4); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/8a/11a917ee11506f83579ec51faa9426]
+~> TaskHandler[id: 16; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_2_mpnn_3); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/f3/45844c66d3826d450420a964592919]
+~> TaskHandler[id: 23; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_4_mpnn_3); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/eb/feb879f3d1281c8520ffd7b0d9e17d]
+~> TaskHandler[id: 11; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_1_mpnn_1); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/aa/34cf856295fd76e106386f2c592168]
+~> TaskHandler[id: 19; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_3_mpnn_2); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/ce/6c34ee05d051b43858ffdf7a4b4629]
+~> TaskHandler[id: 5; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_0_mpnn_0); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/46/f5bd7322e75647d3aa3a4b1161c564]
+~> TaskHandler[id: 14; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_2_mpnn_1); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/8f/63c2825db1e04a77645fa63aded6b2]
+~> TaskHandler[id: 21; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_4_mpnn_1); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/28/a0811e5856572a2c7804e1c3125bfc]
+~> TaskHandler[id: 12; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_1_mpnn_3); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/54/ce493c1d6f9de544a9a869a0a32eed]
+.. remaining tasks omitted.
+jun-22 10:47:28.242 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 13; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_2_mpnn_0); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/12/54e59ecf43f6a7933052db95b04e5e]
+jun-22 10:47:28.247 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 10:47:28.247 [Task submitter] INFO  nextflow.Session - [ea/98696c] Submitted process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_0_mpnn_3)
+jun-22 10:48:13.475 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 8; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_0_mpnn_3); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/ea/98696cee82363aee09c94b622dbc1c]
+jun-22 10:48:13.478 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 10:48:13.478 [Task submitter] INFO  nextflow.Session - [8a/11a917] Submitted process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_4_mpnn_4)
+jun-22 10:49:00.251 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 24; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_4_mpnn_4); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/8a/11a917ee11506f83579ec51faa9426]
+jun-22 10:49:00.256 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 10:49:00.256 [Task submitter] INFO  nextflow.Session - [f3/45844c] Submitted process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_2_mpnn_3)
+jun-22 10:49:30.717 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 29; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_1_mpnn_0); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/d3/a34f5bfc41a84807290dab5a3b6467]
+jun-22 10:49:30.721 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 10:49:30.722 [Task submitter] INFO  nextflow.Session - [b2/b1a1db] Submitted process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_3_mpnn_4)
+jun-22 10:49:48.699 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 16; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_2_mpnn_3); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/f3/45844c66d3826d450420a964592919]
+jun-22 10:49:48.703 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 10:49:48.704 [Task submitter] INFO  nextflow.Session - [eb/feb879] Submitted process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_4_mpnn_3)
+jun-22 10:50:35.058 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 23; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_4_mpnn_3); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/eb/feb879f3d1281c8520ffd7b0d9e17d]
+jun-22 10:50:35.062 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 10:50:35.063 [Task submitter] INFO  nextflow.Session - [aa/34cf85] Submitted process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_1_mpnn_1)
+jun-22 10:51:21.103 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 11; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_1_mpnn_1); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/aa/34cf856295fd76e106386f2c592168]
+jun-22 10:51:21.107 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 10:51:21.108 [Task submitter] INFO  nextflow.Session - [ce/6c34ee] Submitted process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_3_mpnn_2)
+jun-22 10:52:05.600 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 2 -- submitted tasks are shown below
+~> TaskHandler[id: 25; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_3_mpnn_4); status: RUNNING; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/b2/b1a1db1c4119ba52f7247aeddf84d2]
+~> TaskHandler[id: 19; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_3_mpnn_2); status: RUNNING; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/ce/6c34ee05d051b43858ffdf7a4b4629]
+jun-22 10:52:07.204 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 19; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_3_mpnn_2); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/ce/6c34ee05d051b43858ffdf7a4b4629]
+jun-22 10:52:07.208 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 10:52:07.209 [Task submitter] INFO  nextflow.Session - [46/f5bd73] Submitted process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_0_mpnn_0)
+jun-22 10:52:08.210 [Task submitter] DEBUG n.processor.TaskPollingMonitor - %% executor local > tasks in the submission queue: 17 -- tasks to be submitted are shown below
+~> TaskHandler[id: 14; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_2_mpnn_1); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/8f/63c2825db1e04a77645fa63aded6b2]
+~> TaskHandler[id: 21; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_4_mpnn_1); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/28/a0811e5856572a2c7804e1c3125bfc]
+~> TaskHandler[id: 12; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_1_mpnn_3); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/54/ce493c1d6f9de544a9a869a0a32eed]
+~> TaskHandler[id: 22; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_4_mpnn_2); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/bd/23da19352887de117d086a8b0376d3]
+~> TaskHandler[id: 7; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_0_mpnn_2); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/9f/2979b7bd6e66fe40cb1a1cfaa80f7b]
+~> TaskHandler[id: 6; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_0_mpnn_1); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/ec/8adc7c24b294311873864777a15483]
+~> TaskHandler[id: 26; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_4); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/f8/92866a5e9ffa704a42d83e2d98f909]
+~> TaskHandler[id: 28; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_2_mpnn_4); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/bc/6dc9b7c78974282c467ab7cc6af144]
+~> TaskHandler[id: 27; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_2_mpnn_2); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/33/d68f8e52133686fca8fc1a4ef3dd57]
+~> TaskHandler[id: 30; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_3_mpnn_1); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/77/6ee07388b450bc121e50e3ce2eb9ae]
+.. remaining tasks omitted.
+jun-22 10:52:54.053 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 5; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_0_mpnn_0); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/46/f5bd7322e75647d3aa3a4b1161c564]
+jun-22 10:52:54.057 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 10:52:54.058 [Task submitter] INFO  nextflow.Session - [8f/63c282] Submitted process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_2_mpnn_1)
+jun-22 10:53:18.352 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 25; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_3_mpnn_4); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/b2/b1a1db1c4119ba52f7247aeddf84d2]
+jun-22 10:53:18.359 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 10:53:18.360 [Task submitter] INFO  nextflow.Session - [f8/92866a] Submitted process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_4)
+jun-22 10:53:38.638 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 14; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_2_mpnn_1); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/8f/63c2825db1e04a77645fa63aded6b2]
+jun-22 10:53:38.641 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 10:53:38.642 [Task submitter] INFO  nextflow.Session - [28/a0811e] Submitted process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_4_mpnn_1)
+jun-22 10:54:22.900 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 21; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_4_mpnn_1); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/28/a0811e5856572a2c7804e1c3125bfc]
+jun-22 10:54:22.904 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 10:54:22.904 [Task submitter] INFO  nextflow.Session - [54/ce493c] Submitted process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_1_mpnn_3)
+jun-22 10:55:07.435 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 12; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_1_mpnn_3); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/54/ce493c1d6f9de544a9a869a0a32eed]
+jun-22 10:55:07.438 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 10:55:07.439 [Task submitter] INFO  nextflow.Session - [bd/23da19] Submitted process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_4_mpnn_2)
+jun-22 10:55:51.885 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 22; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_4_mpnn_2); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/bd/23da19352887de117d086a8b0376d3]
+jun-22 10:55:51.889 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 10:55:51.889 [Task submitter] INFO  nextflow.Session - [9f/2979b7] Submitted process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_0_mpnn_2)
+jun-22 10:56:36.388 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 7; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_0_mpnn_2); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/9f/2979b7bd6e66fe40cb1a1cfaa80f7b]
+jun-22 10:56:36.391 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 10:56:36.392 [Task submitter] INFO  nextflow.Session - [ec/8adc7c] Submitted process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_0_mpnn_1)
+jun-22 10:57:05.632 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 2 -- submitted tasks are shown below
+~> TaskHandler[id: 26; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_4); status: RUNNING; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/f8/92866a5e9ffa704a42d83e2d98f909]
+~> TaskHandler[id: 6; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_0_mpnn_1); status: RUNNING; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/ec/8adc7c24b294311873864777a15483]
+jun-22 10:57:08.402 [Task submitter] DEBUG n.processor.TaskPollingMonitor - %% executor local > tasks in the submission queue: 16 -- tasks to be submitted are shown below
+~> TaskHandler[id: 28; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_2_mpnn_4); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/bc/6dc9b7c78974282c467ab7cc6af144]
+~> TaskHandler[id: 27; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_2_mpnn_2); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/33/d68f8e52133686fca8fc1a4ef3dd57]
+~> TaskHandler[id: 30; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_3_mpnn_1); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/77/6ee07388b450bc121e50e3ce2eb9ae]
+~> TaskHandler[id: 31; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_2_mpnn_0); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/f9/f745853ee0815d5b89f3f53aca33c7]
+~> TaskHandler[id: 32; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_3); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/76/65207b60065e64d4b5de23b5c29bc4]
+~> TaskHandler[id: 33; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_4_mpnn_4); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/3f/c0397ed3bb949a1a43136490ce9d99]
+~> TaskHandler[id: 34; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_2_mpnn_3); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/f4/1702bab0a5852868c6e2f844f8a5e0]
+~> TaskHandler[id: 35; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_4_mpnn_3); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/8f/af047c4bdf5ce20715172468661f71]
+~> TaskHandler[id: 36; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_1_mpnn_1); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/c6/2c06850328cd8bb316466227a3b19b]
+~> TaskHandler[id: 37; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_3_mpnn_2); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/bd/ffb72cbe4b045264b73f31efd6cf8f]
+.. remaining tasks omitted.
+jun-22 10:57:21.411 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 6; name: NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_0_mpnn_1); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/ec/8adc7c24b294311873864777a15483]
+jun-22 10:57:21.414 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 10:57:21.415 [Task submitter] INFO  nextflow.Session - [bc/6dc9b7] Submitted process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_2_mpnn_4)
+jun-22 10:58:20.894 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 26; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_4); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/f8/92866a5e9ffa704a42d83e2d98f909]
+jun-22 10:58:20.899 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 10:58:20.899 [Task submitter] INFO  nextflow.Session - [33/d68f8e] Submitted process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_2_mpnn_2)
+jun-22 11:01:15.143 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 28; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_2_mpnn_4); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/bc/6dc9b7c78974282c467ab7cc6af144]
+jun-22 11:01:15.146 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 11:01:15.146 [Task submitter] INFO  nextflow.Session - [77/6ee073] Submitted process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_3_mpnn_1)
+jun-22 11:02:05.716 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 2 -- submitted tasks are shown below
+~> TaskHandler[id: 27; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_2_mpnn_2); status: RUNNING; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/33/d68f8e52133686fca8fc1a4ef3dd57]
+~> TaskHandler[id: 30; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_3_mpnn_1); status: RUNNING; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/77/6ee07388b450bc121e50e3ce2eb9ae]
+jun-22 11:02:09.158 [Task submitter] DEBUG n.processor.TaskPollingMonitor - %% executor local > tasks in the submission queue: 14 -- tasks to be submitted are shown below
+~> TaskHandler[id: 31; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_2_mpnn_0); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/f9/f745853ee0815d5b89f3f53aca33c7]
+~> TaskHandler[id: 32; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_3); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/76/65207b60065e64d4b5de23b5c29bc4]
+~> TaskHandler[id: 33; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_4_mpnn_4); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/3f/c0397ed3bb949a1a43136490ce9d99]
+~> TaskHandler[id: 34; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_2_mpnn_3); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/f4/1702bab0a5852868c6e2f844f8a5e0]
+~> TaskHandler[id: 35; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_4_mpnn_3); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/8f/af047c4bdf5ce20715172468661f71]
+~> TaskHandler[id: 36; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_1_mpnn_1); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/c6/2c06850328cd8bb316466227a3b19b]
+~> TaskHandler[id: 37; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_3_mpnn_2); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/bd/ffb72cbe4b045264b73f31efd6cf8f]
+~> TaskHandler[id: 38; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_0); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/54/6d1352783b1c520e57d0c0c78a18fa]
+~> TaskHandler[id: 39; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_2_mpnn_1); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/5b/7305f297a01372ad1c6597b8fe0ffa]
+~> TaskHandler[id: 40; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_4_mpnn_1); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/1a/022fe2fed7478d235570e6c300eb42]
+.. remaining tasks omitted.
+jun-22 11:02:38.042 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 27; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_2_mpnn_2); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/33/d68f8e52133686fca8fc1a4ef3dd57]
+jun-22 11:02:38.046 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 11:02:38.046 [Task submitter] INFO  nextflow.Session - [f9/f74585] Submitted process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_2_mpnn_0)
+jun-22 11:05:19.581 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 30; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_3_mpnn_1); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/77/6ee07388b450bc121e50e3ce2eb9ae]
+jun-22 11:05:19.585 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 11:05:19.586 [Task submitter] INFO  nextflow.Session - [76/65207b] Submitted process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_3)
+jun-22 11:06:45.611 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 31; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_2_mpnn_0); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/f9/f745853ee0815d5b89f3f53aca33c7]
+jun-22 11:06:45.614 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 11:06:45.614 [Task submitter] INFO  nextflow.Session - [3f/c0397e] Submitted process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_4_mpnn_4)
+jun-22 11:07:05.731 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 2 -- submitted tasks are shown below
+~> TaskHandler[id: 32; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_3); status: RUNNING; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/76/65207b60065e64d4b5de23b5c29bc4]
+~> TaskHandler[id: 33; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_4_mpnn_4); status: RUNNING; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/3f/c0397ed3bb949a1a43136490ce9d99]
+jun-22 11:07:09.620 [Task submitter] DEBUG n.processor.TaskPollingMonitor - %% executor local > tasks in the submission queue: 11 -- tasks to be submitted are shown below
+~> TaskHandler[id: 34; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_2_mpnn_3); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/f4/1702bab0a5852868c6e2f844f8a5e0]
+~> TaskHandler[id: 35; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_4_mpnn_3); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/8f/af047c4bdf5ce20715172468661f71]
+~> TaskHandler[id: 36; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_1_mpnn_1); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/c6/2c06850328cd8bb316466227a3b19b]
+~> TaskHandler[id: 37; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_3_mpnn_2); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/bd/ffb72cbe4b045264b73f31efd6cf8f]
+~> TaskHandler[id: 38; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_0); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/54/6d1352783b1c520e57d0c0c78a18fa]
+~> TaskHandler[id: 39; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_2_mpnn_1); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/5b/7305f297a01372ad1c6597b8fe0ffa]
+~> TaskHandler[id: 40; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_4_mpnn_1); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/1a/022fe2fed7478d235570e6c300eb42]
+~> TaskHandler[id: 41; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_1_mpnn_3); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/6e/323a83615da4ab3d337dc14be4d0c3]
+~> TaskHandler[id: 42; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_4_mpnn_2); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/89/e04a5f37f4389db654cacc33f13e41]
+~> TaskHandler[id: 43; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_2); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/3b/a8dc68087349ba130680cf2b2ed0b9]
+jun-22 11:09:20.121 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 32; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_3); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/76/65207b60065e64d4b5de23b5c29bc4]
+jun-22 11:09:20.124 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 11:09:20.124 [Task submitter] INFO  nextflow.Session - [f4/1702ba] Submitted process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_2_mpnn_3)
+jun-22 11:11:15.747 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 33; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_4_mpnn_4); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/3f/c0397ed3bb949a1a43136490ce9d99]
+jun-22 11:11:15.751 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 11:11:15.751 [Task submitter] INFO  nextflow.Session - [8f/af047c] Submitted process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_4_mpnn_3)
+jun-22 11:12:05.812 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 2 -- submitted tasks are shown below
+~> TaskHandler[id: 34; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_2_mpnn_3); status: RUNNING; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/f4/1702bab0a5852868c6e2f844f8a5e0]
+~> TaskHandler[id: 35; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_4_mpnn_3); status: RUNNING; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/8f/af047c4bdf5ce20715172468661f71]
+jun-22 11:12:09.762 [Task submitter] DEBUG n.processor.TaskPollingMonitor - %% executor local > tasks in the submission queue: 9 -- tasks to be submitted are shown below
+~> TaskHandler[id: 36; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_1_mpnn_1); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/c6/2c06850328cd8bb316466227a3b19b]
+~> TaskHandler[id: 37; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_3_mpnn_2); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/bd/ffb72cbe4b045264b73f31efd6cf8f]
+~> TaskHandler[id: 38; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_0); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/54/6d1352783b1c520e57d0c0c78a18fa]
+~> TaskHandler[id: 39; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_2_mpnn_1); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/5b/7305f297a01372ad1c6597b8fe0ffa]
+~> TaskHandler[id: 40; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_4_mpnn_1); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/1a/022fe2fed7478d235570e6c300eb42]
+~> TaskHandler[id: 41; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_1_mpnn_3); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/6e/323a83615da4ab3d337dc14be4d0c3]
+~> TaskHandler[id: 42; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_4_mpnn_2); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/89/e04a5f37f4389db654cacc33f13e41]
+~> TaskHandler[id: 43; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_2); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/3b/a8dc68087349ba130680cf2b2ed0b9]
+~> TaskHandler[id: 44; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_1); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/d3/7ae6e770dd6ea912cfb78d8fb53588]
+jun-22 11:13:41.735 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 34; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_2_mpnn_3); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/f4/1702bab0a5852868c6e2f844f8a5e0]
+jun-22 11:13:41.739 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 11:13:41.739 [Task submitter] INFO  nextflow.Session - [c6/2c0685] Submitted process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_1_mpnn_1)
+jun-22 11:14:30.047 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 35; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_4_mpnn_3); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/8f/af047c4bdf5ce20715172468661f71]
+jun-22 11:14:30.050 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 11:14:30.050 [Task submitter] INFO  nextflow.Session - [bd/ffb72c] Submitted process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_3_mpnn_2)
+jun-22 11:17:05.844 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 2 -- submitted tasks are shown below
+~> TaskHandler[id: 36; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_1_mpnn_1); status: RUNNING; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/c6/2c06850328cd8bb316466227a3b19b]
+~> TaskHandler[id: 37; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_3_mpnn_2); status: RUNNING; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/bd/ffb72cbe4b045264b73f31efd6cf8f]
+jun-22 11:17:09.491 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 36; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_1_mpnn_1); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/c6/2c06850328cd8bb316466227a3b19b]
+jun-22 11:17:09.493 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 11:17:09.494 [Task submitter] INFO  nextflow.Session - [54/6d1352] Submitted process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_0)
+jun-22 11:17:10.495 [Task submitter] DEBUG n.processor.TaskPollingMonitor - %% executor local > tasks in the submission queue: 6 -- tasks to be submitted are shown below
+~> TaskHandler[id: 39; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_2_mpnn_1); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/5b/7305f297a01372ad1c6597b8fe0ffa]
+~> TaskHandler[id: 40; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_4_mpnn_1); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/1a/022fe2fed7478d235570e6c300eb42]
+~> TaskHandler[id: 41; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_1_mpnn_3); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/6e/323a83615da4ab3d337dc14be4d0c3]
+~> TaskHandler[id: 42; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_4_mpnn_2); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/89/e04a5f37f4389db654cacc33f13e41]
+~> TaskHandler[id: 43; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_2); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/3b/a8dc68087349ba130680cf2b2ed0b9]
+~> TaskHandler[id: 44; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_1); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/d3/7ae6e770dd6ea912cfb78d8fb53588]
+jun-22 11:18:53.626 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 37; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_3_mpnn_2); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/bd/ffb72cbe4b045264b73f31efd6cf8f]
+jun-22 11:18:53.629 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 11:18:53.629 [Task submitter] INFO  nextflow.Session - [5b/7305f2] Submitted process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_2_mpnn_1)
+jun-22 11:21:23.079 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 38; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_0); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/54/6d1352783b1c520e57d0c0c78a18fa]
+jun-22 11:21:23.084 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 11:21:23.085 [Task submitter] INFO  nextflow.Session - [1a/022fe2] Submitted process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_4_mpnn_1)
+jun-22 11:22:05.944 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 2 -- submitted tasks are shown below
+~> TaskHandler[id: 39; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_2_mpnn_1); status: RUNNING; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/5b/7305f297a01372ad1c6597b8fe0ffa]
+~> TaskHandler[id: 40; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_4_mpnn_1); status: RUNNING; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/1a/022fe2fed7478d235570e6c300eb42]
+jun-22 11:22:11.094 [Task submitter] DEBUG n.processor.TaskPollingMonitor - %% executor local > tasks in the submission queue: 4 -- tasks to be submitted are shown below
+~> TaskHandler[id: 41; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_1_mpnn_3); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/6e/323a83615da4ab3d337dc14be4d0c3]
+~> TaskHandler[id: 42; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_4_mpnn_2); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/89/e04a5f37f4389db654cacc33f13e41]
+~> TaskHandler[id: 43; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_2); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/3b/a8dc68087349ba130680cf2b2ed0b9]
+~> TaskHandler[id: 44; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_1); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/d3/7ae6e770dd6ea912cfb78d8fb53588]
+jun-22 11:23:21.992 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 39; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_2_mpnn_1); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/5b/7305f297a01372ad1c6597b8fe0ffa]
+jun-22 11:23:21.995 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 11:23:21.995 [Task submitter] INFO  nextflow.Session - [6e/323a83] Submitted process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_1_mpnn_3)
+jun-22 11:25:25.355 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 40; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_4_mpnn_1); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/1a/022fe2fed7478d235570e6c300eb42]
+jun-22 11:25:25.358 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 11:25:25.358 [Task submitter] INFO  nextflow.Session - [89/e04a5f] Submitted process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_4_mpnn_2)
+jun-22 11:27:05.927 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 41; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_1_mpnn_3); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/6e/323a83615da4ab3d337dc14be4d0c3]
+jun-22 11:27:05.930 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 11:27:05.931 [Task submitter] INFO  nextflow.Session - [3b/a8dc68] Submitted process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_2)
+jun-22 11:27:06.027 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 2 -- submitted tasks are shown below
+~> TaskHandler[id: 42; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_4_mpnn_2); status: RUNNING; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/89/e04a5f37f4389db654cacc33f13e41]
+~> TaskHandler[id: 43; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_2); status: SUBMITTED; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/3b/a8dc68087349ba130680cf2b2ed0b9]
+jun-22 11:27:11.933 [Task submitter] DEBUG n.processor.TaskPollingMonitor - %% executor local > tasks in the submission queue: 1 -- tasks to be submitted are shown below
+~> TaskHandler[id: 44; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_1); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/d3/7ae6e770dd6ea912cfb78d8fb53588]
+jun-22 11:28:54.153 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 42; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_4_mpnn_2); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/89/e04a5f37f4389db654cacc33f13e41]
+jun-22 11:28:54.156 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 11:28:54.156 [Task submitter] INFO  nextflow.Session - [d3/7ae6e7] Submitted process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_1)
+jun-22 11:30:46.060 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 43; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_2); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/3b/a8dc68087349ba130680cf2b2ed0b9]
+jun-22 11:32:06.061 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 1 -- submitted tasks are shown below
+~> TaskHandler[id: 44; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_1); status: RUNNING; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/d3/7ae6e770dd6ea912cfb78d8fb53588]
+jun-22 11:32:53.750 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 44; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_1); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/d3/7ae6e770dd6ea912cfb78d8fb53588]
+jun-22 11:32:53.764 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 11:32:53.764 [Task submitter] INFO  nextflow.Session - [bf/a9391b] Submitted process > NFCORE_PROTEINFOLD:CASCADE:RANK_ESM (esm)
+jun-22 11:32:54.528 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 45; name: NFCORE_PROTEINFOLD:CASCADE:RANK_ESM (esm); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/bf/a9391bb6751949d5613d0a36864070]
+jun-22 11:32:54.545 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 11:32:54.545 [Task submitter] INFO  nextflow.Session - [da/a89585] Submitted process > NFCORE_PROTEINFOLD:CASCADE:RUN_CHAI1 (backbone_design_3_mpnn_1)
+jun-22 11:32:54.546 [Task submitter] DEBUG n.processor.TaskPollingMonitor - %% executor local > tasks in the submission queue: 4 -- tasks to be submitted are shown below
+~> TaskHandler[id: 49; name: NFCORE_PROTEINFOLD:CASCADE:RUN_CHAI1 (backbone_design_0_mpnn_3); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/42/24ec3229c16f7b2f678988c88f66aa]
+~> TaskHandler[id: 47; name: NFCORE_PROTEINFOLD:CASCADE:RUN_CHAI1 (backbone_design_0_mpnn_2); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/23/41ad4d7c0abb5eed456d3a7c0f6b34]
+~> TaskHandler[id: 48; name: NFCORE_PROTEINFOLD:CASCADE:RUN_CHAI1 (backbone_design_1_mpnn_3); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/33/15afbf21e67ffe6df0dc064d36631b]
+~> TaskHandler[id: 46; name: NFCORE_PROTEINFOLD:CASCADE:RUN_CHAI1 (backbone_design_0_mpnn_1); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/15/ead87a65b894a317286b1214f2a929]
+jun-22 11:35:03.101 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 50; name: NFCORE_PROTEINFOLD:CASCADE:RUN_CHAI1 (backbone_design_3_mpnn_1); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/da/a8958580f623cfccb584bbb7255c77]
+jun-22 11:35:03.105 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 11:35:03.105 [Task submitter] INFO  nextflow.Session - [42/24ec32] Submitted process > NFCORE_PROTEINFOLD:CASCADE:RUN_CHAI1 (backbone_design_0_mpnn_3)
+jun-22 11:35:04.109 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 11:35:04.110 [Task submitter] INFO  nextflow.Session - [36/7c3db8] Submitted process > NFCORE_PROTEINFOLD:CASCADE:METRICS_CHAI (backbone_design_3_mpnn_1)
+jun-22 11:37:06.080 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 2 -- submitted tasks are shown below
+~> TaskHandler[id: 49; name: NFCORE_PROTEINFOLD:CASCADE:RUN_CHAI1 (backbone_design_0_mpnn_3); status: RUNNING; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/42/24ec3229c16f7b2f678988c88f66aa]
+~> TaskHandler[id: 51; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_CHAI (backbone_design_3_mpnn_1); status: RUNNING; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/36/7c3db89e07b108200f3f400c367bdc]
+jun-22 11:37:08.119 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 49; name: NFCORE_PROTEINFOLD:CASCADE:RUN_CHAI1 (backbone_design_0_mpnn_3); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/42/24ec3229c16f7b2f678988c88f66aa]
+jun-22 11:37:08.123 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 11:37:08.123 [Task submitter] INFO  nextflow.Session - [23/41ad4d] Submitted process > NFCORE_PROTEINFOLD:CASCADE:RUN_CHAI1 (backbone_design_0_mpnn_2)
+jun-22 11:37:55.134 [Task submitter] DEBUG n.processor.TaskPollingMonitor - %% executor local > tasks in the submission queue: 3 -- tasks to be submitted are shown below
+~> TaskHandler[id: 48; name: NFCORE_PROTEINFOLD:CASCADE:RUN_CHAI1 (backbone_design_1_mpnn_3); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/33/15afbf21e67ffe6df0dc064d36631b]
+~> TaskHandler[id: 46; name: NFCORE_PROTEINFOLD:CASCADE:RUN_CHAI1 (backbone_design_0_mpnn_1); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/15/ead87a65b894a317286b1214f2a929]
+~> TaskHandler[id: 52; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_CHAI (backbone_design_0_mpnn_3); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/33/6c8bb26f73c044fe03a5028dda1ae6]
+jun-22 11:38:31.210 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 51; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_CHAI (backbone_design_3_mpnn_1); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/36/7c3db89e07b108200f3f400c367bdc]
+jun-22 11:38:31.212 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 11:38:31.213 [Task submitter] INFO  nextflow.Session - [33/6c8bb2] Submitted process > NFCORE_PROTEINFOLD:CASCADE:METRICS_CHAI (backbone_design_0_mpnn_3)
+jun-22 11:39:13.746 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 47; name: NFCORE_PROTEINFOLD:CASCADE:RUN_CHAI1 (backbone_design_0_mpnn_2); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/23/41ad4d7c0abb5eed456d3a7c0f6b34]
+jun-22 11:39:13.749 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 11:39:13.749 [Task submitter] INFO  nextflow.Session - [33/15afbf] Submitted process > NFCORE_PROTEINFOLD:CASCADE:RUN_CHAI1 (backbone_design_1_mpnn_3)
+jun-22 11:41:16.640 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 48; name: NFCORE_PROTEINFOLD:CASCADE:RUN_CHAI1 (backbone_design_1_mpnn_3); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/33/15afbf21e67ffe6df0dc064d36631b]
+jun-22 11:41:16.644 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 11:41:16.645 [Task submitter] INFO  nextflow.Session - [15/ead87a] Submitted process > NFCORE_PROTEINFOLD:CASCADE:RUN_CHAI1 (backbone_design_0_mpnn_1)
+jun-22 11:42:06.108 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 2 -- submitted tasks are shown below
+~> TaskHandler[id: 52; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_CHAI (backbone_design_0_mpnn_3); status: RUNNING; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/33/6c8bb26f73c044fe03a5028dda1ae6]
+~> TaskHandler[id: 46; name: NFCORE_PROTEINFOLD:CASCADE:RUN_CHAI1 (backbone_design_0_mpnn_1); status: RUNNING; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/15/ead87a65b894a317286b1214f2a929]
+jun-22 11:42:15.273 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 52; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_CHAI (backbone_design_0_mpnn_3); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/33/6c8bb26f73c044fe03a5028dda1ae6]
+jun-22 11:42:15.276 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 11:42:15.276 [Task submitter] INFO  nextflow.Session - [78/b3ec2f] Submitted process > NFCORE_PROTEINFOLD:CASCADE:METRICS_CHAI (backbone_design_0_mpnn_2)
+jun-22 11:42:55.284 [Task submitter] DEBUG n.processor.TaskPollingMonitor - %% executor local > tasks in the submission queue: 1 -- tasks to be submitted are shown below
+~> TaskHandler[id: 54; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_CHAI (backbone_design_1_mpnn_3); status: NEW; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/f9/9ff4261d0d158ae7c04adff3422f0f]
+jun-22 11:43:24.231 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 46; name: NFCORE_PROTEINFOLD:CASCADE:RUN_CHAI1 (backbone_design_0_mpnn_1); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/15/ead87a65b894a317286b1214f2a929]
+jun-22 11:43:24.234 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 11:43:24.234 [Task submitter] INFO  nextflow.Session - [f9/9ff426] Submitted process > NFCORE_PROTEINFOLD:CASCADE:METRICS_CHAI (backbone_design_1_mpnn_3)
+jun-22 11:45:42.983 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 53; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_CHAI (backbone_design_0_mpnn_2); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/78/b3ec2f61fc6eb06cc3c4121c6cc2a1]
+jun-22 11:45:42.986 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 11:45:42.986 [Task submitter] INFO  nextflow.Session - [a9/781f82] Submitted process > NFCORE_PROTEINFOLD:CASCADE:METRICS_CHAI (backbone_design_0_mpnn_1)
+jun-22 11:46:55.681 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 54; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_CHAI (backbone_design_1_mpnn_3); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/f9/9ff4261d0d158ae7c04adff3422f0f]
+jun-22 11:47:06.194 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 1 -- submitted tasks are shown below
+~> TaskHandler[id: 55; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_CHAI (backbone_design_0_mpnn_1); status: RUNNING; exit: -; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/a9/781f823cd5c5107b9979d7390bfbde]
+jun-22 11:49:37.431 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 55; name: NFCORE_PROTEINFOLD:CASCADE:METRICS_CHAI (backbone_design_0_mpnn_1); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/a9/781f823cd5c5107b9979d7390bfbde]
+jun-22 11:49:37.441 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 11:49:37.441 [Task submitter] INFO  nextflow.Session - [2d/a266fb] Submitted process > NFCORE_PROTEINFOLD:CASCADE:RANK_CHAI (chai)
+jun-22 11:49:38.277 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 56; name: NFCORE_PROTEINFOLD:CASCADE:RANK_CHAI (chai); status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/2d/a266fb7dd65f28c345828e4ae49e63]
+jun-22 11:49:38.288 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+jun-22 11:49:38.288 [Task submitter] INFO  nextflow.Session - [2a/8de564] Submitted process > NFCORE_PROTEINFOLD:CASCADE:CASCADE_REPORT
+jun-22 11:49:39.315 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 57; name: NFCORE_PROTEINFOLD:CASCADE:CASCADE_REPORT; status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/2a/8de56409bffa4ec185ea782b91a916]
+jun-22 11:49:39.318 [main] DEBUG nextflow.Session - Session await > all processes finished
+jun-22 11:49:39.416 [Task monitor] DEBUG n.processor.TaskPollingMonitor - <<< barrier arrives (monitor: local) - terminating tasks monitor poll loop
+jun-22 11:49:39.416 [main] DEBUG nextflow.Session - Session await > all barriers passed
+jun-22 11:49:39.418 [main] DEBUG nextflow.util.ThreadPoolManager - Thread pool 'TaskFinalizer' shutdown completed (hard=false)
+jun-22 11:49:39.419 [main] DEBUG nextflow.util.ThreadPoolManager - Thread pool 'PublishDir' shutdown completed (hard=false)
+jun-22 11:49:39.421 [main] INFO  nextflow.Nextflow - -[0;35m[nf-core/proteinfold][0;32m Pipeline completed successfully[0m-
+jun-22 11:49:39.427 [main] DEBUG n.trace.WorkflowStatsObserver - Workflow completed > WorkflowStats[succeededCount=57; failedCount=0; ignoredCount=0; cachedCount=0; pendingCount=0; submittedCount=0; runningCount=0; retriesCount=0; abortedCount=0; succeedDuration=12h 44m 21s; failedDuration=0ms; cachedDuration=0ms;loadCpus=0; loadMemory=0; peakRunning=3; peakCpus=12; peakMemory=72 GB; ]
+jun-22 11:49:39.583 [main] DEBUG nextflow.trace.ReportObserver - Workflow completed -- rendering execution report
+jun-22 11:49:39.844 [main] DEBUG nextflow.trace.TimelineObserver - Workflow completed -- rendering execution timeline
+jun-22 11:49:39.889 [main] DEBUG nextflow.trace.TraceFileObserver - Workflow completed -- saving trace file
+jun-22 11:49:39.894 [main] DEBUG nextflow.cache.CacheDB - Closing CacheDB done
+jun-22 11:49:39.923 [main] INFO  org.pf4j.AbstractPluginManager - Stop plugin 'nf-schema@2.6.1'
+jun-22 11:49:39.923 [main] DEBUG nextflow.plugin.BasePlugin - Plugin stopped nf-schema
+jun-22 11:49:39.924 [main] DEBUG nextflow.util.ThreadPoolManager - Thread pool 'FileTransfer' shutdown completed (hard=false)
+jun-22 11:49:39.924 [main] DEBUG nextflow.script.ScriptRunner - > Execution complete -- Goodbye

@@ -1,27 +1,18 @@
 process CANDIDATES_CSV_TO_FASTA {
-
     tag "csv_to_fasta"
-
     input:
     path candidates_csv
-
     output:
-    path "*.fasta"
-
+    path "*.fasta",      emit: fastas
+    path "versions.yml", emit: versions
     script:
+    def task_process = task.process
     """
-    python <<'PY'
-import pandas as pd
+    candidates_to_csv_fasta.py ${candidates_csv}
 
-df = pd.read_csv("${candidates_csv}")
-
-for _, row in df.iterrows():
-    cid = row["candidate_id"]
-    seq = row["binder_sequence"]
-
-    with open(f"{cid}.fasta", "w") as f:
-        f.write(f">{cid}\\n")
-        f.write(seq + "\\n")
-PY
-"""
+    cat << END_VERSIONS > versions.yml
+    "${task_process}":
+        python: \$(python3 --version | sed 's/Python //g')
+END_VERSIONS
+    """
 }

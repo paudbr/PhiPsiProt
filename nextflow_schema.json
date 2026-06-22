@@ -190,6 +190,10 @@
                     "fa_icon": "fas fa-link",
                     "format": "uri",
                     "errorMessage": "Please provide a valid URL for the MMSeqs2 API server"
+                },
+                " protein_chains ": {
+                    "type": "string",
+                    "description": "Comma-separated list of protein chains to use for Boltz-2 ligand cofolding"
                 }
             }
         },
@@ -378,6 +382,7 @@
                     "type": "string",
                     "description": "Sets the model to use for prediction. Default is boltz2"
                 }
+
             }
         },
         "foldseek_options": {
@@ -984,7 +989,20 @@
                     "type": "string",
                     "default": "null/params/mols/",
                     "description": "Path to boltz-2 mols"
+                },
+                "binder_no_msa": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "MSA is unavailable for protein binder."
+                },
+
+                "with_affinity": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Affinity score (pIC50 in microM) can only be computed for protein-ligand complexes."
                 }
+
+
             }
         },
         "rosettafold2na_dbs_and_parameters_link_options": {

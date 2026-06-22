@@ -1,7 +1,7 @@
 <h1>
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/images/nf-core-proteinfold_logo_dark.png">
-    <img alt="nf-core/proteinfold" src="docs/images/nf-core-proteinfold_logo_light.png">
+    <img alt="nf-core/PhiPsiProt" src="docs/images/PhiPsiProt_logo.png" width="200" >
   </picture>
 </h1>
 
@@ -28,7 +28,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 ## Pipeline summary
 
-![Alt text](docs/images/nf-core-proteinfold_metro_map_2.0.0.png?raw=true "nf-core-proteinfold 2.0.0 metro map")
+![Alt text](pipeline.svg?raw=true "nf-core-proteinfold 2.0.0 metro map")
 
 | Mode                                                                                               | Protein | RNA | Small-molecule | PTM | Constraints | pLM | MSA server | Split MSA |
 | :------------------------------------------------------------------------------------------------- | :-----: | :-: | :------------: | :-: | :---------: | :-: | :--------: | :-------: |

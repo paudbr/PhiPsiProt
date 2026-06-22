@@ -6,17 +6,32 @@ import os
 import re
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 import math
 import matplotlib
 matplotlib.use('Agg')  # sin display
 import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
 from scipy import stats
 
 
 WATER_NAMES = {"HOH", "WAT", "DOD"}
 
+def clean_receptor(reference_pdb, out_file):
+    """Escribe un receptor solo-proteina: conserva ATOM/TER, elimina
+    HETATM (ligando, aguas, iones). Necesario para que el pocket este
+    libre antes de dockear."""
+    kept = 0
+    with open(reference_pdb) as src, open(out_file, "w") as dst:
+        for line in src:
+            if line.startswith("ATOM") or line.startswith("TER"):
+                dst.write(line)
+                if line.startswith("ATOM"):
+                    kept += 1
+        dst.write("END\n")
+    if kept == 0:
+        raise ValueError(f"No protein ATOM records found in {reference_pdb}")
+    return out_file
 
 def parse_residues(text):
     residues = []
@@ -84,34 +99,40 @@ def extract_ligand(reference_pdb, ligand_resname, out_file):
     return out_file
 
 
+def smiles_to_sdf(candidate_id, smiles, out_sdf):
+    """Convierte un SMILES a SDF 3D con obabel (genera coords + protona a pH 7.4)."""
+    cmd = [
+        "obabel",
+        f"-:{smiles}",
+        "-osdf",
+        "-O", out_sdf,
+        "--gen3d",
+        "-p", "7.4",
+    ]
+    proc = subprocess.run(cmd, text=True, capture_output=True)
+    if proc.returncode != 0 or not Path(out_sdf).exists() or Path(out_sdf).stat().st_size == 0:
+        raise RuntimeError(
+            f"obabel falló para {candidate_id} ({smiles}):\n{proc.stdout}\n{proc.stderr}"
+        )
+    return out_sdf
+
+
 def read_candidates(candidates_csv):
-    base_dir = Path(candidates_csv).resolve().parent
+    """Lee un CSV candidate_id,smiles_ligand y genera un SDF 3D por ligando."""
     rows = []
     with open(candidates_csv, newline="") as handle:
         reader = csv.DictReader(handle)
         for row in reader:
-            candidate_id = row.get("candidate_id") or row.get("id") or Path(row.get("pdb", "")).stem
-            pdb = row.get("pdb")
-            if not pdb:
+            candidate_id = row.get("candidate_id") or row.get("id")
+            smiles = row.get("smiles_ligand") or row.get("smiles")
+            if not candidate_id or not smiles:
+                print(f"WARNING: fila sin candidate_id o smiles, saltando: {row}")
                 continue
-            pdb_path = Path(pdb)
-            if not pdb_path.is_absolute():
-                pdb_path = base_dir / pdb_path
-
-            # ← NUEVO: copiar al workdir si no está ya aquí
-            local_pdb = Path(pdb_path.name)
-            if not local_pdb.exists():
-                if pdb_path.exists():
-                    shutil.copyfile(str(pdb_path), str(local_pdb))
-                else:
-                    print(f"WARNING: PDB not found: {pdb_path}, skipping")
-                    continue
-
-            rows.append({"candidate_id": candidate_id, "pdb": str(local_pdb), **row})
+            sdf = f"{candidate_id}_ligand.sdf"
+            smiles_to_sdf(candidate_id, smiles.strip(), sdf)
+            rows.append({"candidate_id": candidate_id, "ligand_sdf": sdf, "smiles": smiles.strip()})
     return rows
 
-
-import math
 
 def parse_gnina_log(text):
     """Parsea la tabla de modos de GNINA. Devuelve scores del modo 1 (mejor pose)."""
@@ -132,6 +153,7 @@ def parse_gnina_log(text):
         "cnn_affinity": float(best[4]),   # CNN affinity
     }
 
+
 def mean_std(xs):
     if not xs:
         return "", ""
@@ -143,29 +165,49 @@ def mean_std(xs):
     return round(m, 4), round(s, 4)
 
 
-
-def run_gnina(candidate_id, receptor, ligand, box, replicate, args):
+def run_gnina(candidate_id, receptor, ligand, box, replicate, args, autobox_ref=None):
     out_sdf = f"{candidate_id}_rep{replicate}.sdf"
     log_file = f"{candidate_id}_rep{replicate}.gnina.log"
-    cmd = [
-        "gnina",
-        "--receptor", receptor,
-        "--ligand", ligand,
-        "--center_x", str(box["center_x"]),
-        "--center_y", str(box["center_y"]),
-        "--center_z", str(box["center_z"]),
-        "--size_x", str(box["size_x"]),
-        "--size_y", str(box["size_y"]),
-        "--size_z", str(box["size_z"]),
+
+    cmd = ["gnina", "--receptor", receptor, "--ligand", ligand]
+
+    if autobox_ref:
+        # caja automatica alrededor del ligando de referencia + margen.
+        # --autobox_add = buffer en Angstroms (default +4 en los seis lados).
+        # --autobox_extend = booleano: expande la caja si el ligando no cabe
+        #   rotando en su conformacion de entrada (clave con ligandos grandes).
+        cmd += [
+            "--autobox_ligand", autobox_ref,
+            "--autobox_add", str(args.autobox_add),
+            "--autobox_extend", "true",
+        ]
+    else:
+        # fallback: caja explicita por centroide de residuos
+        cmd += [
+            "--center_x", str(box["center_x"]),
+            "--center_y", str(box["center_y"]),
+            "--center_z", str(box["center_z"]),
+            "--size_x", str(box["size_x"]),
+            "--size_y", str(box["size_y"]),
+            "--size_z", str(box["size_z"]),
+        ]
+
+    cmd += [
         "--num_modes", str(args.gnina_num_modes),
         "--exhaustiveness", str(args.gnina_exhaustiveness),
         "--seed", str(args.gnina_seed + replicate),
         "--out", out_sdf,
     ]
+
     proc = subprocess.run(cmd, text=True, capture_output=True)
     log_text = proc.stdout + "\n" + proc.stderr
     with open(log_file, "w") as handle:
         handle.write(log_text)
+
+    if proc.returncode != 0:
+        print(f"WARNING: gnina returncode={proc.returncode} para {candidate_id} "
+              f"rep{replicate}. Ver {log_file}", file=sys.stderr)
+
     parsed = parse_gnina_log(log_text)
     parsed.update({
         "candidate_id": candidate_id,
@@ -176,6 +218,7 @@ def run_gnina(candidate_id, receptor, ligand, box, replicate, args):
     })
     return parsed
 
+
 def plot_scores(records, output_pdf="gnina_score_distributions.pdf"):
     """Pinta distribución de scores por candidato vs original y hace Mann-Whitney U."""
 
@@ -184,18 +227,26 @@ def plot_scores(records, output_pdf="gnina_score_distributions.pdf"):
         "cnn_score":    "CNN Pose Score — higher is better",
         "cnn_affinity": "CNN Affinity — higher is better",
     }
-    # Separar original del resto
     grouped = {}
     for rec in records:
         grouped.setdefault(rec["candidate_id"], []).append(rec)
+
+    candidates = [c for c in grouped if c != "original"]
+    from matplotlib.backends.backend_pdf import PdfPages
+
+    if not candidates:
+        print("WARNING: no hay candidatos para plotear, generando PDF vacío")
+        with PdfPages(output_pdf) as pdf:
+            fig, ax = plt.subplots()
+            ax.axis("off")
+            ax.text(0.5, 0.5, "No candidate ligands docked", ha="center")
+            pdf.savefig(fig); plt.close(fig)
+        return
 
     original_vals = {
         m: [r[m] for r in grouped.get("original", []) if r[m] is not None]
         for m in metrics
     }
-    candidates = [c for c in grouped if c != "original"]
-
-    from matplotlib.backends.backend_pdf import PdfPages
 
     with PdfPages(output_pdf) as pdf:
         for metric, ylabel in metrics.items():
@@ -206,7 +257,6 @@ def plot_scores(records, output_pdf="gnina_score_distributions.pdf"):
 
             positions = []
             labels    = []
-            colors    = []
             stat_lines = []
 
             for i, cid in enumerate(candidates):
@@ -215,13 +265,10 @@ def plot_scores(records, output_pdf="gnina_score_distributions.pdf"):
                     continue
 
                 x = i + 1
-                # Puntos individuales
                 ax.scatter([x] * len(vals), vals, color="steelblue", zorder=3, s=60)
-                # Media
                 m = sum(vals) / len(vals)
                 ax.hlines(m, x - 0.25, x + 0.25, colors="steelblue", linewidth=2.5)
 
-                # Mann-Whitney U vs original
                 if orig and len(vals) >= 1:
                     if len(vals) >= 2 and len(orig) >= 2:
                         stat, pval = stats.mannwhitneyu(vals, orig, alternative="two-sided")
@@ -232,13 +279,10 @@ def plot_scores(records, output_pdf="gnina_score_distributions.pdf"):
 
                 positions.append(x)
                 labels.append(cid)
-                colors.append("steelblue")
 
-            # Línea de la media del original
             if orig_mean is not None:
                 ax.axhline(orig_mean, color="tomato", linestyle="--", linewidth=1.5,
                            label=f"Original mean ({orig_mean:.3f})")
-                # Banda ±std del original
                 if len(orig) > 1:
                     orig_std = math.sqrt(sum((v - orig_mean)**2 for v in orig) / (len(orig)-1))
                     ax.axhspan(orig_mean - orig_std, orig_mean + orig_std,
@@ -250,7 +294,6 @@ def plot_scores(records, output_pdf="gnina_score_distributions.pdf"):
             ax.set_title(f"{metric} — binders vs original")
             ax.legend(fontsize=8)
 
-            # Añadir stats como texto en la figura
             if stat_lines:
                 stats_text = "\n".join(stat_lines)
                 fig.text(0.01, -0.05 * len(stat_lines),
@@ -267,24 +310,25 @@ def plot_scores(records, output_pdf="gnina_score_distributions.pdf"):
         ax.axis("off")
         table_data = [["Candidate", "Affinity mean±SD", "CNN Score mean±SD",
                         "CNN Aff mean±SD", "p (affinity)", "p (cnn_aff)"]]
+
+        def fmt(xs):
+            if not xs:
+                return "n/a"
+            m = sum(xs)/len(xs)
+            s = math.sqrt(sum((x-m)**2 for x in xs)/(len(xs)-1)) if len(xs) > 1 else 0
+            return f"{m:.3f}±{s:.3f}"
+
+        def pval_str(a, b):
+            if len(a) >= 2 and len(b) >= 2:
+                _, p = stats.mannwhitneyu(a, b, alternative="two-sided")
+                sig = "***" if p < 0.001 else "**" if p < 0.01 else "*" if p < 0.05 else "ns"
+                return f"{p:.3f} {sig}"
+            return "n/a"
+
         for cid in candidates:
             vals_aff = [r["affinity"]     for r in grouped[cid] if r["affinity"] is not None]
             vals_cnn = [r["cnn_score"]    for r in grouped[cid] if r["cnn_score"] is not None]
             vals_ca  = [r["cnn_affinity"] for r in grouped[cid] if r["cnn_affinity"] is not None]
-
-            def fmt(xs):
-                if not xs: return "n/a"
-                m = sum(xs)/len(xs)
-                s = math.sqrt(sum((x-m)**2 for x in xs)/(len(xs)-1)) if len(xs)>1 else 0
-                return f"{m:.3f}±{s:.3f}"
-
-            def pval_str(a, b):
-                if len(a) >= 2 and len(b) >= 2:
-                    _, p = stats.mannwhitneyu(a, b, alternative="two-sided")
-                    sig = "***" if p<0.001 else "**" if p<0.01 else "*" if p<0.05 else "ns"
-                    return f"{p:.3f} {sig}"
-                return "n/a"
-
             table_data.append([
                 cid,
                 fmt(vals_aff),
@@ -319,30 +363,67 @@ def main():
     parser.add_argument("--gnina-exhaustiveness", type=int, default=8)
     parser.add_argument("--gnina-num-modes", type=int, default=9)
     parser.add_argument("--gnina-seed", type=int, default=1000)
+    parser.add_argument("--autobox-ligand", default=None,
+                        help="PDB/SDF de referencia para autobox. Si se da, "
+                             "la caja se construye alrededor de este ligando.")
+    parser.add_argument("--autobox-add", type=float, default=4.0,
+                        help="Buffer en Angstrom anadido a la autobox en los "
+                             "seis lados (GNINA --autobox_add, default 4).")
+    parser.add_argument("--no-autobox", action="store_true",
+                        help="Desactiva autobox y fuerza la caja por residuos.")
     args = parser.parse_args()
 
     residues = parse_residues(args.pocket_residues)
     box = box_from_residues(args.reference_pdb, residues, args.box_size)
 
-    ligand_file = args.ligand_file
-    if ligand_file:
-        staged_ligand = Path(ligand_file).name
-        if Path(ligand_file).resolve() != Path(staged_ligand).resolve():
-            shutil.copyfile(ligand_file, staged_ligand)
-        ligand_file = staged_ligand
-    else:
-        ligand_file = extract_ligand(args.reference_pdb, args.ligand_resname, "extracted_ligand.pdb")
 
+    receptor = "receptor_clean.pdb"
+    clean_receptor(args.reference_pdb, receptor)
+
+    # Cada candidato es un LIGANDO (SMILES -> SDF 3D)
     candidates = read_candidates(args.candidates)
-    candidates.append({"candidate_id": "original", "pdb": args.reference_pdb})
+
+    # "original": el ligando co-cristalizado extraido del reference (MK1/saquinavir)
+    original_ligand = extract_ligand(args.reference_pdb, args.ligand_resname, "extracted_ligand.pdb")
+
+    # ── Decidir autobox ───────────────────────────────────────────
+    # Por defecto: autobox alrededor del ligando co-cristalizado extraido,
+    # que garantiza que la caja contiene el sitio activo con margen
+    # (resuelve el "ligand out of the box" con ligandos grandes/flexibles).
+    autobox_ref = None
+    if not args.no_autobox:
+        autobox_ref = args.autobox_ligand or original_ligand
+        if autobox_ref and not Path(autobox_ref).exists():
+            print(f"WARNING: autobox ref '{autobox_ref}' no existe; "
+                  f"usando caja por residuos.", file=sys.stderr)
+            autobox_ref = None
+    if autobox_ref:
+        print(f"[gnina] usando autobox sobre '{autobox_ref}' "
+              f"(add={args.autobox_add} A, extend=on)", file=sys.stderr)
+    else:
+        print(f"[gnina] usando caja por residuos centrada en "
+              f"({box['center_x']:.1f}, {box['center_y']:.1f}, {box['center_z']:.1f}) "
+              f"lado={args.box_size} A", file=sys.stderr)
 
     records = []
+    # Ligandos nuevos
     for candidate in candidates:
         for rep in range(args.runs):
-            records.append(run_gnina(candidate["candidate_id"], candidate["pdb"], ligand_file, box, rep, args))
+            records.append(
+                run_gnina(candidate["candidate_id"], receptor,
+                          candidate["ligand_sdf"], box, rep, args,
+                          autobox_ref=autobox_ref)
+            )
+    # Ligando original como referencia de comparacion
+    for rep in range(args.runs):
+        records.append(
+            run_gnina("original", receptor, original_ligand, box, rep, args,
+                      autobox_ref=autobox_ref)
+        )
 
     with open("gnina_scores.tsv", "w", newline="") as handle:
-        fields = ["candidate_id", "replicate", "cnn_score", "cnn_affinity", "affinity", "returncode", "docked_sdf", "log"]
+        fields = ["candidate_id", "replicate", "cnn_score", "cnn_affinity",
+                  "affinity", "returncode", "docked_sdf", "log"]
         writer = csv.DictWriter(handle, fieldnames=fields, delimiter="\t")
         writer.writeheader()
         writer.writerows(records)
@@ -368,6 +449,7 @@ def main():
                 row[f"{metric}_mean"] = m
                 row[f"{metric}_std"]  = s
             writer.writerow(row)
+
     plot_scores(records, output_pdf="gnina_score_distributions.pdf")
 
 

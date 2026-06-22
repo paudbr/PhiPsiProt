@@ -1,0 +1,12 @@
+nextflow run main.nf -profile docker \
+  --input "/mnt/data_local/pipes/structural/PhiPsiProt_structural/samplesheet_ca.csv" \
+  --input_pdb "/mnt/alphafold3_db/test_modo3/3HS4.pdb" \
+  --input_csv "/mnt/alphafold3_db/test_modo3/top20_candidates.csv" \
+  --mode "backbone" \
+  --cascade true \
+  --ligand false \
+  --col_seq "final_sequence" \
+  --outdir "/mnt/alphafold3_db/test_modo3_new/output/" \
+  --use_gpu true \
+  --use_msa_server true \
+  -resume

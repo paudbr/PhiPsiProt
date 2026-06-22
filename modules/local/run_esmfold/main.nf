@@ -26,9 +26,18 @@ process RUN_ESMFOLD {
     def args = task.ext.args ?: ''
     def VERSION = '1.0.3' // WARN: Version information not provided by tool on CLI. Please update this string when bumping container versions.
 
+
     // KR - note: removed the *.pdb -> tmp.pdb, tmp.pdb  -> esmfold.pdb. Why not just take directly?
     // Only one .pdb per ESMFold run
     """
+
+    export HOME=/tmp/esm_\$\$
+    mkdir -p \$HOME
+    export TRITON_CACHE_DIR=\$HOME/.triton
+    export DEEPSPEED_TRITON_CACHE_DIR=\$HOME/.triton
+    export XDG_CACHE_HOME=\$HOME/.cache
+    export CUDA_CACHE_PATH=\$HOME/.nv
+    mkdir -p \$HOME/.triton \$HOME/.cache \$HOME/.nv
     esm-fold \
         -i ${fasta} \
         -o \$PWD \
@@ -47,23 +56,6 @@ process RUN_ESMFOLD {
         python: \$(python3 --version | sed 's/Python //g')
         pytorch: \$(python3 -c "import torch; print(torch.__version__)" 2>/dev/null || echo "unknown")
         openfold: \$(python -m pip show openfold | grep "^Version" | sed 's/.*Version: //' 2>/dev/null || echo "unknown")
-        numpy: \$(python3 -c "import numpy; print(numpy.__version__)" 2>/dev/null || echo "unknown")
-        biopython: \$(python3 -c "import Bio; print(Bio.__version__)" 2>/dev/null || echo "unknown")
-    END_VERSIONS
-    """
-
-    stub:
-    def VERSION = '1.0.3' // WARN: Version information not provided by tool on CLI. Please update this string when bumping container versions.
-    """
-    touch "${meta.id}_esmfold.pdb"
-    touch "${meta.id}_plddt.tsv"
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        esm-fold: $VERSION
-        python: \$(python3 --version 2>/dev/null | sed 's/Python //g' || echo "unknown")
-        pytorch: \$(python3 -c "import torch; print(torch.__version__)" 2>/dev/null || echo "unknown")
-        openfold: \$(python -m pip show openfold 2>/dev/null | grep "^Version" | sed 's/.*Version: //' || echo "unknown")
         numpy: \$(python3 -c "import numpy; print(numpy.__version__)" 2>/dev/null || echo "unknown")
         biopython: \$(python3 -c "import Bio; print(Bio.__version__)" 2>/dev/null || echo "unknown")
     END_VERSIONS

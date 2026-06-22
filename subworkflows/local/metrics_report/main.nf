@@ -134,6 +134,12 @@ process TAG_AF3_PLDDT {
     script: "cp ${tsv} ${meta.id}_af3_plddt.tsv"
 }
 
+process TAG_AF3_PDB {
+    tag "$meta.id"
+    input:  tuple val(meta), path(pdb)
+    output: path("${meta.id}_af3_${pdb.baseName}.pdb")
+    script: "cp ${pdb} ${meta.id}_af3_${pdb.baseName}.pdb"
+}
 
 workflow METRICS_REPORT {
 
@@ -219,10 +225,16 @@ workflow METRICS_REPORT {
     )
     ch_all_scores = ch_all_scores.mix( MERGE_CHAI_SCORES.out )
 
+        // PDBs de AF3 renombrados con meta.id para evitar colisión en stageAs
+    TAG_AF3_PDB(
+        ch_af3_ready.map { meta, pdb, tool, json -> [ meta, pdb ] }
+    )
+
     ch_all_pdbs = ch_af2_ready
-        .mix( ch_af3_ready, ch_esm_ready )
-        .map { meta, pdb, tool, json -> pdb }           // extrae path de la tupla
-        .mix( ch_chai_ready )                            // chai_ready ya es path suelto
+        .mix( ch_esm_ready )
+        .map { meta, pdb, tool, json -> pdb }   // af2 + esm
+        .mix( ch_chai_ready )                    // chai (path suelto)
+        .mix( TAG_AF3_PDB.out )                  // af3 renombrado (path suelto)
 
     // ── Reporte único ─────────────────────────────────────────────────────
     GENERATE_METRICS_REPORT(

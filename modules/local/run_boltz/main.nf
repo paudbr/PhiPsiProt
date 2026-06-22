@@ -3,8 +3,7 @@
  */
 process RUN_BOLTZ {
     tag "$meta.id"
-    label 'process_medium'
-    label 'process_gpu'
+    label 'process_high'
 
     container "quay.io/nf-core/proteinfold_boltz:2.0.0"
 
@@ -33,6 +32,7 @@ process RUN_BOLTZ {
     tuple val(meta), path ("${meta.id}_iptm.tsv")                               , optional: true, emit: iptm_raw
     tuple val(meta), path ("${meta.id}_chainwise_ptm.tsv")                      , emit: summary_chainwise_ptm_raw
     tuple val(meta), path ("${meta.id}_chainwise_iptm.tsv")                     , optional: true, emit: chainwise_iptm_raw
+    tuple val(meta), path ("boltz_results_*/predictions/*/affinity_*.json"), optional: true, emit: affinity
     path "versions.yml", emit: versions
 
     when:
@@ -45,8 +45,15 @@ process RUN_BOLTZ {
     }
     def args = task.ext.args ?: ''
     """
-    mkdir -p ./home
-    export HOME=./home
+
+    export HOME=/tmp/esm_\$\$
+    mkdir -p \$HOME
+    export TRITON_CACHE_DIR=\$HOME/.triton
+    export DEEPSPEED_TRITON_CACHE_DIR=\$HOME/.triton
+    export XDG_CACHE_HOME=\$HOME/.cache
+    export CUDA_CACHE_PATH=\$HOME/.nv
+    mkdir -p \$HOME/.triton \$HOME/.cache \$HOME/.nv
+
 
     [ ! -f mols.tar ] && touch mols.tar
 
@@ -67,7 +74,8 @@ process RUN_BOLTZ {
         --structs boltz_results_*/predictions/${meta.id}/*.pdb \\
         --jsons boltz_results_*/predictions/${meta.id}/confidence_*_model_*.json \\
         --npzs boltz_results_*/predictions/${meta.id}/pae_*_model_*.npz \\
-        --csvs ${meta.id}_*.csv
+        --csvs ${meta.id}_*.csv \\
+        --affinity-json boltz_results_*/predictions/${meta.id}/affinity_*.json
 
     mv "${meta.id}_msa.tsv" "${meta.id}_boltz_msa.tsv"
 

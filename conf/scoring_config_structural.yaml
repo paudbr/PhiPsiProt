@@ -1,0 +1,37 @@
+# scoring_config para métricas estructurales (cascada ESM -> Chai)
+#
+# Métricas disponibles (las escribe structural_metrics.py):
+#   rosetta_dg      ΔG en REU del modelo (más negativo = más estable)        -> lower
+#   rosetta_ddg     ΔG(modelo) - ΔG(original); <0 = más estable que nativo   -> lower
+#   tm_score        TM-score vs input_pdb (0..1, mayor mejor)                -> higher
+#   mean_plddt      pLDDT medio (0..100, mayor mejor)                        -> higher
+#   sap_score       agregación absoluta (menor mejor)                        -> lower
+#   delta_sap       SAP(modelo) - SAP(original); <0 = más soluble que nativo -> lower
+#   n_cysteines     nº cisteínas (normalmente gate)
+#   net_charge      carga neta a pH (PROPKA)
+#   net_charge_abs  |carga neta| (cerca de neutro mejor)                     -> lower
+
+normalization: zscore        # zscore | minmax
+
+gates:                       # filtros duros — SOLO se aplican en la ronda ESM
+  n_cysteines:   { max: 2 }
+  net_charge:    { min: -10, max: 10 }
+  mean_plddt:    { min: 87.0 }  # pLDDT medio mínimo (para descartar modelos muy malos)
+  sap_score:   { max: 0.0 }   # SAP absoluto máximo (para descartar modelos muy agregantes)
+
+directions:                  # 'lower' = menor es mejor (se invierte al normalizar)
+  rosetta_dg:      lower
+  rosetta_ddg:     lower
+  sap_score:       lower
+  delta_sap:       lower
+  net_charge_abs:  lower
+
+weights:                     # activar = poner aquí; desactivar = quitar o 0
+  rosetta_ddg:  0.25         # estabilidad vs original
+  rosetta_dg:   0.10         # estabilidad absoluta (apoyo)
+  tm_score:     0.20         # parecido al original
+  mean_plddt:   0.15         # confianza de plegamiento
+  delta_sap:    0.15         # solubilidad vs original
+  sap_score:    0.15         # solubilidad absoluta
+
+top_n: 5                     # cuántos pasan de ESM a Chai

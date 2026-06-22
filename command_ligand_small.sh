@@ -1,0 +1,23 @@
+nextflow run main.nf -profile docker \
+  --input "/mnt/data_local/pipes/structural/PhiPsiProt_structural/samplesheet_HV1.csv" \
+  --ligand true \
+  --docking_tool gnina \
+  --ligand_candidates_csv "/mnt/alphafold3_db/test_small_ligand/ligand_candidates_2.csv" \
+  --outdir "/mnt/alphafold3_db/test_small_ligand/output_VIH/" \
+  --structural_tools ESM \
+  --use_gpu true \
+  --boltz_model "boltz2" \
+  --with_affinity true \
+  --use_msa_server true \
+  --gnina_box_size 20 \
+  --gnina_exhaustiveness 62 \
+  --gnina_autobox_add 4 \
+  --boltz_accelerator "gpu" \
+  --gnina_autobox_extend true \
+  --protein_chains "A,B" \
+  --ligand_resname "MK1" \
+  --binding_residues "8,23,25,27,28,29,30,32,47,48,49,50,53,81,82,84,8,23,25,27,28,29,30,31,32,47,48,49,50,76,81,82,84" \
+  --receptor_sequence "/mnt/alphafold3_db/test_small_ligand/1HSG.fa" \
+  --ligand_reference_pdb "/mnt/alphafold3_db/test_small_ligand/1HSG.pdb" \
+  --pocket_residues "A8,A23,A25,A27,A28,A29,A30,A32,A47,A48,A49,A50,A53,A81,A82,A84,B8,B23,B25,B27,B28,B29,B30,B31,B32,B47,B48,B49,B50,B76,B81,B82,B84"  \
+

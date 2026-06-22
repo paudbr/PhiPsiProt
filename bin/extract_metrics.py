@@ -229,188 +229,324 @@ def read_npz(name, npz_files):
 
 # Boltz MSA processing
 def read_csv(name, csv_files):
-    if not os.path.isfile(csv_files[0]): return #TODO: Fix temporary workaround
+    if not csv_files or not os.path.isfile(csv_files[0]):
+        return
+
     msa_rows = {}
     unpaired_msa_rows = {}
+
     for csv_file in sorted(csv_files, key=lambda x: int(x.split('_')[-1].split('.csv')[0])):
         msa_lines = []
         unpaired_msa_lines = []
-        with open(csv_file) as f:
-            f.readline()
-            for line in f:
-                if line.split(',')[0] == '-1' and len(csv_files)>1: #Server MSA appears as un-paired
-                    unpaired_msa_lines.append(''.join(c for c in line.strip('\n').split(',')[1] if not c.islower()))
-                else:
-                    msa_lines.append(''.join(c for c in line.strip('\n').split(',')[1] if not c.islower()))
-        msa_rows[csv_file.split('_')[-1].split('.csv')[0]] = [[str(AA_to_int.get(residue, 20)) for residue in line] for line in msa_lines]
-        unpaired_msa_rows[csv_file.split('_')[-1].split('.csv')[0]] = [[str(AA_to_int.get(residue, 20)) for residue in line] for line in unpaired_msa_lines]
 
-    # Get Chain to MSA mapping (ie non-redundant for homomers)
-    # TODO: Make this explicit input
+        with open(csv_file) as f:
+            f.readline()  # skip header
+
+            for line in f:
+                cols = line.strip("\n").split(",")
+
+                if len(cols) < 2:
+                    continue
+
+                seq = ''.join(c for c in cols[1] if not c.islower())
+
+                if cols[0] == "-1" and len(csv_files) > 1:
+                    unpaired_msa_lines.append(seq)
+                else:
+                    msa_lines.append(seq)
+
+        msa_id = csv_file.split("_")[-1].split(".csv")[0]
+
+        msa_rows[msa_id] = [
+            [str(AA_to_int.get(residue, 20)) for residue in line]
+            for line in msa_lines
+        ]
+
+        unpaired_msa_rows[msa_id] = [
+            [str(AA_to_int.get(residue, 20)) for residue in line]
+            for line in unpaired_msa_lines
+        ]
+
     with open(f'boltz_results_{name}/processed/manifest.json') as f:
         manifest = json.load(f)
 
+    def get_msa_id(chain):
+        msa_id = chain.get("msa_id", -1)
+
+        if msa_id in (-1, None):
+            return None
+
+        msa_id = str(msa_id)
+
+        if "_" in msa_id:
+            msa_id = msa_id.split("_")[-1]
+
+        return msa_id
+
+    valid_chains = []
+
+    for chain in manifest["records"][0]["chains"]:
+        msa_id = get_msa_id(chain)
+
+        if msa_id is None:
+            continue
+
+        if msa_id not in msa_rows:
+            continue
+
+        valid_chains.append((chain, msa_id))
+
+    if len(valid_chains) == 0:
+        print("WARNING: No valid MSA chains found. Skipping MSA TSV generation.")
+        return
+
     final_rows = []
-    # Paired
-    for i in range(len(msa_rows["0"])): #The number of paired lines is common to all MSAs
-        temp_row = []
-        #This needs to be fixed if inference is batched in future.
-        for chain in manifest["records"][0]["chains"]:
-            j = chain["msa_id"].split("_")[-1]
-            temp_row.extend(msa_rows[j][i])
-        final_rows.append(temp_row)
 
-    # Un-paired
-    msa_widths = [len(msa_rows[chain["msa_id"].split("_")[-1]][0]) for chain in manifest["records"][0]["chains"]]
-    msa_heights = [len(unpaired_msa_rows[chain["msa_id"].split("_")[-1]]) for chain in manifest["records"][0]["chains"]]
+    # -----------------------
+    # PAIRED MSA
+    # -----------------------
 
-    cum_total_rows = np.cumsum(msa_heights)
+    paired_height = min(
+        len(msa_rows[msa_id])
+        for _, msa_id in valid_chains
+        if len(msa_rows[msa_id]) > 0
+    )
 
-    for row_idx in range(cum_total_rows[-1]):
+    for row_idx in range(paired_height):
         temp_row = []
 
-        for i, chain in enumerate(manifest["records"][0]["chains"]):
-            msa = unpaired_msa_rows[chain["msa_id"].split("_")[-1]]
-            width = msa_widths[i]
-            if i == 0:
-                minrow = 0
-            else:
-                minrow = cum_total_rows[i-1]
-            maxrow = cum_total_rows[i]
+        for _, msa_id in valid_chains:
+            temp_row.extend(msa_rows[msa_id][row_idx])
 
-            if minrow <= row_idx < maxrow:
-                msa_row_idx = row_idx - minrow
-                temp_row.extend(msa[msa_row_idx])
-            else:
-                temp_row.extend(["21"] * width) #gap
         final_rows.append(temp_row)
+
+    # -----------------------
+    # UNPAIRED MSA
+    # -----------------------
+
+    msa_widths = []
+
+    for _, msa_id in valid_chains:
+        if len(msa_rows[msa_id]) > 0:
+            msa_widths.append(len(msa_rows[msa_id][0]))
+        else:
+            msa_widths.append(0)
+
+    msa_heights = [
+        len(unpaired_msa_rows.get(msa_id, []))
+        for _, msa_id in valid_chains
+    ]
+
+    if sum(msa_heights) > 0:
+
+        cum_total_rows = np.cumsum(msa_heights)
+
+        for row_idx in range(cum_total_rows[-1]):
+
+            temp_row = []
+
+            for i, (_, msa_id) in enumerate(valid_chains):
+
+                msa = unpaired_msa_rows.get(msa_id, [])
+                width = msa_widths[i]
+
+                minrow = 0 if i == 0 else cum_total_rows[i - 1]
+                maxrow = cum_total_rows[i]
+
+                if minrow <= row_idx < maxrow and len(msa) > 0:
+                    msa_row_idx = row_idx - minrow
+                    temp_row.extend(msa[msa_row_idx])
+                else:
+                    temp_row.extend(["21"] * width)
+
+            final_rows.append(temp_row)
 
     write_tsv(f"{name}_msa.tsv", final_rows)
 
 def read_json(name, json_files):
     ptm_data = {}
     iptm_data = {}
-    chain_pair_iptm_data = {} # For iPTM data to be converted into formatted pairs with non-self elements
     chain_pair_entries = {}
     chainwise_ptms = {}
     chain_ids = []
+    ranking_scores = {}
 
     for idx, json_file in enumerate(json_files):
         with open(json_file, 'r') as f:
             data = json.load(f)
-            if json_file.endswith("_data.json"): #AF3 output with MSA info
-                # Can't just used format_msa_rows since there's FASTA headers in the json content
-                paired_msa_rows = []
-                unpaired_msa_rows = []
-                for chain in data['sequences']:
-                    unpaired_MSA = chain['protein']['unpairedMsa']
-                    unpaired_msa_lines = [''.join(c for c in line if not c.islower()) for line in unpaired_MSA.split("\n") if line.strip() and not line.startswith(">")]
-                    unpaired_msa_rows.append([[str(AA_to_int.get(residue, 20)) for residue in line] for line in unpaired_msa_lines])
-                    paired_MSA = chain['protein']['pairedMsa']
-                    paired_msa_lines = [''.join(c for c in line if not c.islower()) for line in paired_MSA.split("\n") if line.strip() and not line.startswith(">")]
-                    paired_msa_rows.append([[str(AA_to_int.get(residue, 20)) for residue in line] for line in paired_msa_lines])
 
-                chains = len(data['sequences'])
-                final_rows = []
-                # Paired
-                for i in range(len(paired_msa_rows[0])): #The number of paired lines is common to all MSAs
+        basename = os.path.basename(json_file)
+        dirname  = os.path.dirname(json_file)
+
+        # ── AF3: datos MSA ──────────────────────────────────────────
+        if json_file.endswith("_data.json"):
+            paired_msa_rows   = []
+            unpaired_msa_rows = []
+            for chain in data['sequences']:
+                if 'protein' not in chain:
+                    continue
+                unpaired_MSA   = chain['protein'].get('unpairedMsa', '')
+                unpaired_lines = [
+                    ''.join(c for c in line if not c.islower())
+                    for line in unpaired_MSA.split("\n")
+                    if line.strip() and not line.startswith(">")
+                ]
+                unpaired_msa_rows.append([
+                    [str(AA_to_int.get(r, 20)) for r in line]
+                    for line in unpaired_lines
+                ])
+                paired_MSA   = chain['protein'].get('pairedMsa', '')
+                paired_lines = [
+                    ''.join(c for c in line if not c.islower())
+                    for line in paired_MSA.split("\n")
+                    if line.strip() and not line.startswith(">")
+                ]
+                paired_msa_rows.append([
+                    [str(AA_to_int.get(r, 20)) for r in line]
+                    for line in paired_lines
+                ])
+
+            chains     = len(paired_msa_rows)
+            final_rows = []
+
+            if chains > 0 and len(paired_msa_rows[0]) > 0:
+                for i in range(len(paired_msa_rows[0])):
                     temp_row = []
-                    #This needs to be fixed if inference is batched in future.
                     for j in range(chains):
-                        temp_row.extend(paired_msa_rows[j][i])
+                        if j < len(paired_msa_rows) and i < len(paired_msa_rows[j]):
+                            temp_row.extend(paired_msa_rows[j][i])
+                        else:
+                            width = len(paired_msa_rows[0][0]) if paired_msa_rows[0] else 0
+                            temp_row.extend(["21"] * width)
                     final_rows.append(temp_row)
 
-                # Un-paired
-                msa_widths = [len(paired_msa_rows[chain][0]) for chain in range(chains)]
-                msa_heights = [len(unpaired_msa_rows[chain]) for chain in range(chains)]
+            msa_widths = []
+            for chain_idx in range(chains):
+                if paired_msa_rows[chain_idx]:
+                    msa_widths.append(len(paired_msa_rows[chain_idx][0]))
+                elif unpaired_msa_rows[chain_idx]:
+                    msa_widths.append(len(unpaired_msa_rows[chain_idx][0]))
+                else:
+                    msa_widths.append(0)
 
+            msa_heights = [len(unpaired_msa_rows[c]) for c in range(chains)]
+            if sum(msa_heights) > 0:
                 cum_total_rows = np.cumsum(msa_heights)
-
                 for row_idx in range(cum_total_rows[-1]):
                     temp_row = []
-
                     for i in range(chains):
-                        msa = unpaired_msa_rows[i]
-                        width = msa_widths[i]
-                        if i == 0:
-                            minrow = 0
-                        else:
-                            minrow = cum_total_rows[i-1]
+                        msa    = unpaired_msa_rows[i]
+                        width  = msa_widths[i]
+                        minrow = 0 if i == 0 else cum_total_rows[i - 1]
                         maxrow = cum_total_rows[i]
-                        if minrow <= row_idx < maxrow:
-                            msa_row_idx = row_idx - minrow
-                            temp_row.extend(msa[msa_row_idx])
+                        if minrow <= row_idx < maxrow and len(msa) > 0:
+                            temp_row.extend(msa[row_idx - minrow])
                         else:
-                            temp_row.extend(["21"] * width) #gap
+                            temp_row.extend(["21"] * width)
                     final_rows.append(temp_row)
+
+            if final_rows:
                 write_tsv(f"{name}_msa.tsv", final_rows)
-            #AF3 output with PAE info, or HF3 PAE data. TODO: Need to make sure the workflow points to [protein]/[protein]_rank1/all_results.json
-
-            # TODO: I think I need to capture model_id and inference_id  -- MUST FIX since this is so fragile and will be different for different programs.
-            #if '_alphafold2_ptm_model_' in json_file: # ColabFold, multimer or monomer
-            ## Might want to cut more if I just want ${meta.id}_[metric].tsv
-            #    model_id = os.path.basename(json_file)
-            #    print(model_id)
-            if 'all_results' in json_file: # Individual predictions in HF3
-                model_id = int(os.path.dirname(json_file).split('-rank')[-1]) #Use re-ranked output
-            if 'predictions' in json_file: # Boltz-1 confidences in predictions/[protein]/confidence_[protein]_model_*.json
-            # TODO: haven't tested this for multiple models with --diffusion_samples
-                model_id = os.path.basename(json_file).split('_model_')[-1].split('.json')[0]
-            #TODO: Fix this for AF3 - the top-ranked files are in the top-level directory
-            if 'confidences' in json_file: #Prevent crash when model_id is not defined
-                #model_id = os.path.basename(json_file).split('confidences_')[-1].split('.json')[0]
-                model_id = 0
-
-            if "pae" not in data.keys():
-                print(f"No PAE output in {json_file}, it was likely a monomer calculation")
             else:
+                print(f"WARNING: Empty MSA for {name}, skipping MSA TSV.")
+
+        # ── AF3: métricas de confianza ───────────────────────────────
+        elif json_file.endswith("_summary_confidences.json"):
+            model_id = 0
+            if 'ranking_score' in data:
+                ranking_scores[model_id] = data['ranking_score']
+            if 'ptm' in data:
+                ptm_data[model_id] = f"{np.round(data['ptm'], 3)}\n"
+            if 'iptm' in data and data['iptm'] is not None:
+                iptm_data[model_id] = f"{np.round(data['iptm'], 3)}\n"
+            if 'chain_pair_iptm' in data:
+                chain_iptm_matrix = np.array(data['chain_pair_iptm'])
+                chain_pair_entries[model_id] = chain_iptm_matrix_to_pairs(chain_iptm_matrix)
+                chainwise_ptms[model_id]     = chainwise_iptm_matrix_to_ptms(chain_iptm_matrix)
+            if 'chain_pair_pae_min' in data:
+                pae_min_matrix = data['chain_pair_pae_min']
+                pae_min_rows   = [[""] + [f"chain_{j}" for j in range(len(pae_min_matrix[0]))]]
+                for i, row in enumerate(pae_min_matrix):
+                    pae_min_rows.append([f"chain_{i}"] + [f"{v:.4f}" for v in row])
+                write_tsv(f"{name}_chain_pair_pae_min.tsv", pae_min_rows)
+            extra = {k: data[k] for k in ('has_clash', 'fraction_disordered') if k in data}
+            if extra:
+                write_tsv(f"{name}_extra_metrics.tsv",
+                          [list(extra.keys()), list(extra.values())])
+
+        # ── AF3: PAE por modelo ──────────────────────────────────────
+        elif json_file.endswith("_confidences.json"):
+            model_id = 0
+            if 'pae' in data:
                 write_tsv(f"{name}_{model_id}_pae.tsv", format_pae_rows(data["pae"]))
 
-            if 'ptm' not in data.keys():
-                print(f"No pTM/iPTM output in {json_file}, it was likely a monomer calculation")
-                #This message should change - currently called on boltz files not expected to contain ptm
-            else:
-                ptm_data[model_id] = f"{np.round(data['ptm'],3)}\n"
+        # ── Boltz1/Boltz2: confidence_*_model_*.json ────────────────
+        elif 'predictions' in json_file or basename.startswith("confidence_"):
+            model_id = basename.split('_model_')[-1].replace('.json', '')
 
-            if 'iptm' not in data.keys():
-                print(f"No pTM/iPTM output in {json_file}, it was likely a monomer calculation")
-            else:
-                if data['iptm']: #ie not null
-                    iptm_data[model_id] = f"{np.round(data['iptm'],3)}\n"
+            # ptm / iptm escalares — PRIMERO, antes de cualquier cosa que pueda fallar
+            if 'ptm' in data:
+                ptm_data[model_id] = f"{np.round(data['ptm'], 3)}\n"
+            if 'iptm' in data and data['iptm']:
+                iptm_data[model_id] = f"{np.round(data['iptm'], 3)}\n"
 
-            if 'chain_pair_iptm' not in data.keys() and 'pair_chains_iptm' not in data.keys():
-                print(f"No chain-wise iPTM output in {json_file}, it was likely a monomer calculation")
-            else:
-                if 'chain_pair_iptm' in data.keys():
-                    chain_pair_iptm_data = data['chain_pair_iptm']
-                    chain_iptm_matrix = np.array(chain_pair_iptm_data)
-                elif 'pair_chains_iptm' in data.keys(): #Boltz key
-                    chain_pair_iptm_data = data['pair_chains_iptm']
-                    # casting to int works for sorting boltz - need to carefully check other modes
-                    chain_iptm_matrix = np.array([[chain_pair_iptm_data[row][col] for col in sorted(chain_pair_iptm_data[row], key=int)] for row in sorted(chain_pair_iptm_data, key=int)])
-                    basename = os.path.basename(json_file)
-                    dirname = os.path.dirname(json_file)
-                    pdb_name = ".".join(basename[11:].split('.')[:-1])+'.pdb' #TODO: Fix magic number
-                    chain_ids = get_chain_ids(os.path.join(dirname,pdb_name))
-                else:
-                    raise ValueError("No chain-wise iPTM data found in the JSON file.")
+            # PAE
+            if 'pae' in data:
+                write_tsv(f"{name}_{model_id}_pae.tsv", format_pae_rows(data["pae"]))
 
+            # chain_pair_iptm (Boltz2: pair_chains_iptm)
+            if 'chain_pair_iptm' in data:
+                chain_iptm_matrix = np.array(data['chain_pair_iptm'])
                 chain_pair_entries[model_id] = chain_iptm_matrix_to_pairs(chain_iptm_matrix)
-                chainwise_ptms[model_id] = chainwise_iptm_matrix_to_ptms(chain_iptm_matrix)
+                chainwise_ptms[model_id]     = chainwise_iptm_matrix_to_ptms(chain_iptm_matrix)
 
+            elif 'pair_chains_iptm' in data:
+                cpd = data['pair_chains_iptm']
+                chain_iptm_matrix = np.array([
+                    [cpd[row][col] for col in sorted(cpd[row], key=int)]
+                    for row in sorted(cpd, key=int)
+                ])
+                # Boltz2: confidence_NAME_model_0.json → NAME_model_0.pdb
+                pdb_name = basename.replace("confidence_", "").replace(".json", ".pdb")
+                pdb_path = os.path.join(dirname, pdb_name)
+                if os.path.exists(pdb_path):
+                    chain_ids = get_chain_ids(pdb_path)
+                chain_pair_entries[model_id] = chain_iptm_matrix_to_pairs(chain_iptm_matrix)
+                chainwise_ptms[model_id]     = chainwise_iptm_matrix_to_ptms(chain_iptm_matrix)
+
+        else:
+            # HF3 individual predictions
+            if 'all_results' in json_file:
+                model_id = int(os.path.dirname(json_file).split('-rank')[-1])
+            else:
+                model_id = idx
+
+            if 'ptm' in data:
+                ptm_data[model_id] = f"{np.round(data['ptm'], 3)}\n"
+            if 'iptm' in data and data['iptm']:
+                iptm_data[model_id] = f"{np.round(data['iptm'], 3)}\n"
+            if 'pae' in data:
+                write_tsv(f"{name}_{model_id}_pae.tsv", format_pae_rows(data["pae"]))
+
+    # ── Escribir TSVs finales ────────────────────────────────────────
+    if ranking_scores:
+        write_tsv(f"{name}_ranking_scores.tsv",
+                  [["model_id", "ranking_score"]] +
+                  [[k, f"{v:.6f}"] for k, v in sorted(ranking_scores.items())])
     if chainwise_ptms:
-        write_tsv(f"{name}_chainwise_ptm.tsv", format_iptm_rows(chainwise_ptms, chain_ids=chain_ids))
-
+        write_tsv(f"{name}_chainwise_ptm.tsv",
+                  format_iptm_rows(chainwise_ptms, chain_ids=chain_ids))
     if chain_pair_entries:
-        write_tsv(f"{name}_chainwise_iptm.tsv", format_iptm_rows(chain_pair_entries, chain_ids=chain_ids))
-
+        write_tsv(f"{name}_chainwise_iptm.tsv",
+                  format_iptm_rows(chain_pair_entries, chain_ids=chain_ids))
     if ptm_data:
-        ptm_rows = [[k, v.strip()] for k, v in sorted(ptm_data.items(), key=lambda x: x[0])]
+        ptm_rows = [[k, v.strip()] for k, v in sorted(ptm_data.items(), key=lambda x: str(x[0]))]
         write_tsv(f"{name}_ptm.tsv", ptm_rows)
-
     if iptm_data:
-        iptm_rows = [[k, v.strip()] for k, v in sorted(iptm_data.items(), key=lambda x: x[0])]
+        iptm_rows = [[k, v.strip()] for k, v in sorted(iptm_data.items(), key=lambda x: str(x[0]))]
         write_tsv(f"{name}_iptm.tsv", iptm_rows)
+
+
 
 
 def read_pt(name, pt_files):

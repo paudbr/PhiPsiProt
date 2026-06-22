@@ -1,0 +1,19 @@
+# scoring_config.yaml
+normalization: zscore        # zscore | minmax
+
+gates:                       # filtros duros: fuera si no los pasa (déjalo vacío si no quieres)
+  gnina_cnn_score:    { min: 0.0 }
+  boltz_confidence:   { min: 0.0 }
+  boltz_ligand_iptm:  { min: 0.0 }
+
+directions:                  # "lower" = se invierte (menor es mejor)
+  gnina_affinity:            lower
+  boltz_affinity_pred_value: lower
+
+weights:                     # solo las métricas de afinidad/potencia
+  gnina_cnn_affinity:          0.25
+  gnina_affinity:              0.15
+  boltz_affinity_pred_value:   0.30
+  boltz_affinity_prob_binary:  0.30
+
+top_n: 5

@@ -1,0 +1,133 @@
+flowchart TB
+    subgraph " "
+    v2["Channel.fromList"]
+    v13["mode"]
+    v17["ch_candidates_csv"]
+    v27["params"]
+    v28["numRec"]
+    v33["ch_reference_pdb"]
+    v34["relax_mode"]
+    v43["ph"]
+    v44["relax_mode"]
+    v50["ch_scoring_config"]
+    v51["apply_gates"]
+    v52["select_top_n"]
+    v53["stage"]
+    v63["ch_chai_weights"]
+    v71["ph"]
+    v72["relax_mode"]
+    v79["apply_gates"]
+    v80["select_top_n"]
+    v81["stage"]
+    end
+    subgraph " "
+    v4[" "]
+    v15["ch_design_candidates"]
+    v19[" "]
+    v30[" "]
+    v31[" "]
+    v65[" "]
+    v66[" "]
+    v67[" "]
+    v68[" "]
+    v69[" "]
+    v76["metrics"]
+    v89["report"]
+    v91["ch_versions"]
+    end
+    subgraph "NFCORE_PROTEINFOLD [NFCORE_PROTEINFOLD]"
+    subgraph "NFCORE_PROTEINFOLD:BACKBONE [BACKBONE]"
+    v14(["DESIGN_DUMMY"])
+    end
+    subgraph "NFCORE_PROTEINFOLD:CASCADE [CASCADE]"
+    v18(["FILTER_DEGENERATE_CANDIDATES"])
+    v21(["CSV_TO_FASTAS"])
+    v29(["RUN_ESMFOLD"])
+    v35(["REFERENCE_METRICS"])
+    v45(["METRICS_ESM"])
+    v54(["RANK_ESM"])
+    v64(["RUN_CHAI1"])
+    v73(["METRICS_CHAI"])
+    v82(["RANK_CHAI"])
+    v88(["CASCADE_REPORT"])
+    v20(( ))
+    v23(( ))
+    v37(( ))
+    v47(( ))
+    v48(( ))
+    v77(( ))
+    v84(( ))
+    v86(( ))
+    end
+    v90(( ))
+    end
+    subgraph "PIPELINE_INITIALISATION [PIPELINE_INITIALISATION]"
+    v3(( ))
+    end
+    v2 --> v3
+    v3 --> v4
+    v13 --> v14
+    v14 --> v15
+    v17 --> v18
+    v18 --> v21
+    v18 --> v19
+    v18 --> v20
+    v21 --> v20
+    v21 --> v23
+    v27 --> v29
+    v28 --> v29
+    v23 --> v29
+    v29 --> v45
+    v29 --> v31
+    v29 --> v30
+    v29 --> v20
+    v29 --> v84
+    v33 --> v35
+    v33 --> v45
+    v33 --> v73
+    v34 --> v35
+    v35 --> v20
+    v35 --> v37
+    v43 --> v45
+    v44 --> v45
+    v37 --> v45
+    v45 --> v20
+    v45 --> v47
+    v45 --> v48
+    v50 --> v54
+    v50 --> v82
+    v51 --> v54
+    v52 --> v54
+    v53 --> v54
+    v48 --> v54
+    v54 --> v88
+    v54 --> v20
+    v54 --> v23
+    v63 --> v64
+    v23 --> v64
+    v64 --> v69
+    v64 --> v73
+    v64 --> v68
+    v64 --> v67
+    v64 --> v66
+    v64 --> v65
+    v64 --> v20
+    v64 --> v86
+    v71 --> v73
+    v72 --> v73
+    v37 --> v73
+    v73 --> v20
+    v73 --> v47
+    v73 --> v77
+    v47 --> v76
+    v79 --> v82
+    v80 --> v82
+    v81 --> v82
+    v77 --> v82
+    v82 --> v88
+    v82 --> v20
+    v84 --> v88
+    v86 --> v88
+    v88 --> v89
+    v90 --> v91
+    v20 --> v90

@@ -122,57 +122,23 @@ def fasta_to_alphafold3_json(file_in):
     return entities
 
 def create_json_dict(id, entities, model_seed):
-    """
-    Create the final JSON dictionary in AlphaFold3 format.
-
-    The function takes in the sequence ID, a list of entities, and a list of model seeds and
-    creates a JSON structure that follows AlphaFold3's requirements:
-    {
-        "name": "sequence_id",
-        "sequences": [
-            {
-                "protein": {
-                    "id": "A",
-                    "sequence": "protein_sequence"
-                }
-            }
-        ],
-        "modelSeeds": [seed_values],
-        "dialect": "alphafold3",
-        "version": 1
-    }
-
-    Args:
-        id (str): Sequence ID
-        entities (list): List of entities in AlphaFold3 format
-        model_seed (list): List of model seeds to use
-
-    Returns:
-        dict: JSON-compatible dictionary in AlphaFold3 format
-    """
-
     json_sequence_list = []
-
-    for entity in entities:
-        item = {
-            entity[0]: {
-                "id": entity[1],
-                "sequence": entity[2]
-            }
-        }
-
+    for entity_type, chain_id, seq in entities:
+        if entity_type == "smiles":
+            item = {"ligand": {"id": chain_id, "smiles": seq}}
+        elif entity_type == "ccd":
+            item = {"ligand": {"id": chain_id, "ccdCodes": [seq]}}
+        else:  # protein, dna, rna
+            item = {entity_type: {"id": chain_id, "sequence": seq}}
         json_sequence_list.append(item)
 
-
-    alphafold3_json_dict = {
-        "name": f"{id}",
+    return {
+        "name": id,
         "sequences": json_sequence_list,
         "modelSeeds": model_seed,
         "dialect": "alphafold3",
-        "version": 1
+        "version": 1,
     }
-
-    return alphafold3_json_dict
 
 def main(args=None):
     """
