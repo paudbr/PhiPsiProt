@@ -1,0 +1,12 @@
+gates:
+  iptm:          { min: 0.60 }   # 0.60 VHH / 0.85 scFv
+  pae_global:    { max: 10.0 }
+top_n: 10
+directions:
+  iptm:          higher
+  plddt_global:  higher
+  pae_global:    lower
+weights:
+  iptm:          0.60
+  plddt_global:  0.20
+  pae_global:    0.20

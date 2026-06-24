@@ -1,0 +1,19 @@
+gates:
+  plddt_cdr:     { min: 0.65 }
+  pae_interface: { max: 15.0 }
+  rmsd_cdr:      { max: 2.5  }
+  iptm_ht:       { min: 0.20 }   # permisivo — ESMFold2 es menos preciso que AF3
+top_pct: 20                       # top 20%
+directions:
+  iptm_ht:       higher
+  plddt_cdr:     higher
+  plddt_global:  higher
+  pae_interface: lower
+  pae_global:    lower
+  rmsd_cdr:      lower
+  rmsd_global:   lower
+weights:
+  iptm_ht:       0.35
+  plddt_cdr:     0.20
+  pae_interface: 0.25
+  rmsd_cdr:      0.20
