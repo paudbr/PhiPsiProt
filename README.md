@@ -1,146 +1,317 @@
-<h1>
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/images/nf-core-proteinfold_logo_dark.png">
-    <img alt="nf-core/PhiPsiProt" src="docs/images/PhiPsiProt_logo.png" width="200" >
-  </picture>
-</h1>
+# PhiPsiProt
 
-[![Open in GitHub Codespaces](https://img.shields.io/badge/Open_In_GitHub_Codespaces-black?labelColor=grey&logo=github)](https://github.com/codespaces/new/nf-core/proteinfold)
-[![GitHub Actions CI Status](https://github.com/nf-core/proteinfold/actions/workflows/nf-test.yml/badge.svg)](https://github.com/nf-core/proteinfold/actions/workflows/nf-test.yml)
-[![GitHub Actions Linting Status](https://github.com/nf-core/proteinfold/actions/workflows/linting.yml/badge.svg)](https://github.com/nf-core/proteinfold/actions/workflows/linting.yml)[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/proteinfold/results)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.13135393-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.13135393)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/nf-core-proteinfold_logo_dark.png">
+  <img alt="PhiPsiProt" src="docs/images/PhiPsiProt_logo.png" width="200">
+</picture>
 
-[![Nextflow](https://img.shields.io/badge/version-%E2%89%A525.10.2-green?style=flat&logo=nextflow&logoColor=white&color=%230DC09D&link=https%3A%2F%2Fnextflow.io)](https://www.nextflow.io/)
-[![nf-core template version](https://img.shields.io/badge/nf--core_template-3.5.1-green?style=flat&logo=nfcore&logoColor=white&color=%2324B064&link=https%3A%2F%2Fnf-co.re)](https://github.com/nf-core/tools/releases/tag/3.5.1)
-[![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)
+[![Nextflow](https://img.shields.io/badge/version-%E2%89%A525.10.2-green?style=flat&logo=nextflow&logoColor=white&color=%230DC09D)](https://www.nextflow.io/)
 [![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
 [![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)
-[![Launch on Seqera Platform](https://img.shields.io/badge/Launch%20%F0%9F%9A%80-Seqera%20Platform-%234256e7)](https://cloud.seqera.io/launch?pipeline=https://github.com/nf-core/proteinfold)
 
-[![Get help on Slack](http://img.shields.io/badge/slack-nf--core%20%23proteinfold-4A154B?labelColor=000000&logo=slack)](https://nfcore.slack.com/channels/proteinfold)[![Follow on Bluesky](https://img.shields.io/badge/bluesky-%40nf__core-1185fe?labelColor=000000&logo=bluesky)](https://bsky.app/profile/nf-co.re)[![Follow on Mastodon](https://img.shields.io/badge/mastodon-nf__core-6364ff?labelColor=FFFFFF&logo=mastodon)](https://mstdn.science/@nf_core)[![Watch on YouTube](http://img.shields.io/badge/youtube-nf--core-FF0000?labelColor=000000&logo=youtube)](https://www.youtube.com/c/nf-core)
+**PhiPsiProt** is a Nextflow DSL2 pipeline for protein structure prediction, computational drug design, and de novo antibody design, developed at the Bioengineering and Biomedical Computing Unit of the [Centro de Investigación Biomédica de La Rioja (CIBIR) ](https://www.cibir.es/es/). It extends [nf-core/proteinfold](https://nf-co.re/proteinfold) with five operational modes covering the full cycle from structure prediction to candidate prioritisation.
 
-## Introduction
+---
 
-**nf-core/proteinfold** is a bioinformatics best-practice analysis pipeline for Protein 3D structure prediction.
+## Pipeline overview
 
-The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool to run tasks across multiple compute infrastructures in a very portable manner. It uses Docker/Singularity containers making installation trivial and results highly reproducible. The [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl2.html) implementation of this pipeline uses one container per process which makes it much easier to maintain and update software dependencies. Where possible, these processes have been submitted to and installed from [nf-core/modules](https://github.com/nf-core/modules) in order to make them available to all nf-core pipelines, and to everyone within the Nextflow community!
+![PhiPsiProt pipeline metro map](pipeline.svg)
 
-On release, automated continuous integration tests run the pipeline on a full-sized dataset on the AWS cloud infrastructure. This ensures that the pipeline runs on AWS, has sensible resource allocation defaults set to run on real-world datasets, and permits the persistent storage of results to benchmark between pipeline releases and other analysis sources. The results obtained from the full-sized test can be viewed on the [nf-core website](https://nf-co.re/proteinfold/results).
+The pipeline exposes five modes via `--mode`:
 
-## Pipeline summary
+| Mode | Use case |
+|---|---|
+| `structural` | Multi-tool structure prediction and comparison |
+| `backbone` | Backbone stabilisation: ESMFold → Chai-1 with structural metrics and YAML-configurable ranking |
+| `screening` | Saturation mutagenesis + structural validation of mutant candidates |
+| `peptide_design` | Peptide binder design (stub, in development) |
+| `antibody_design` | De novo VHH / scFv design: RFdiffusion → ProteinMPNN → ESMFold2 → AF3 → HADDOCK3 |
 
-![Alt text](pipeline.svg?raw=true "nf-core-proteinfold 2.0.0 metro map")
+All modes support an optional intermediate ligand/binder docking step (`--ligand true`) using GNINA and Boltz-2 co-folding before final structural validation.
 
-| Mode                                                                                               | Protein | RNA | Small-molecule | PTM | Constraints | pLM | MSA server | Split MSA |
-| :------------------------------------------------------------------------------------------------- | :-----: | :-: | :------------: | :-: | :---------: | :-: | :--------: | :-------: |
-| [AlphaFold2](https://github.com/deepmind/alphafold)                                                |   ✅    | ❌  |       ❌       | ❌  |     ❌      | ❌  |     ❌     |    ✅     |
-| [ESMFold](https://github.com/facebookresearch/esm)                                                 |   ✅    | ❌  |       ❌       | ❌  |     ❌      | ✅  |     ❌     |    ❌     |
-| [ColabFold](https://github.com/sokrypton/ColabFold)                                                |   ✅    | ❌  |       ❌       | ❌  |     ❌      | ❌  |     ✅     |    ✅     |
-| [RoseTTAFold2NA](https://github.com/uw-ipd/RoseTTAFold2NA)                                         |   ✅    | ✅  |       ❌       | ❌  |     ❌      | ❌  |     ❌     |    ❌     |
-| [RoseTTAFold-All-Atom](https://github.com/baker-laboratory/RoseTTAFold-All-Atom/)                  |   ✅    | ✅  |       ✅       | ✅  |     ❌      | ❌  |     ❌     |    ❌     |
-| [AlphaFold3](https://github.com/google-deepmind/alphafold3)                                        |   ✅    | ✅  |       ✅       | ✅  |     ❌      | ❌  |     ❌     |    ❌     |
-| [HelixFold3](https://github.com/PaddlePaddle/PaddleHelix/tree/dev/apps/protein_folding/helixfold3) |   ✅    | ✅  |       ✅       | ✅  |     ❌      | ❌  |     ❌     |    ❌     |
-| [Boltz](https://github.com/jwohlwend/boltz/)                                                       |   ✅    | ✅  |       ✅       | ✅  |     ✅      | ❌  |     ✅     |    ✅     |
+---
 
-**nf-core/proteinfold** supports multiple tools for general molecular structure prediction. Each of the methods have overlapping functionality which can be utilized within the pipeline. All tools support predicting protein structure from an input amino acid sequence. The pipeline is composed of the following steps:
+## Modes
 
-1. Split input fasta file (Optional): The pipeline can split large batches of monomeric sequences (eg an entire genome) from a multi-entry fasta input using the `--split_fasta` flag.
+### `structural` (default)
 
-2. Prepare databases for chosen methods: The pipeline downloads any required reference data.
+Runs one or more structure prediction tools in parallel on a samplesheet of protein sequences. Supported tools (selectable via `--structural_tools`): AlphaFold2, AlphaFold3, ESMFold, Chai-1, ColabFold, RoseTTAFold2NA, RoseTTAFold-All-Atom, HelixFold3, Boltz.
 
-3. Structure prediction:
+Each tool produces a predicted structure, pLDDT, PAE and pTM metrics. Results are combined in an interactive HTML report with NGL viewer and Plotly charts.
 
-   i. Combined: MSA Search + Model Inference: Structures are predicted from MSAs generated using built-in homolog search pipelines.
+```bash
+nextflow run main.nf -profile docker \
+  --mode structural \
+  --structural_tools AF3,ESM,Chai \
+  --input samplesheet.csv \
+  --alphafold3_db /mnt/alphafold3_db/ \
+  --outdir results/
+```
 
-   ii. Split: AlphaFold2 MSA Search + Model Inference: The AlphaFold2 MSA generation pipeline is executed independently and then provided as input for AlphaFold2 structure prediction.
+### `backbone`
 
-   iii. Split: ColabFold MSA Search + Model Inference: The ColabFold MSA generation pipeline is used to produce input MSAs which can be used by ColabFold and Boltz.
+Two-stage screening for backbone stabilisation of protein variants. Designed for campaigns where a large number of point mutants or designed sequences need to be rapidly triaged before expensive structural validation.
 
-   iv. pLM: Protein Language Model: The ESMFold model is used to predict structures without generating an MSA.
+**Pipeline:** Filter degenerate sequences → CSV → FASTAs → ESMFold (fast) → structural metrics + YAML ranking → top N → Chai-1 (accurate) → structural metrics + YAML ranking → HTML report
 
-4. Generate Report: The pipeline produces an interactive HTML report to visualize structure prediction outputs.
+Metrics computed at each stage: Rosetta ΔG, ΔΔG vs reference, TM-score, mean pLDDT, SAP score (aggregation propensity), ΔSAP, net charge, number of cysteines. All scoring weights and gate thresholds are configurable via a YAML file (`--scoring_config`).
 
-5. Comparison Report: The structures predicted by parallel modes are combined in an interactive HTML report.
+```bash
+nextflow run main.nf -profile docker \
+  --mode cascade \
+  --input samplesheet.csv \
+  --scoring_config conf/scoring_config_structural.yaml \
+  --outdir results/
+```
 
-6. MultiQC: The overall QC statistics are summarized.
+### `screening`
 
-## Usage
+Saturation mutagenesis at user-defined positions of a reference PDB. Generates all single amino acid substitutions at the specified positions, then runs the full structural validation cascade to rank them.
 
-> [!NOTE]
-> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
+```bash
+nextflow run main.nf -profile docker \
+  --mode screening \
+  --input_pdb reference.pdb \
+  --target_chain A \
+  --positions "5,10,42,67" \
+  --outdir results/
+```
 
-First, prepare a samplesheet with your input data that looks as follows:
+### `antibody_design`
 
-```csv title="samplesheet.csv"
+De novo antibody design implementing the Watson et al. (Nature 2026) pipeline with extensions. Supports VHH (nanobodies, single domain) and scFv (conventional antibody fragments).
+
+**Pipeline:**
+
+```
+RFdiffusion (rfantibody fine-tuned)
+    ↓  N backbone designs
+ProteinMPNN (rfantibody wrapper)
+    ↓  N × seqs_per_struct sequences
+ESMFold2-Fast (Biohub)          ← pre-filter, model loaded once for all designs
+    ↓  top 20%  (ipTM H↔T, PAE interface, pLDDT CDR, RMSD CDR)
+AlphaFold3
+    ↓  top 10   (ipTM ≥ 0.60 VHH / ≥ 0.85 scFv)
+HADDOCK3 docking
+    ↓  top 10   (HADDOCK score, buried SASA, van der Waals energy)
+HTML report (ESMFold2 | AF3 | HADDOCK3 tabs, NGL viewer)
+```
+
+All filter thresholds and ranking weights are configurable via YAML files (one per stage). The ESMFold2 pre-filter runs the entire batch in a single process to load the ESMC-6B backbone only once and avoid GPU OOM.
+
+```bash
+nextflow run main.nf -profile docker \
+  --mode antibody_design \
+  --ab_type VHH \
+  --ab_target_pdb antigen_truncated.pdb \
+  --ab_framework_pdb h-NbBCII10.pdb \
+  --ab_hotspot_residues "B131,B132,B133,B156,B157,B158" \
+  --ab_design_loops "H1:7,H2:6,H3:5-13" \
+  --ab_rfdiff_weights /mnt/alphafold3_db/RFD/RFdiffusion_Ab.pt \
+  --ab_mpnn_weights /mnt/alphafold3_db/RFD/ProteinMPNN_v48_noise_0.2.pt \
+  --ab_esmfold2_weights /mnt/alphafold3_db/ESMFold2/hub \
+  --ab_num_designs 1000 \
+  --ab_seqs_per_struct 4 \
+  --alphafold3_db /mnt/alphafold3_db/ \
+  --ab_scoring_esm conf/scoring_ab_esmfold2.yaml \
+  --ab_scoring_af3 conf/scoring_ab_af3.yaml \
+  --ab_scoring_haddock3 conf/scoring_ab_haddock3.yaml \
+  --outdir results/
+```
+
+**Key parameters:**
+
+| Parameter | Description | Default |
+|---|---|---|
+| `--ab_type` | `VHH` or `scFv` | `VHH` |
+| `--ab_antigen_chain` | Chain ID of antigen in target PDB | `B` |
+| `--ab_hotspot_residues` | Epitope residues e.g. `B131,B132` (chain letter + resnum of original PDB, **not** T) | required |
+| `--ab_design_loops` | CDR loops and lengths e.g. `H1:7,H2:6,H3:5-13` | required |
+| `--ab_num_designs` | Number of RFdiffusion backbone designs | `50` |
+| `--ab_seqs_per_struct` | ProteinMPNN sequences per backbone | `4` |
+| `--ab_mpnn_temperature` | ProteinMPNN sampling temperature | `0.2` |
+| `--ab_af3_seeds` | AF3 seeds per design (max ipTM taken) | `10` |
+| `--ab_run_haddock` | Run HADDOCK3 docking stage | `true` |
+| `--ab_iptm_threshold` | Legacy single-threshold param (use YAML gates instead) | `0.60` |
+
+**YAML scoring files** (`assets/scoring/`):
+
+- `scoring_ab_esmfold2.yaml` — gates (pLDDT CDR, PAE interface, RMSD CDR, ipTM H↔T), top 20%
+- `scoring_ab_af3.yaml` — gates (ipTM, PAE global), top 10
+- `scoring_ab_haddock3.yaml` — gates (HADDOCK score), top 10
+
+Each YAML supports `normalization` (zscore/minmax), hard `gates`, metric `directions` (higher/lower), `weights`, and either `top_n` or `top_pct` cutoff.
+
+### Ligand/binder docking filter (`--ligand true`)
+
+An optional intermediate docking/co-folding step that can be inserted into any mode before final structural validation. Designed for scoring small-molecule inhibitors or peptide binders against a receptor.
+
+**Sub-pipeline:**
+
+```
+Candidate CSV
+    ↓
+ESMFold (rapid monomer folding of candidates)
+    ↓
+GNINA (CNN-based docking, N replicates per candidate)
+    → CNN score, CNN affinity, affinity (kcal/mol), Mann-Whitney U vs reference
+    ↓
+Boltz-2 co-folding + affinity prediction
+    → confidence score, predicted affinity
+    ↓
+HADDOCK3 (optional, --docking_tool haddock3)
+    → HADDOCK score, AIRs from pocket residues
+    ↓
+Top candidates → structural validation (AF3, Chai-1, etc.)
+```
+
+**GNINA** runs N replicates (`--ligand_filter_runs`, default 3) per candidate, extracts CNN score, CNN affinity and binding affinity for the best pose, and produces a PDF with score distributions and Mann-Whitney U tests vs the original reference compound.
+
+**Boltz-2** co-folds the receptor + ligand/peptide together and provides a confidence score and predicted binding affinity. The top candidates from Boltz-2 are passed to the co-fold samplesheet for full structural prediction.
+
+```bash
+nextflow run main.nf -profile docker \
+  --mode structural \
+  --structural_tools AF3 \
+  --input samplesheet.csv \
+  --ligand true \
+  --docking_tool gnina \
+  --ligand_candidates_csv candidates.csv \
+  --ligand_reference_pdb 3KS3.pdb \
+  --ligand_resname GOL \
+  --pocket_residues "A5,A4,A10,A238,A239,A240,A241,A242,A243,A100" \
+  --ligand_filter_runs 3 \
+  --gnina_box_size 20 \
+  --gnina_exhaustiveness 8 \
+  --receptor_sequence receptor.fa \
+  --ligand_ccd GOL \
+  --boltz_model boltz2 \
+  --outdir results/
+```
+
+**Ligand filter parameters:**
+
+| Parameter | Description | Default |
+|---|---|---|
+| `--ligand` | Enable intermediate docking filter | `false` |
+| `--docking_tool` | `gnina`, `haddock3`, or `rosettadock` | `gnina` |
+| `--ligand_candidates_csv` | CSV with `candidate_id,pdb` columns | required |
+| `--ligand_reference_pdb` | Reference receptor PDB for box definition and baseline scores | required |
+| `--ligand_file` | Ligand file for GNINA (extracted from reference if omitted) | optional |
+| `--ligand_resname` | Residue name to extract as ligand | `GOL` |
+| `--ligand_ccd` | CCD code for Boltz-2 ligand co-folding | optional |
+| `--ligand_smiles` | SMILES string for Boltz-2 ligand co-folding | optional |
+| `--pocket_residues` | Comma-separated pocket residues for GNINA box and HADDOCK AIRs | required |
+| `--ligand_filter_runs` | GNINA/Boltz-2 replicates per candidate | `3` |
+| `--gnina_box_size` | GNINA cubic box size (Å) | `20` |
+| `--gnina_exhaustiveness` | GNINA exhaustiveness | `8` |
+| `--gnina_num_modes` | Docking poses requested from GNINA | `9` |
+| `--receptor_sequence` | Receptor FASTA for Boltz-2 co-folding | required with `--ligand` |
+
+---
+
+## Samplesheet format
+
+```csv
 id,fasta
-T1024,T1024.fasta
-T1026,T1026.fasta
+candidate_001,candidate_001.fasta
+candidate_002,candidate_002.fasta
 ```
 
-Now, you can run the pipeline using:
+For ligand docking, the candidates CSV format is:
+
+```csv
+candidate_id,pdb
+compound_A,compound_A.pdb
+compound_B,compound_B.pdb
+```
+
+---
+
+## Outputs
+
+Each mode writes to `--outdir` with the following structure:
+
+```
+outdir/
+├── antibody_design/
+│   ├── 01_rfdiffusion/          *.qv Quiver files
+│   ├── 02_proteinmpnn/          *.qv Quiver files
+│   ├── 03_af3_inputs/           *.json AlphaFold3 input JSONs
+│   ├── 04_esmfold2/             *_esm2_metrics.tsv, *_esm2_pred.cif
+│   ├── 05_af3/                  *_iptm.tsv, *_alphafold3.cif
+│   ├── 06_haddock3/             *_haddock_metrics.tsv
+│   └── rankings/                *_ranked.tsv (ESMFold2, AF3, HADDOCK3)
+│   └── PhiPsiProt_antibody_report.html
+├── structural/                  per-tool subdirectories
+├── cascade/                     ESMFold and Chai-1 results + report
+├── ligand_docking/              gnina_scores.tsv, gnina_summary.tsv, *.sdf, *.pdf
+└── pipeline_info/               execution timeline, resource usage
+```
+
+---
+
+## Requirements
+
+- Nextflow ≥ 25.10.2
+- Docker or Singularity
+- GPU strongly recommended (RTX5000-Ada 16GB or equivalent tested)
+
+**Model weights required** (not downloaded automatically):
+
+| Model | Path | Size |
+|---|---|---|
+| RFdiffusion antibody | `RFD/RFdiffusion_Ab.pt` | ~500 MB |
+| ProteinMPNN | `RFD/ProteinMPNN_v48_noise_0.2.pt` | ~30 MB |
+| ESMFold2-Fast | `ESMFold2/hub/models--biohub--ESMFold2-Fast/` | ~3 GB |
+| ESMC-6B (backbone) | `ESMFold2/hub/models--biohub--ESMC-6B/` | ~12 GB |
+| ESMFold2 CCD dict | `ESMFold2/hub/models--biohub--ESMFold2/` | ~400 MB |
+| AlphaFold3 | `/mnt/alphafold3_db/` | ~1.2 TB |
+
+---
+
+## Installation
 
 ```bash
-nextflow run nf-core/proteinfold \
-   -profile <docker/singularity/.../institute> \
-   --input samplesheet.csv \
-   --outdir <OUTDIR> \
-   --mode <alphafold2/esmfold/colabfold/rosettafold2na/rosettafold-all-atom/alphafold3/boltz/helixfold3>
+git clone https://github.com/riojasalud/PhiPsiProt.git
+cd PhiPsiProt
+
+# Test with stub mode (no weights needed)
+nextflow run main.nf -profile docker -stub \
+  --mode antibody_design \
+  --outdir results_stub/
 ```
 
-The pipeline takes care of downloading the databases and parameters required by each of the modes. In case you have already downloaded the required files, you can skip this step by providing the path to the databases using the `--db` parameter.
-
-```bash
-nextflow run nf-core/proteinfold \
-   -profile <docker/singularity/.../institute> \
-   --input samplesheet.csv \
-   --outdir <OUTDIR> \
-   --mode <MODE> \
-   --db <DBDIR>
-```
-
-> [!WARNING]
-> The reference data for most methods is extremely large and may exceed individual user disk allocations on shared HPC systems.
-
-In order to run multiple methods simultaneously where reference data is stored at different locations, the `--db` flag can be overwritten for each specific mode (e.g. `--alphafold2_db`, `--colabfold_db`, `--esmfold_db` and `--rosettafold_all_atom_db`). Please refer to the [usage documentation](https://nf-co.re/proteinfold/usage) to check the directory structure you must provide for each database.
-
-> [!WARNING]
-> Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_; see [docs](https://nf-co.re/docs/usage/getting_started/configuration#custom-configuration-files).
-
-For more details and further functionality, please refer to the [usage documentation](https://nf-co.re/proteinfold/usage) and the [parameter documentation](https://nf-co.re/proteinfold/parameters).
-
-## Pipeline output
-
-To see the results of an example test run with a full size dataset refer to the [results](https://nf-co.re/proteinfold/results) tab on the nf-core website pipeline page.
-For more details about the output files and reports, please refer to the
-[output documentation](https://nf-co.re/proteinfold/output).
-
-## Adding new modes to the pipeline
-
-For details on how to contribute new modes to the pipeline please refer to the [Howto contribute new modes](https://nf-co.re/proteinfold/usage/HOWTO_CONTRIBUTE_NEW_MODES).
+---
 
 ## Credits
 
-nf-core/proteinfold was originally written by Athanasios Baltzis ([@athbaltzis](https://github.com/athbaltzis)), Jose Espinosa-Carrasco ([@JoseEspinosa](https://github.com/JoseEspinosa)), Luisa Santus ([@luisas](https://github.com/luisas)) and Leila Mansouri ([@l-mansouri](https://github.com/l-mansouri)) from [The Comparative Bioinformatics Group](https://www.crg.eu/en/cedric_notredame) at [The Centre for Genomic Regulation, Spain](https://www.crg.eu/) under the umbrella of the [BovReg project](https://www.bovreg.eu/) and Harshil Patel ([@drpatelh](https://github.com/drpatelh)) from [Seqera Labs, Spain](https://seqera.io/).
+PhiPsiProt was developed at the **Unidad de Ingeniería y Computación Biomédica, CIBIR ** based on [nf-core/proteinfold](https://nf-co.re/proteinfold).
 
-Many thanks to others who have helped out and contributed along the way too, including (but not limited to): Norman Goodacre and Waleed Osman from Interline Therapeutics ([@interlinetx](https://github.com/interlinetx)), Martin Steinegger ([@martin-steinegger](https://github.com/martin-steinegger)) and Raoul J.P. Bonnal ([@rjpbonnal](https://github.com/rjpbonnal))
+**Authors:**
 
-We would also like to thanks to the AWS Open Data Sponsorship Program for generously providing the resources necessary to host the data utilized in the testing, development, and deployment of nf-core proteinfold.
+- Paula de Blas Rioja — pblas@riojasalud.es
+- Laura González López — lgonlopez@riojasalud.es
+- álvaro Pérez Sala Pérez — aperez@riojasalud.es
 
-## Contributions and Support
+The antibody design module implements the computational pipeline described in:
 
-If you would like to contribute to this pipeline, please see the [contributing guidelines](.github/CONTRIBUTING.md).
+> Watson JL et al. *De novo design of protein structure and function with RFdiffusion.* Nature (2023). doi: 10.1038/s41586-023-06415-8
 
-For further information or help, don't hesitate to get in touch on the [Slack `#proteinfold` channel](https://nfcore.slack.com/channels/proteinfold) (you can join with [this invite](https://nf-co.re/join/slack)).
+> Watson JL et al. *Broadly applicable and accurate protein–protein complex prediction using ESMFold2.* Nature (2026).
 
-## Citations
+GNINA docking: McNutt AT et al. *GNINA 1.0: molecular docking with deep learning.* J Cheminformatics (2021).
 
-If you use nf-core/proteinfold for your analysis, please cite it using the following doi: [10.5281/zenodo.7437038](https://doi.org/10.5281/zenodo.7437038)
+Boltz-2: Wohlwend J et al. *Boltz-2: Towards accurate and efficient biomolecular co-folding.* bioRxiv (2025).
 
-An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
+---
 
-You can cite the `nf-core` publication as follows:
+## Citation
 
-> **The nf-core framework for community-curated bioinformatics pipelines.**
->
-> Philip Ewels, Alexander Peltzer, Sven Fillinger, Harshil Patel, Johannes Alneberg, Andreas Wilm, Maxime Ulysse Garcia, Paolo Di Tommaso & Sven Nahnsen.
->
-> _Nat Biotechnol._ 2020 Feb 13. doi: [10.1038/s41587-020-0439-x](https://dx.doi.org/10.1038/s41587-020-0439-x).
+If you use PhiPsiProt in your research, please cite:
+
+> Blanco Sáez P, López González G, Pérez A. *PhiPsiProt: a Nextflow pipeline for protein structure prediction and computational antibody design.* Hospital Universitario de La Rioja (2026).
+
+And the underlying nf-core framework:
+
+> Ewels P et al. *The nf-core framework for community-curated bioinformatics pipelines.* Nat Biotechnol (2020). doi: 10.1038/s41587-020-0439-x

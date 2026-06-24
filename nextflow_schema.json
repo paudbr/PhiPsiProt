@@ -459,6 +459,30 @@
                 }
             }
         },
+
+        "ab_design_options": {
+            "title": "Ab design options",
+            "type": "object",
+            "fa_icon": "fas fa-fast-forward",
+            "description": "Options to control ab design workflow.",
+            "properties": {
+                "ab_target_pdb":        { "type": "string", "format": "file-path",   "description": "Antigen PDB for antibody design" },
+                "ab_framework_pdb":     { "type": "string", "format": "file-path",   "description": "Antibody framework PDB (CDRs masked to Gly)" },
+                "ab_hotspot_residues":  { "type": "string",                          "description": "Epitope residues e.g. A:45,A:46,A:102" },
+                "ab_cdr_residues":      { "type": "string",                          "description": "CDR positions to design e.g. H:26-32,H:50-58" },
+                "ab_fixed_residues":    { "type": "string",                          "description": "Framework residues fixed in ProteinMPNN" },
+                "ab_type":              { "type": "string", "enum": ["VHH","scFv"],  "default": "VHH" },
+                "ab_num_designs":       { "type": "integer","default": 50 },
+                "ab_seqs_per_backbone": { "type": "integer","default": 8 },
+                "ab_mpnn_temperature":  { "type": "number", "default": 0.1 },
+                "ab_iptm_threshold":    { "type": "number", "default": 0.85,         "description": "AF3 ipTM filter (0.85 scFv / 0.60 VHH)" },
+                "ab_af3_seeds":         { "type": "integer","default": 10 },
+                "ab_run_haddock":       { "type": "boolean","default": true }
+
+        }},
+
+
+
         "institutional_config_options": {
             "title": "Institutional config options",
             "type": "object",

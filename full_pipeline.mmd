@@ -2,19 +2,24 @@
 %%metro style: light
 %%metro line: cascade | Cascade: RFDifussion → ProteinMPNN → ESMFold → Chai-1 → Report | #7c3aed
 %%metro line: structural | Structural: AF2 / AF3 / ESMFold / Chai-1 → Report | #2563eb
+%%metro line: antibody | Antibody design: RFdiffusion → ProteinMPNN → ESMFold2 → AF3 → HADDOCK3 → Report | #059669
 %%metro file: input_in | CSV
 %%metro file: cascade_out | HTML
 %%metro file: struct_out | HTML
+%%metro file: ab_out | HTML
 %%metro logo: ./docs/images/PhiPsiProt_logo.png
-
 graph LR
     input_in[ ]
     mode{Mode}
-    input_in -->|cascade,structural| mode
-
+    input_in -->|cascade,structural,antibody| mode
     subgraph BB [Backbone · stabilisation (cascade)]
+        ref[ref]
+        rfd1[RFdiffusion]
+        filt1[Filter TM score distribution]
+        mpnn1[ProteinMPNN]
+        filt2[Top candidates]
         filt[Filter degenerate]
-        fastas[CSV → FASTAs]
+        fastas[csv a fa]
         esm1[Run ESMFold]
         met1[Structural metrics]
         rank1[Rank ESMFold]
@@ -22,7 +27,11 @@ graph LR
         met2[Structural metrics]
         rank2[Rank Chai]
         cascade_out[ ]
-
+        rfd1 -->|cascade| filt1
+        ref -->|cascade| filt1
+        filt1 -->|cascade| mpnn1
+        mpnn1 -->|cascade| filt2
+        filt2 -->|cascade| filt
         filt -->|cascade| fastas
         fastas -->|cascade| esm1
         esm1 -->|cascade| met1
@@ -34,7 +43,6 @@ graph LR
         met2 -->|cascade| rank2
         rank2 -->|cascade| cascade_out
     end
-
     subgraph ST [Structural · (default)]
         af2[AlphaFold2]
         af3[AlphaFold3]
@@ -42,16 +50,38 @@ graph LR
         chai[Chai-1]
         mr[Metrics report]
         struct_out[ ]
-
         af2 -->|structural| mr
         af3 -->|structural| mr
         esm -->|structural| mr
         chai -->|structural| mr
         mr -->|structural| struct_out
     end
-
-    mode -->|cascade| filt
+    subgraph AB [Antibody design]
+        rfd[RFdiffusion]
+        mpnn[ProteinMPNN]
+        esm2[ESMFold2]
+        filter_esm[top 20%]
+        ab_mid[ ]
+        af3ab[AlphaFold3]
+        filter_af3[top 10]
+        haddock[HADDOCK3]
+        filter_haddock[top 10]
+        ab_report[Report]
+        ab_out[ ]
+        rfd -->|antibody| mpnn
+        mpnn -->|antibody| esm2
+        esm2 -->|antibody| filter_esm
+        filter_esm -->|antibody| ab_mid
+        ab_mid -->|antibody| af3ab
+        af3ab -->|antibody| filter_af3
+        filter_af3 -->|antibody| haddock
+        haddock -->|antibody| filter_haddock
+        filter_haddock -->|antibody| ab_report
+        ab_report -->|antibody| ab_out
+    end
+    mode -->|cascade| rfd1
     mode -->|structural| af2
     mode -->|structural| af3
     mode -->|structural| esm
     mode -->|structural| chai
+    mode -->|antibody| rfd

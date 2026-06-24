@@ -1,1 +1,0 @@
-nextflow run ../main.nf --input /mnt/data_local/pipes/structural/PhiPsiProt_structural/samplesheet_papain.csv --mode antibody_design --outdir /mnt/alphafold3_db/test_papain/outdir_af3/ -profile docker --mode structural --use_gpu true -work-dir "/mnt/alphafold3_db/work" -resume

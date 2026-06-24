@@ -6,6 +6,8 @@ process RUN_CHAI1 {
     label 'process_medium'
     label 'process_gpu'
     container 'quay.io/nf-core/proteinfold_chai1:1.3.0'
+  
+    publishDir "${params.outdir}/run/chai1", mode: 'copy'
 
     shell '/bin/bash', '-euo', 'pipefail'
 

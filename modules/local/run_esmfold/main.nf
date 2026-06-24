@@ -2,6 +2,8 @@ process RUN_ESMFOLD {
     tag "$meta.id"
     label 'process_medium'
     label 'process_gpu'
+ 
+    publishDir "${params.outdir}/run/esmfold", mode: 'copy'
 
     container "nf-core/proteinfold_esmfold:2.0.0"
 

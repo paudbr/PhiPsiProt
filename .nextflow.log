@@ -1,396 +1,73 @@
-jun-22 12:06:18.621 [main] DEBUG nextflow.cli.Launcher - Setting http proxy: ProxyConfig[protocol=http; host=10.15.206.126; port=3128]
-jun-22 12:06:18.650 [main] DEBUG nextflow.cli.Launcher - Setting https proxy: ProxyConfig[protocol=https; host=10.15.206.126; port=3128]
-jun-22 12:06:18.651 [main] DEBUG nextflow.cli.Launcher - $> nextflow run main.nf -profile docker --input /mnt/data_local/pipes/structural/PhiPsiProt_structural/samplesheet_ca.csv --input_pdb /mnt/alphafold3_db/test_modo3/3HS4.pdb --input_csv /mnt/alphafold3_db/test_modo3/top20_candidates.csv --mode backbone --cascade true --ligand false --col_seq final_sequence --outdir /mnt/alphafold3_db/test_modo3_new/output/ --use_gpu true --use_msa_server true -resume
-jun-22 12:06:18.810 [main] DEBUG nextflow.cli.CmdRun - N E X T F L O W  ~  version 25.10.4
-jun-22 12:06:18.836 [main] DEBUG nextflow.plugin.PluginsFacade - Setting up plugin manager > mode=prod; embedded=false; plugins-dir=/home/paula/.nextflow/plugins; core-plugins: nf-amazon@3.4.4,nf-azure@1.20.2,nf-cloudcache@0.5.0,nf-codecommit@0.5.0,nf-console@1.3.0,nf-google@1.23.5,nf-k8s@1.2.2,nf-tower@1.17.5,nf-wave@1.16.1
-jun-22 12:06:18.864 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
-jun-22 12:06:18.865 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
-jun-22 12:06:18.867 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.12.0 in 'deployment' mode
-jun-22 12:06:18.879 [main] DEBUG nextflow.util.RetryConfig - Missing nextflow session - using default retry config
-jun-22 12:06:19.034 [main] INFO  org.pf4j.AbstractPluginManager - No plugins
-jun-22 12:06:19.056 [main] DEBUG nextflow.config.ConfigBuilder - Found config local: /mnt/data_local/pipes/structural/PhiPsiProt_structural/nextflow.config
-jun-22 12:06:19.058 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /mnt/data_local/pipes/structural/PhiPsiProt_structural/nextflow.config
-jun-22 12:06:19.079 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `docker`
-jun-22 12:06:20.911 [main] DEBUG nextflow.config.ConfigBuilder - Available config profiles: [uzl_omics, denbi_qbic, mjolnir_globe, uppmax, incliva, uge, icr_alma, rosalind_uge, lugh, mccleary, test_split_fasta, unibe_ibu, czbiohub_aws, jax, roslin, iris, tes, scw, test_full_boltz, tigem, tubingen_apg, vsc_calcua, pdc_kth, humantechnopole, test_alphafold2_split, stjude, daisybio, eddie, medair, biowulf, bi, test_full_colabfold_webserver, cedars, charliecloud, seattlechildrens, rosalind, cfc, emulate_amd64, uzh, ccga_dx, crick, test_rosettafold_all_atom, ku_sund_danhead, marvin, shifter, biohpc_gen, mana, wehi, arcc, test_full_helixfold3, imperial, maestro, cannon, nci_gadi, test_rosettafold2na, eva_grace, googlebatch, sahmri, kaust, alliance_canada, cambridge, jex, test_helixfold3, test_full_colabfold_multimer, cheaha, nyu_hpc, test, test_full_alphafold2_multimer, gpu, seg_globe, mssm, sanger, test_full_rosettafold2na, pasteur, einstein, ethz_euler, tuos_stanage, test_colabfold_webserver, azurebatch, crukmi, csiro_petrichor, wave, docker, hypatia, psmn, test_full_alphafold2_split, fgcz, conda, mpcdf_viper, dirac, uw_hyak_pedslabs, binac2, genouest, unsw_katana, utd_juno, test_boltz, hazel, seawulf, lovelace, test_alphafold3_standard, uct_hpc, aws_tower, bih, cfc_dev, ifb_core, embl_hd, mcw_rcc, alice, giga, ilifu, ki_luria, test_colabfold_local, vai, test_full_esmfold_multimer, unc_longleaf, apollo, test_full_alphafold2_standard, ipop_up, ceci_nic5, ccga_cau, mahuika, apptainer, bigpurple, adcra, pawsey_setonix, vsc_kul_uhasselt, purdue_gautschi, pawsey_nimbus, rki, ucl_myriad, fred_hutch, icr_davros, ceres, purdue_negishi, munin, hasta, shu_bmrc, ebi_codon_slurm, ebc, lrz_cm4, purdue_bell, mamba, york_viking, unc_lccc, awsbatch, wustl_htcf, ceci_dragon2, genotoul, abims, janelia, nu_genomics, oist, arm64, mpcdf, leicester, vsc_ugent, test_alphafold3_download, create, sage, podman, ebi_codon, xanadu, marjorie, computerome, ucd_sonic, test_alphafold2_download, dkfz, bluebear, m3c, test_full, imb, ucl_cscluster, seadragon, qmul_apocrita, engaging, gis, eva, unity, cropdiversityhpc, nygc, test_esmfold, crg, singularity, test_colabfold_download, self_hosted_runner, tufts, debug, hki_genie, test_full_rosettafold_all_atom, cbe, test_full_colabfold_local, test_full_esmfold, phoenix, uod_hpc, fub_curta, fsu_draco]
-jun-22 12:06:20.939 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins declared=[nf-schema@2.6.1]
-jun-22 12:06:20.940 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins default=[]
-jun-22 12:06:20.941 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins resolved requirement=[nf-schema@2.6.1]
-jun-22 12:06:21.211 [main] DEBUG n.plugin.HttpPluginRepository - Registry request: https://registry.nextflow.io/api/v1/plugins/dependencies?plugins=nf-schema%402.6.1&nextflowVersion=25.10.4
+jun-24 10:21:20.206 [main] DEBUG nextflow.cli.Launcher - Setting http proxy: ProxyConfig[protocol=http; host=10.15.206.126; port=3128]
+jun-24 10:21:20.225 [main] DEBUG nextflow.cli.Launcher - Setting https proxy: ProxyConfig[protocol=https; host=10.15.206.126; port=3128]
+jun-24 10:21:20.225 [main] DEBUG nextflow.cli.Launcher - $> nextflow run . -profile docker --mode antibody_design --outdir /mnt/alphafold3_db/test_ab/vhh_ha --input samplesheet_papain.csv --ab_type VHH --ab_target_pdb /mnt/alphafold3_db/test_ab/flu_HA_truncated.pdb --ab_framework_pdb /mnt/alphafold3_db/test_ab/h-NbBCII10.pdb --ab_hotspot_residues B131,B132,B133,B156,B157,B158 --ab_design_loops 'H1:7,H2:6,H3:5-13' --ab_num_designs 10 --ab_seqs_per_struct 4 --ab_mpnn_temperature 0.2 --ab_iptm_threshold 0.60 --ab_af3_seeds 10 --ab_run_haddock true --use_gpu true -resume
+jun-24 10:21:20.408 [main] DEBUG nextflow.cli.CmdRun - N E X T F L O W  ~  version 25.10.4
+jun-24 10:21:20.421 [main] DEBUG nextflow.plugin.PluginsFacade - Setting up plugin manager > mode=prod; embedded=false; plugins-dir=/home/paula/.nextflow/plugins; core-plugins: nf-amazon@3.4.4,nf-azure@1.20.2,nf-cloudcache@0.5.0,nf-codecommit@0.5.0,nf-console@1.3.0,nf-google@1.23.5,nf-k8s@1.2.2,nf-tower@1.17.5,nf-wave@1.16.1
+jun-24 10:21:20.436 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+jun-24 10:21:20.437 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+jun-24 10:21:20.439 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.12.0 in 'deployment' mode
+jun-24 10:21:20.449 [main] DEBUG nextflow.util.RetryConfig - Missing nextflow session - using default retry config
+jun-24 10:21:20.542 [main] INFO  org.pf4j.AbstractPluginManager - No plugins
+jun-24 10:21:21.234 [main] DEBUG nextflow.config.ConfigBuilder - Found config local: /mnt/data_local/pipes/structural/PhiPsiProt_structural/nextflow.config
+jun-24 10:21:21.236 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /mnt/data_local/pipes/structural/PhiPsiProt_structural/nextflow.config
+jun-24 10:21:21.246 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `docker`
+jun-24 10:21:22.036 [main] DEBUG nextflow.config.ConfigBuilder - Available config profiles: [uzl_omics, denbi_qbic, mjolnir_globe, uppmax, incliva, uge, icr_alma, rosalind_uge, lugh, mccleary, test_split_fasta, unibe_ibu, czbiohub_aws, jax, roslin, iris, tes, scw, test_full_boltz, tigem, tubingen_apg, vsc_calcua, pdc_kth, humantechnopole, test_alphafold2_split, stjude, daisybio, eddie, medair, biowulf, bi, test_full_colabfold_webserver, cedars, charliecloud, seattlechildrens, rosalind, cfc, emulate_amd64, uzh, ccga_dx, crick, test_rosettafold_all_atom, ku_sund_danhead, marvin, shifter, biohpc_gen, mana, wehi, arcc, test_full_helixfold3, imperial, maestro, cannon, nci_gadi, test_rosettafold2na, eva_grace, googlebatch, sahmri, kaust, alliance_canada, cambridge, jex, test_helixfold3, test_full_colabfold_multimer, cheaha, nyu_hpc, test, test_full_alphafold2_multimer, gpu, seg_globe, mssm, sanger, test_full_rosettafold2na, pasteur, einstein, ethz_euler, tuos_stanage, test_colabfold_webserver, azurebatch, crukmi, csiro_petrichor, wave, docker, hypatia, psmn, test_full_alphafold2_split, fgcz, conda, mpcdf_viper, dirac, uw_hyak_pedslabs, binac2, genouest, unsw_katana, utd_juno, test_boltz, hazel, seawulf, lovelace, test_alphafold3_standard, uct_hpc, aws_tower, bih, cfc_dev, ifb_core, embl_hd, mcw_rcc, alice, giga, ilifu, ki_luria, test_colabfold_local, vai, test_full_esmfold_multimer, unc_longleaf, apollo, test_full_alphafold2_standard, ipop_up, ceci_nic5, ccga_cau, mahuika, apptainer, bigpurple, adcra, pawsey_setonix, vsc_kul_uhasselt, purdue_gautschi, pawsey_nimbus, rki, ucl_myriad, fred_hutch, icr_davros, ceres, purdue_negishi, munin, hasta, shu_bmrc, ebi_codon_slurm, ebc, lrz_cm4, purdue_bell, mamba, york_viking, unc_lccc, awsbatch, wustl_htcf, ceci_dragon2, genotoul, abims, janelia, nu_genomics, oist, arm64, mpcdf, leicester, vsc_ugent, test_alphafold3_download, create, sage, podman, ebi_codon, xanadu, marjorie, computerome, ucd_sonic, test_alphafold2_download, dkfz, bluebear, m3c, test_full, imb, ucl_cscluster, seadragon, qmul_apocrita, engaging, gis, eva, unity, cropdiversityhpc, nygc, test_esmfold, crg, singularity, test_colabfold_download, self_hosted_runner, tufts, debug, hki_genie, test_full_rosettafold_all_atom, cbe, test_full_colabfold_local, test_full_esmfold, phoenix, uod_hpc, fub_curta, fsu_draco]
+jun-24 10:21:22.068 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins declared=[nf-schema@2.6.1]
+jun-24 10:21:22.069 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins default=[]
+jun-24 10:21:22.069 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins resolved requirement=[nf-schema@2.6.1]
+jun-24 10:21:22.284 [main] DEBUG n.plugin.HttpPluginRepository - Registry request: https://registry.nextflow.io/api/v1/plugins/dependencies?plugins=nf-schema%402.6.1&nextflowVersion=25.10.4
 - code: 200
 - body: {"plugins":[{"id":"nf-schema","releases":[{"version":"2.6.1","url":"https://registry.nextflow.io/api/v1/plugins/nf-schema/2.6.1/download/nf-schema-2.6.1.zip","date":"2025-10-27T10:50:21.364829Z","sha512sum":"467832f2987f90e2d2aa8e6d8387e45d4a0406ce8b5579a71fcd506155b85491bc6e978a536d767508a8ed1a4610a60c1f0cd3d9dc226f4fea1ce2973a23d043","requires":">=25.10.0","dependsOn":[],"status":"PUBLISHED"}],"projectUrl":"https://github.com/nextflow-io/nf-schema","provider":"nextflow-io"}]}
-jun-22 12:06:21.247 [main] DEBUG nextflow.plugin.PluginUpdater - Installing plugin nf-schema version: 2.6.1
-jun-22 12:06:21.257 [main] INFO  org.pf4j.AbstractPluginManager - Plugin 'nf-schema@2.6.1' resolved
-jun-22 12:06:21.258 [main] INFO  org.pf4j.AbstractPluginManager - Start plugin 'nf-schema@2.6.1'
-jun-22 12:06:21.266 [main] DEBUG nextflow.plugin.BasePlugin - Plugin started nf-schema@2.6.1
-jun-22 12:06:21.273 [main] DEBUG n.secret.LocalSecretsProvider - Secrets store: /home/paula/.nextflow/secrets/store.json
-jun-22 12:06:21.275 [main] DEBUG nextflow.secret.SecretsLoader - Discovered secrets providers: [nextflow.secret.LocalSecretsProvider@1f39269d] - activable => nextflow.secret.LocalSecretsProvider@1f39269d
-jun-22 12:06:21.276 [main] DEBUG nextflow.cli.CmdRun - Applied DSL=2 from script declaration
-jun-22 12:06:21.293 [main] DEBUG nextflow.cli.CmdRun - Launching `main.nf` [spontaneous_austin] DSL2 - revision: 42995afaaa
-jun-22 12:06:21.328 [main] DEBUG nextflow.Session - Session UUID: 8984d60f-c018-46ba-aac1-abac79fa6da9
-jun-22 12:06:21.329 [main] DEBUG nextflow.Session - Run name: spontaneous_austin
-jun-22 12:06:21.329 [main] DEBUG nextflow.Session - Executor pool size: 32
-jun-22 12:06:21.337 [main] DEBUG nextflow.file.FilePorter - File porter settings maxRetries=3; maxTransfers=50; pollTimeout=null
-jun-22 12:06:21.340 [main] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'FileTransfer' minSize=10; maxSize=96; workQueue=LinkedBlockingQueue[-1]; allowCoreThreadTimeout=false
-jun-22 12:06:21.361 [main] DEBUG nextflow.cli.CmdRun - 
+jun-24 10:21:22.315 [main] DEBUG nextflow.plugin.PluginUpdater - Installing plugin nf-schema version: 2.6.1
+jun-24 10:21:22.322 [main] INFO  org.pf4j.AbstractPluginManager - Plugin 'nf-schema@2.6.1' resolved
+jun-24 10:21:22.322 [main] INFO  org.pf4j.AbstractPluginManager - Start plugin 'nf-schema@2.6.1'
+jun-24 10:21:22.325 [main] DEBUG nextflow.plugin.BasePlugin - Plugin started nf-schema@2.6.1
+jun-24 10:21:22.330 [main] DEBUG n.secret.LocalSecretsProvider - Secrets store: /home/paula/.nextflow/secrets/store.json
+jun-24 10:21:22.332 [main] DEBUG nextflow.secret.SecretsLoader - Discovered secrets providers: [nextflow.secret.LocalSecretsProvider@5b7ee56c] - activable => nextflow.secret.LocalSecretsProvider@5b7ee56c
+jun-24 10:21:22.333 [main] DEBUG nextflow.cli.CmdRun - Applied DSL=2 from script declaration
+jun-24 10:21:22.344 [main] DEBUG nextflow.cli.CmdRun - Launching `./main.nf` [goofy_lichterman] DSL2 - revision: ed7ce571cb
+jun-24 10:21:22.377 [main] DEBUG nextflow.Session - Session UUID: 39d67ff1-1d5a-4368-a264-9a8196badc13
+jun-24 10:21:22.377 [main] DEBUG nextflow.Session - Run name: goofy_lichterman
+jun-24 10:21:22.377 [main] DEBUG nextflow.Session - Executor pool size: 32
+jun-24 10:21:22.383 [main] DEBUG nextflow.file.FilePorter - File porter settings maxRetries=3; maxTransfers=50; pollTimeout=null
+jun-24 10:21:22.385 [main] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'FileTransfer' minSize=10; maxSize=96; workQueue=LinkedBlockingQueue[-1]; allowCoreThreadTimeout=false
+jun-24 10:21:22.396 [main] DEBUG nextflow.cli.CmdRun - 
   Version: 25.10.4 build 11173
   Created: 10-02-2026 15:17 UTC (16:17 CEST)
-  System: Linux 6.8.0-117-generic
+  System: Linux 6.8.0-124-generic
   Runtime: Groovy 4.0.28 on OpenJDK 64-Bit Server VM 17.0.18-internal+0-adhoc.conda.src
   Encoding: UTF-8 (UTF-8)
-  Process: 647947@FRS-BINF-01 [127.0.1.1]
-  CPUs: 32 - Mem: 82.4 GB (6.1 GB) - Swap: 4 GB (1.3 GB)
-jun-22 12:06:21.394 [main] DEBUG nextflow.Session - Work-dir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work [ext2/ext3]
-jun-22 12:06:21.417 [main] DEBUG nextflow.executor.ExecutorFactory - Extension executors providers=[]
-jun-22 12:06:21.426 [main] DEBUG nextflow.Session - Observer factory (v2): LinObserverFactory
-jun-22 12:06:21.428 [main] DEBUG nextflow.Session - Observer factory (v2): DefaultObserverFactory
-jun-22 12:06:21.440 [main] DEBUG nextflow.Session - Observer factory (v2): ValidationObserverFactory
-jun-22 12:06:21.466 [main] DEBUG nextflow.cache.CacheFactory - Using Nextflow cache factory: nextflow.cache.DefaultCacheFactory
-jun-22 12:06:21.474 [main] DEBUG nextflow.util.CustomThreadPool - Creating default thread pool > poolSize: 33; maxThreads: 1000
-jun-22 12:06:21.567 [main] DEBUG nextflow.Session - Session start
-jun-22 12:06:21.571 [main] DEBUG nextflow.trace.TraceFileObserver - Workflow started -- trace file: /mnt/alphafold3_db/test_modo3_new/output/pipeline_info/execution_trace_2026-06-22_12-06-19.txt
-jun-22 12:06:21.940 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
-jun-22 12:06:23.591 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryLog:paramsSummaryLog]; plugin Id: nf-schema
-jun-22 12:06:23.598 [main] DEBUG n.validation.config.ValidationConfig - Set `validation.monochromeLogs` to false
-jun-22 12:06:23.599 [main] DEBUG n.validation.config.ValidationConfig - Added the following parameters to the ignored parameters: [genomes]
-jun-22 12:06:23.607 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [validateParameters:validateParameters]; plugin Id: nf-schema
-jun-22 12:06:23.607 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
-jun-22 12:06:23.609 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
-jun-22 12:06:23.609 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [samplesheetToList:samplesheetToList]; plugin Id: nf-schema
-jun-22 12:06:23.609 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
-jun-22 12:06:23.826 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryLog:paramsSummaryLog]; plugin Id: nf-schema
-jun-22 12:06:23.826 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [validateParameters:validateParameters]; plugin Id: nf-schema
-jun-22 12:06:23.827 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
-jun-22 12:06:23.829 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
-jun-22 12:06:23.829 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [samplesheetToList:samplesheetToList]; plugin Id: nf-schema
-jun-22 12:06:23.829 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
-jun-22 12:06:23.991 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
-jun-22 12:06:24.145 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryLog:paramsSummaryLog]; plugin Id: nf-schema
-jun-22 12:06:24.145 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [validateParameters:validateParameters]; plugin Id: nf-schema
-jun-22 12:06:24.146 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
-jun-22 12:06:24.147 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
-jun-22 12:06:24.147 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [samplesheetToList:samplesheetToList]; plugin Id: nf-schema
-jun-22 12:06:24.148 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
-jun-22 12:06:24.794 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryLog:paramsSummaryLog]; plugin Id: nf-schema
-jun-22 12:06:24.795 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [validateParameters:validateParameters]; plugin Id: nf-schema
-jun-22 12:06:24.795 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
-jun-22 12:06:24.796 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsSummaryMap:paramsSummaryMap]; plugin Id: nf-schema
-jun-22 12:06:24.796 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [samplesheetToList:samplesheetToList]; plugin Id: nf-schema
-jun-22 12:06:24.797 [main] DEBUG nextflow.script.IncludeDef - Loading included plugin extensions with names: [paramsHelp:paramsHelp]; plugin Id: nf-schema
-jun-22 12:06:25.260 [main] INFO  nextflow.Nextflow - 
--[2m----------------------------------------------------[0m-
-                                        [0;32m,--.[0;30m/[0;32m,-.[0m
-[0;34m        ___     __   __   __   ___     [0;32m/,-._.--~'[0m
-[0;34m  |\ | |__  __ /  ` /  \ |__) |__         [0;33m}  {[0m
-[0;34m  | \| |       \__, \__/ |  \ |___     [0;32m\`-._,-`-,[0m
-                                        [0;32m`._,._,'[0m
-[0;35m  nf-core/proteinfold 2.0.0[0m
--[2m----------------------------------------------------[0m-
+  Process: 87844@FRS-BINF-01 [127.0.1.1]
+  CPUs: 32 - Mem: 82.4 GB (710.5 MB) - Swap: 4 GB (3.9 GB)
+jun-24 10:21:22.449 [main] DEBUG nextflow.Session - Work-dir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work [ext2/ext3]
+jun-24 10:21:22.468 [main] DEBUG nextflow.executor.ExecutorFactory - Extension executors providers=[]
+jun-24 10:21:22.475 [main] DEBUG nextflow.Session - Observer factory (v2): LinObserverFactory
+jun-24 10:21:22.476 [main] DEBUG nextflow.Session - Observer factory (v2): DefaultObserverFactory
+jun-24 10:21:22.487 [main] DEBUG nextflow.Session - Observer factory (v2): ValidationObserverFactory
+jun-24 10:21:22.519 [main] DEBUG nextflow.cache.CacheFactory - Using Nextflow cache factory: nextflow.cache.DefaultCacheFactory
+jun-24 10:21:22.524 [main] DEBUG nextflow.util.CustomThreadPool - Creating default thread pool > poolSize: 33; maxThreads: 1000
+jun-24 10:21:22.530 [main] ERROR nextflow.cli.Launcher - Unable to acquire lock on session with ID 39d67ff1-1d5a-4368-a264-9a8196badc13
 
-jun-22 12:06:25.288 [main] INFO  nextflow.Nextflow - [1mGlobal options[0m
-  [0;34minput                           : [0;32m/mnt/data_local/pipes/structural/PhiPsiProt_structural/samplesheet_ca.csv[0m
-  [0;34moutdir                          : [0;32m/mnt/alphafold3_db/test_modo3_new/output/[0m
-  [0;34mmode                            : [0;32mbackbone[0m
-  [0;34muse_gpu                         : [0;32mtrue[0m
-  [0;34mgenerate_metrics_report         : [0;32mtrue[0m
-  [0;34mgnina_exhaustiveness            : [0;32m16[0m
-  [0;34muse_msa_server                  : [0;32mtrue[0m
+Common reasons for this error are:
+ - You are trying to resume the execution of an already running pipeline
+ - A previous execution was abruptly interrupted, leaving the session open
 
-[1mColabFold options[0m
-  [0;34mcolabfold_db_load_mode          : [0;32m0[0m
+You can see which process is holding the lock file by using the following command:
+ - lsof /mnt/data_local/pipes/structural/PhiPsiProt_structural/.nextflow/cache/39d67ff1-1d5a-4368-a264-9a8196badc13/db/LOCK
+java.io.IOException: Unable to acquire lock on session with ID 39d67ff1-1d5a-4368-a264-9a8196badc13
 
-[1mAlphaFold3 DBs and parameters links options[0m
-  [0;34malphafold3_small_bfd_path       : [0;32m/mnt/alphafold3_db/AF3_FINAL_DB//small_bfd/*[0m
-  [0;34malphafold3_params_path          : [0;32m/mnt/alphafold3_db/AF3_FINAL_DB/params/af3.bin[0m
-  [0;34malphafold3_mgnify_path          : [0;32m/mnt/alphafold3_db/AF3_FINAL_DB//mgnify/*[0m
-  [0;34malphafold3_pdb_mmcif_path       : [0;32m/mnt/alphafold3_db/AF3_FINAL_DB//pdb_mmcif/mmcif_files[0m
-  [0;34malphafold3_uniref90_path        : [0;32m/mnt/alphafold3_db/AF3_FINAL_DB//uniref90/*[0m
-  [0;34malphafold3_pdb_seqres_path      : [0;32m/mnt/alphafold3_db/AF3_FINAL_DB//pdb_seqres/*[0m
-  [0;34malphafold3_uniprot_path         : [0;32m/mnt/alphafold3_db/AF3_FINAL_DB//uniprot/*[0m
-  [0;34malphafold3_rnacentral_path      : [0;32m/mnt/alphafold3_db/AF3_FINAL_DB//rnacentral/*[0m
-  [0;34malphafold3_nt_rna_path          : [0;32m/mnt/alphafold3_db/AF3_FINAL_DB//nt_rna/*[0m
-  [0;34malphafold3_rfam_path            : [0;32m/mnt/alphafold3_db/AF3_FINAL_DB//rfam/*[0m
+Common reasons for this error are:
+ - You are trying to resume the execution of an already running pipeline
+ - A previous execution was abruptly interrupted, leaving the session open
 
-[1mColabFold DBs and parameters paths options[0m
-  [0;34mcolabfold_alphafold2_params_tags: [0;32m[alphafold2_multimer_v1:alphafold_params_colab_2021-10-27, alphafold2_multimer_v2:alphafold_params_colab_2022-03-02, alphafold2_multimer_v3:alphafold_params_colab_2022-12-06, alphafold2_ptm:alphafold_params_2021-07-14][0m
-
-[1mESMFold parameters paths options[0m
-  [0;34mesmfold_db                      : [0;32m/mnt/data_local/chai_cache/[0m
-  [0;34mesmfold_params_path             : [0;32m/mnt/data_local/chai_cache//params/*[0m
-
-[1mBoltz DBs and model paths options[0m
-  [0;34mboltz_db                        : [0;32m/mnt/alphafold3_db/BOLTZ2/[0m
-  [0;34mboltz_ccd_path                  : [0;32m/mnt/alphafold3_db/BOLTZ2//params/ccd.pkl[0m
-  [0;34mboltz_model_path                : [0;32m/mnt/alphafold3_db/BOLTZ2//params/boltz1_conf.ckpt[0m
-  [0;34mboltz2_aff_path                 : [0;32m/mnt/alphafold3_db/BOLTZ2//params/boltz2_aff.ckpt[0m
-  [0;34mboltz2_conf_path                : [0;32m/mnt/alphafold3_db/BOLTZ2//params/boltz2_conf.ckpt[0m
-  [0;34mboltz2_mols_path                : [0;32m/mnt/alphafold3_db/BOLTZ2//params/mols/[0m
-
-[1mGeneric options[0m
-  [0;34mtrace_report_suffix             : [0;32m2026-06-22_12-06-19[0m
-
-[1mCore Nextflow options[0m
-  [0;34mrunName                         : [0;32mspontaneous_austin[0m
-  [0;34mcontainerEngine                 : [0;32mdocker[0m
-  [0;34mlaunchDir                       : [0;32m/mnt/data_local/pipes/structural/PhiPsiProt_structural[0m
-  [0;34mworkDir                         : [0;32m/mnt/data_local/pipes/structural/PhiPsiProt_structural/work[0m
-  [0;34mprojectDir                      : [0;32m/mnt/data_local/pipes/structural/PhiPsiProt_structural[0m
-  [0;34muserName                        : [0;32mpaula[0m
-  [0;34mprofile                         : [0;32mdocker[0m
-  [0;34mconfigFiles                     : [0;32m/mnt/data_local/pipes/structural/PhiPsiProt_structural/nextflow.config[0m
-
-!! Only displaying parameters that differ from the pipeline defaults !!
--[2m----------------------------------------------------[0m-
-jun-22 12:06:25.289 [main] INFO  nextflow.Nextflow - 
-* The pipeline
-    https://doi.org/10.5281/zenodo.7629996
-
-* The nf-core framework
-    https://doi.org/10.1038/s41587-020-0439-x
-
-* Software dependencies
-    https://github.com/nf-core/proteinfold/blob/master/CITATIONS.md
-
-jun-22 12:06:25.293 [main] DEBUG n.v.parameters.ParameterValidator - Starting parameters validation
-jun-22 12:06:25.418 [main] DEBUG n.v.v.evaluators.SchemaEvaluator - Started validating /mnt/data_local/pipes/structural/PhiPsiProt_structural/samplesheet_ca.csv
-jun-22 12:06:25.448 [main] DEBUG n.v.v.evaluators.SchemaEvaluator - Validation of file '/mnt/data_local/pipes/structural/PhiPsiProt_structural/samplesheet_ca.csv' passed!
-jun-22 12:06:25.479 [main] WARN  n.v.logging.ValidationLogger - The following invalid input values have been detected:
-
-* --af3_top_n: 5
-* --esm_scrmsd_max: 
-* --binding_site_residues: 168,232,58,241,67,369,97
-* --binder_min_entropy: 2.5
-* --input_pdb: /mnt/alphafold3_db/test_modo3/3HS4.pdb
-* --rank_w_ptm: 0.5
-* --scoring_config: /mnt/data_local/pipes/structural/PhiPsiProt_structural/conf/scoring_config_structural.yaml
-* --metrics_relax: restrained
-* --colabfold_alphafold2_params_tags.alphafold2_multimer_v3: alphafold_params_colab_2022-12-06
-* --colabfold_alphafold2_params_tags.alphafold2_multimer_v2: alphafold_params_colab_2022-03-02
-* --colabfold_alphafold2_params_tags.alphafold2_multimer_v1: alphafold_params_colab_2021-10-27
-* --colabfold_alphafold2_params_tags.alphafold2_ptm: alphafold_params_2021-07-14
-* --rank_score_min: 
-* --metrics_ph: 7.0
-* --rank_w_plddt: 0.5
-* --binder_max_homopolymer: 5
-* --binder_max_single_aa: 0.40
-* --chai1_weights_path: /mnt/data_local/chai_cache/
-* --esm_plddt_min: 80
-* --https_proxy: http://10.15.206.126:3128
-* --cascade: true
-* --col_seq: final_sequence
-* --gnina_autobox_extend: true
-* --input_csv: /mnt/alphafold3_db/test_modo3/top20_candidates.csv
-* --gnina_autobox_add: 4
-* --http_proxy: http://10.15.206.126:3128
-* --chai_ptm_min: 0.7
-* --chai_plddt_min: 80
-
-
-jun-22 12:06:25.481 [main] DEBUG n.v.parameters.ParameterValidator - Finishing parameters validation
-jun-22 12:06:25.552 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
-jun-22 12:06:25.553 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
-jun-22 12:06:25.560 [main] DEBUG nextflow.executor.Executor - [warm up] executor > local
-jun-22 12:06:25.565 [main] DEBUG n.processor.LocalPollingMonitor - Creating local task monitor for executor 'local' > cpus=30; memory=82.4 GB; capacity=32; pollInterval=100ms; dumpInterval=5m
-jun-22 12:06:25.568 [main] DEBUG n.processor.TaskPollingMonitor - >>> barrier register (monitor: local)
-jun-22 12:06:25.591 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'NFCORE_PROTEINFOLD:BACKBONE:DESIGN_DUMMY': maxForks=0; fair=false; array=0
-jun-22 12:06:25.608 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_single` matches labels `process_single` for process with name NFCORE_PROTEINFOLD:CASCADE:FILTER_DEGENERATE_CANDIDATES
-jun-22 12:06:25.609 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
-jun-22 12:06:25.609 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
-jun-22 12:06:25.610 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'NFCORE_PROTEINFOLD:CASCADE:FILTER_DEGENERATE_CANDIDATES': maxForks=0; fair=false; array=0
-jun-22 12:06:25.616 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_single` matches labels `process_single` for process with name NFCORE_PROTEINFOLD:CASCADE:CSV_TO_FASTAS
-jun-22 12:06:25.617 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
-jun-22 12:06:25.617 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
-jun-22 12:06:25.618 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'NFCORE_PROTEINFOLD:CASCADE:CSV_TO_FASTAS': maxForks=0; fair=false; array=0
-jun-22 12:06:25.630 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_medium` matches labels `process_medium,process_gpu` for process with name NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD
-jun-22 12:06:25.631 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_gpu` matches labels `process_medium,process_gpu` for process with name NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD
-jun-22 12:06:25.635 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
-jun-22 12:06:25.636 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
-jun-22 12:06:25.641 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD': maxForks=1; fair=false; array=0
-jun-22 12:06:25.647 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_medium` matches labels `process_medium` for process with name NFCORE_PROTEINFOLD:CASCADE:REFERENCE_METRICS
-jun-22 12:06:25.650 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
-jun-22 12:06:25.651 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
-jun-22 12:06:25.651 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'NFCORE_PROTEINFOLD:CASCADE:REFERENCE_METRICS': maxForks=0; fair=false; array=0
-jun-22 12:06:25.673 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_medium` matches labels `process_medium` for process with name NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM
-jun-22 12:06:25.674 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
-jun-22 12:06:25.674 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
-jun-22 12:06:25.675 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM': maxForks=0; fair=false; array=0
-jun-22 12:06:25.685 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_single` matches labels `process_single` for process with name NFCORE_PROTEINFOLD:CASCADE:RANK_ESM
-jun-22 12:06:25.686 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
-jun-22 12:06:25.686 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
-jun-22 12:06:25.687 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'NFCORE_PROTEINFOLD:CASCADE:RANK_ESM': maxForks=0; fair=false; array=0
-jun-22 12:06:25.706 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_medium` matches labels `process_medium,process_gpu` for process with name NFCORE_PROTEINFOLD:CASCADE:RUN_CHAI1
-jun-22 12:06:25.706 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_gpu` matches labels `process_medium,process_gpu` for process with name NFCORE_PROTEINFOLD:CASCADE:RUN_CHAI1
-jun-22 12:06:25.707 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
-jun-22 12:06:25.707 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
-jun-22 12:06:25.708 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'NFCORE_PROTEINFOLD:CASCADE:RUN_CHAI1': maxForks=1; fair=false; array=0
-jun-22 12:06:25.713 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_medium` matches labels `process_medium` for process with name NFCORE_PROTEINFOLD:CASCADE:METRICS_CHAI
-jun-22 12:06:25.714 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
-jun-22 12:06:25.714 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
-jun-22 12:06:25.714 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'NFCORE_PROTEINFOLD:CASCADE:METRICS_CHAI': maxForks=0; fair=false; array=0
-jun-22 12:06:25.719 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_single` matches labels `process_single` for process with name NFCORE_PROTEINFOLD:CASCADE:RANK_CHAI
-jun-22 12:06:25.720 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
-jun-22 12:06:25.720 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
-jun-22 12:06:25.721 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'NFCORE_PROTEINFOLD:CASCADE:RANK_CHAI': maxForks=0; fair=false; array=0
-jun-22 12:06:25.726 [main] DEBUG n.script.dsl.ProcessConfigBuilder - Config settings `withLabel:process_single` matches labels `process_single` for process with name NFCORE_PROTEINFOLD:CASCADE:CASCADE_REPORT
-jun-22 12:06:25.727 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
-jun-22 12:06:25.727 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
-jun-22 12:06:25.728 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'NFCORE_PROTEINFOLD:CASCADE:CASCADE_REPORT': maxForks=0; fair=false; array=0
-jun-22 12:06:25.743 [main] DEBUG nextflow.Session - Config process names validation disabled as requested
-jun-22 12:06:25.745 [main] DEBUG nextflow.Session - Igniting dataflow network (28)
-jun-22 12:06:25.745 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > NFCORE_PROTEINFOLD:BACKBONE:DESIGN_DUMMY
-jun-22 12:06:25.746 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > NFCORE_PROTEINFOLD:CASCADE:FILTER_DEGENERATE_CANDIDATES
-jun-22 12:06:25.746 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > NFCORE_PROTEINFOLD:CASCADE:CSV_TO_FASTAS
-jun-22 12:06:25.746 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD
-jun-22 12:06:25.746 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > NFCORE_PROTEINFOLD:CASCADE:REFERENCE_METRICS
-jun-22 12:06:25.746 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM
-jun-22 12:06:25.746 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > NFCORE_PROTEINFOLD:CASCADE:RANK_ESM
-jun-22 12:06:25.746 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > NFCORE_PROTEINFOLD:CASCADE:RUN_CHAI1
-jun-22 12:06:25.746 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > NFCORE_PROTEINFOLD:CASCADE:METRICS_CHAI
-jun-22 12:06:25.746 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > NFCORE_PROTEINFOLD:CASCADE:RANK_CHAI
-jun-22 12:06:25.746 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > NFCORE_PROTEINFOLD:CASCADE:CASCADE_REPORT
-jun-22 12:06:25.747 [main] DEBUG nextflow.script.ScriptRunner - Parsed script files:
-  Script_ac258ef1994281e8: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/nf-core/untar/main.nf
-  Script_f0de76d74938b5d6: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/csv_to_fastas/main.nf
-  Script_8f8c7d0f2a4c48da: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/compare_structures/main.nf
-  Script_873c0131ae8ce821: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/nf-core/multiqc/main.nf
-  Script_ac9d71fcb22f44c0: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/design_modes/backbone.nf
-  Script_fbc7130024ee091d: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/local/aria2_uncompress.nf
-  Script_25bb15c7c90dc287: /mnt/data_local/pipes/structural/PhiPsiProt_structural/main.nf
-  Script_3d51113ba66cc4b1: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/run_haddock3/main.nf
-  Script_2037d748f5ce8809: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/generate_haddock_airs/main.nf
-  Script_302606cc29eae5b0: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/boltz_ligand_summary/main.nf
-  Script_a7b23449dcde0af1: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/combine_uniprot/main.nf
-  Script_654860a90fc16ad7: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/collect_metrics/main.nf
-  Script_1809358c99d7cc3b: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/generate_report/main.nf
-  Script_8988a74ceda92929: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/local/prepare_boltz_dbs.nf
-  Script_8a53967f0bf1cf09: /mnt/data_local/pipes/structural/PhiPsiProt_structural/workflows/alphafold3.nf
-  Script_2c2b2707b71b0054: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/run_alphafold3/main.nf
-  Script_081a99adc3498595: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/nf-core/unzip/main.nf
-  Script_9b217d62fa34839d: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/filter_degenerate_candidates/main.nf
-  Script_c7d0da8873969bc3: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/local/post_processing.nf
-  Script_ae69cc2c52a816f5: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/run_gnina_ligand_filter/main.nf
-  Script_db6c62ba45e69560: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/design_modes/saturation.nf
-  Script_ecb257cd0743e8de: /mnt/data_local/pipes/structural/PhiPsiProt_structural/workflows/chai1.nf
-  Script_e4d82ff15bbf6528: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/run_esmfold/main.nf
-  Script_71c8354a7a82b61c: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/design_dummy_ab/main.nf
-  Script_0451ebc6314a21c7: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/design_modes/peptide_design.nf
-  Script_1a2cd110b596c05c: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/design_modes/cascade.nf
-  Script_786cbedb142af3ec: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/local/metrics_report/main.nf
-  Script_0e522e239c72fa00: /mnt/data_local/pipes/structural/PhiPsiProt_structural/workflows/alphafold2.nf
-  Script_c4a99c56e524421f: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/local/docking_cofolding.nf
-  Script_74c5739bd6e3cc25: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/design_modes/antibody_design.nf
-  Script_7b61932d96c22ca1: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/candidates_to_cofold_samplesheet/main.nf
-  Script_b4971a8adbe8ce0c: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/local/prepare_esmfold_dbs.nf
-  Script_15db0e8d9062b311: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/multifasta_to_singlefasta/main.nf
-  Script_220b170b361e8403: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/run_alphafold2_pred/main.nf
-  Script_668e7ebd74c8366c: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/run_boltz/main.nf
-  Script_5e7ac9f4ba5137ff: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/run_alphafold2_msa/main.nf
-  Script_cb150fca414734aa: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/download_pdbmmcif/main.nf
-  Script_312cceb1f1600bd8: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/mmcif2pdb/main.nf
-  Script_0e71ed64d05e63f3: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/nf-core/gunzip/main.nf
-  Script_18e86abc9794b520: /mnt/data_local/pipes/structural/PhiPsiProt_structural/workflows/esmfold.nf
-  Script_015caf15048ee706: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/candidates_csv_to_fasta/main.nf
-  Script_8f98321fd3b51cb4: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/collect_and_rank_structural/main.nf
-  Script_9be7fc31dfb335e5: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/structural_metrics/main.nf
-  Script_faaba73886a1075c: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/nf-core/foldseek/easysearch/main.nf
-  Script_a9bdbb0df6378d1d: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/nf-core/aria2/main.nf
-  Script_36f0db057009fef5: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/generate_metrics_report/main.nf
-  Script_be798c5410f923bc: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/cascade_report/main.nf
-  Script_4f612cfd8c52e8cd: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/nf-core/utils_nextflow_pipeline/main.nf
-  Script_5977f542cd315b9b: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/nf-core/utils_nfcore_pipeline/main.nf
-  Script_7e57b39ebc555bb7: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/candidates_smiles_to_boltz/main.nf
-  Script_91c5f8a10030881d: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/local/prepare_alphafold3_dbs.nf
-  Script_261c7cfeafd47843: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/design_dummy/main.nf
-  Script_e718b87d0bf19a1b: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/run_rosettadock/main.nf
-  Script_5dec716b325c4e6b: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/local/utils_nfcore_proteinfold_pipeline/main.nf
-  Script_623dc2cc517aadc9: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/run_alphafold2/main.nf
-  Script_926dadd028e7989e: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/candidates_smiles_to_af3_fasta/main.nf
-  Script_b5d297c1b774a972: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/candidates_to_boltz/main.nf
-  Script_f12f92c9c1c048fc: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/local/prepare_alphafold2_dbs.nf
-  Script_f000123ea508d767: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/pyrosetta_saturation/main.nf
-  Script_30eec5531e89f777: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/zstd_decompress/main.nf
-  Script_ecef9394b6a46342: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/download_pdbmmcif_af3/main.nf
-  Script_1d06c4c2cdff57e4: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/run_chai1/main.nf
-  Script_1a2037a6183f7e1a: /mnt/data_local/pipes/structural/PhiPsiProt_structural/subworkflows/nf-core/utils_nfschema_plugin/main.nf
-  Script_4bfd17c6538724fc: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/collect_and_rank/main.nf
-  Script_e72d28d41417e65a: /mnt/data_local/pipes/structural/PhiPsiProt_structural/modules/local/fasta_to_alphafold3_json/main.nf
-jun-22 12:06:25.747 [main] DEBUG nextflow.script.ScriptRunner - > Awaiting termination 
-jun-22 12:06:25.747 [main] DEBUG nextflow.Session - Session await
-jun-22 12:06:25.781 [Actor Thread 26] WARN  nextflow.script.ScriptBinding - Access to undefined parameter `seq_col` -- Initialise it to a default value eg. `params.seq_col = some_value`
-jun-22 12:06:25.842 [Actor Thread 26] DEBUG n.processor.TaskFileCollector - Process `NFCORE_PROTEINFOLD:CASCADE:FILTER_DEGENERATE_CANDIDATES` is unable to find [UnixPath]: `/mnt/data_local/pipes/structural/PhiPsiProt_structural/work/61/b81e12f3e1af49f15673f48a14b04b/candidates_rejected.csv` (pattern: `candidates_rejected.csv`)
-jun-22 12:06:25.845 [Actor Thread 26] INFO  nextflow.processor.TaskProcessor - [61/b81e12] Cached process > NFCORE_PROTEINFOLD:CASCADE:FILTER_DEGENERATE_CANDIDATES (filter_degenerate)
-jun-22 12:06:25.845 [Actor Thread 33] INFO  nextflow.processor.TaskProcessor - [31/d600e4] Cached process > NFCORE_PROTEINFOLD:CASCADE:REFERENCE_METRICS (reference)
-jun-22 12:06:25.845 [Actor Thread 29] INFO  nextflow.processor.TaskProcessor - [01/e82029] Cached process > NFCORE_PROTEINFOLD:BACKBONE:DESIGN_DUMMY (backbone)
-jun-22 12:06:25.871 [Actor Thread 33] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'PublishDir' minSize=10; maxSize=96; workQueue=LinkedBlockingQueue[-1]; allowCoreThreadTimeout=false
-jun-22 12:06:25.919 [Actor Thread 26] DEBUG nextflow.processor.TaskProcessor - Process NFCORE_PROTEINFOLD:CASCADE:FILTER_DEGENERATE_CANDIDATES > Skipping output binding because one or more optional files are missing: fileoutparam<1>
-jun-22 12:06:25.935 [Actor Thread 28] INFO  nextflow.processor.TaskProcessor - [f9/03b200] Cached process > NFCORE_PROTEINFOLD:CASCADE:CSV_TO_FASTAS (csv_to_fastas)
-jun-22 12:06:25.971 [Actor Thread 16] INFO  nextflow.processor.TaskProcessor - [84/19e68c] Cached process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_3_mpnn_1)
-jun-22 12:06:25.971 [Actor Thread 11] INFO  nextflow.processor.TaskProcessor - [eb/feb879] Cached process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_4_mpnn_3)
-jun-22 12:06:25.971 [Actor Thread 25] INFO  nextflow.processor.TaskProcessor - [b4/d58058] Cached process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_1_mpnn_0)
-jun-22 12:06:25.971 [Actor Thread 23] INFO  nextflow.processor.TaskProcessor - [68/777ee4] Cached process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_0_mpnn_4)
-jun-22 12:06:25.972 [Actor Thread 33] INFO  nextflow.processor.TaskProcessor - [9f/2979b7] Cached process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_0_mpnn_2)
-jun-22 12:06:25.972 [Actor Thread 31] INFO  nextflow.processor.TaskProcessor - [aa/34cf85] Cached process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_1_mpnn_1)
-jun-22 12:06:25.972 [Actor Thread 28] INFO  nextflow.processor.TaskProcessor - [0d/a479c5] Cached process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_3_mpnn_4)
-jun-22 12:06:25.972 [Actor Thread 14] INFO  nextflow.processor.TaskProcessor - [8a/11a917] Cached process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_4_mpnn_4)
-jun-22 12:06:25.972 [Actor Thread 13] INFO  nextflow.processor.TaskProcessor - [28/a0811e] Cached process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_4_mpnn_1)
-jun-22 12:06:25.972 [Actor Thread 19] INFO  nextflow.processor.TaskProcessor - [8f/63c282] Cached process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_2_mpnn_1)
-jun-22 12:06:25.971 [Actor Thread 24] INFO  nextflow.processor.TaskProcessor - [46/f5bd73] Cached process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_0_mpnn_0)
-jun-22 12:06:25.971 [Actor Thread 32] INFO  nextflow.processor.TaskProcessor - [ec/8adc7c] Cached process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_0_mpnn_1)
-jun-22 12:06:25.971 [Actor Thread 15] INFO  nextflow.processor.TaskProcessor - [ce/6c34ee] Cached process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_3_mpnn_2)
-jun-22 12:06:25.972 [Actor Thread 18] INFO  nextflow.processor.TaskProcessor - [b9/5d5ccd] Cached process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_2_mpnn_2)
-jun-22 12:06:25.971 [Actor Thread 20] INFO  nextflow.processor.TaskProcessor - [12/54e59e] Cached process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_2_mpnn_0)
-jun-22 12:06:25.971 [Actor Thread 29] INFO  nextflow.processor.TaskProcessor - [ea/98696c] Cached process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_0_mpnn_3)
-jun-22 12:06:25.971 [Actor Thread 30] INFO  nextflow.processor.TaskProcessor - [bd/23da19] Cached process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_4_mpnn_2)
-jun-22 12:06:25.971 [Actor Thread 21] INFO  nextflow.processor.TaskProcessor - [54/ce493c] Cached process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_1_mpnn_3)
-jun-22 12:06:25.972 [Actor Thread 26] INFO  nextflow.processor.TaskProcessor - [7e/038295] Cached process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_2_mpnn_4)
-jun-22 12:06:25.973 [Actor Thread 17] INFO  nextflow.processor.TaskProcessor - [f3/45844c] Cached process > NFCORE_PROTEINFOLD:CASCADE:RUN_ESMFOLD (backbone_design_2_mpnn_3)
-jun-22 12:06:25.984 [Actor Thread 25] INFO  nextflow.processor.TaskProcessor - [bc/6dc9b7] Cached process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_2_mpnn_4)
-jun-22 12:06:25.984 [Actor Thread 10] INFO  nextflow.processor.TaskProcessor - [f8/92866a] Cached process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_4)
-jun-22 12:06:25.984 [Actor Thread 20] INFO  nextflow.processor.TaskProcessor - [89/e04a5f] Cached process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_4_mpnn_2)
-jun-22 12:06:25.984 [Actor Thread 9] INFO  nextflow.processor.TaskProcessor - [77/6ee073] Cached process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_3_mpnn_1)
-jun-22 12:06:25.985 [Actor Thread 34] INFO  nextflow.processor.TaskProcessor - [f9/f74585] Cached process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_2_mpnn_0)
-jun-22 12:06:25.985 [Actor Thread 8] INFO  nextflow.processor.TaskProcessor - [33/d68f8e] Cached process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_2_mpnn_2)
-jun-22 12:06:25.985 [Actor Thread 7] INFO  nextflow.processor.TaskProcessor - [8f/af047c] Cached process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_4_mpnn_3)
-jun-22 12:06:25.986 [Actor Thread 5] INFO  nextflow.processor.TaskProcessor - [3b/a8dc68] Cached process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_2)
-jun-22 12:06:25.985 [Actor Thread 4] INFO  nextflow.processor.TaskProcessor - [d3/a34f5b] Cached process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_1_mpnn_0)
-jun-22 12:06:25.989 [Actor Thread 12] INFO  nextflow.processor.TaskProcessor - [bd/ffb72c] Cached process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_3_mpnn_2)
-jun-22 12:06:25.990 [Actor Thread 3] INFO  nextflow.processor.TaskProcessor - [f4/1702ba] Cached process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_2_mpnn_3)
-jun-22 12:06:25.990 [Actor Thread 22] INFO  nextflow.processor.TaskProcessor - [5b/7305f2] Cached process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_2_mpnn_1)
-jun-22 12:06:25.991 [Actor Thread 18] INFO  nextflow.processor.TaskProcessor - [3f/c0397e] Cached process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_4_mpnn_4)
-jun-22 12:06:25.991 [Actor Thread 11] INFO  nextflow.processor.TaskProcessor - [6e/323a83] Cached process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_1_mpnn_3)
-jun-22 12:06:25.991 [Actor Thread 17] INFO  nextflow.processor.TaskProcessor - [1a/022fe2] Cached process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_4_mpnn_1)
-jun-22 12:06:25.992 [Actor Thread 21] INFO  nextflow.processor.TaskProcessor - [b2/b1a1db] Cached process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_3_mpnn_4)
-jun-22 12:06:25.993 [Actor Thread 25] INFO  nextflow.processor.TaskProcessor - [54/6d1352] Cached process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_0)
-jun-22 12:06:25.993 [Actor Thread 4] INFO  nextflow.processor.TaskProcessor - [76/65207b] Cached process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_3)
-jun-22 12:06:25.993 [Actor Thread 13] INFO  nextflow.processor.TaskProcessor - [d3/7ae6e7] Cached process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_0_mpnn_1)
-jun-22 12:06:25.996 [Actor Thread 33] INFO  nextflow.processor.TaskProcessor - [c6/2c0685] Cached process > NFCORE_PROTEINFOLD:CASCADE:METRICS_ESM (backbone_design_1_mpnn_1)
-jun-22 12:06:26.010 [Actor Thread 31] INFO  nextflow.processor.TaskProcessor - [bf/a9391b] Cached process > NFCORE_PROTEINFOLD:CASCADE:RANK_ESM (esm)
-jun-22 12:06:26.028 [Actor Thread 4] INFO  nextflow.processor.TaskProcessor - [15/ead87a] Cached process > NFCORE_PROTEINFOLD:CASCADE:RUN_CHAI1 (backbone_design_0_mpnn_1)
-jun-22 12:06:26.037 [Actor Thread 30] INFO  nextflow.processor.TaskProcessor - [a9/781f82] Cached process > NFCORE_PROTEINFOLD:CASCADE:METRICS_CHAI (backbone_design_0_mpnn_1)
-jun-22 12:06:26.041 [Actor Thread 31] INFO  nextflow.processor.TaskProcessor - [33/15afbf] Cached process > NFCORE_PROTEINFOLD:CASCADE:RUN_CHAI1 (backbone_design_1_mpnn_3)
-jun-22 12:06:26.042 [Actor Thread 33] INFO  nextflow.processor.TaskProcessor - [da/a89585] Cached process > NFCORE_PROTEINFOLD:CASCADE:RUN_CHAI1 (backbone_design_3_mpnn_1)
-jun-22 12:06:26.043 [Actor Thread 25] INFO  nextflow.processor.TaskProcessor - [23/41ad4d] Cached process > NFCORE_PROTEINFOLD:CASCADE:RUN_CHAI1 (backbone_design_0_mpnn_2)
-jun-22 12:06:26.044 [Actor Thread 6] INFO  nextflow.processor.TaskProcessor - [42/24ec32] Cached process > NFCORE_PROTEINFOLD:CASCADE:RUN_CHAI1 (backbone_design_0_mpnn_3)
-jun-22 12:06:26.048 [Actor Thread 18] INFO  nextflow.processor.TaskProcessor - [f9/9ff426] Cached process > NFCORE_PROTEINFOLD:CASCADE:METRICS_CHAI (backbone_design_1_mpnn_3)
-jun-22 12:06:26.049 [Actor Thread 13] INFO  nextflow.processor.TaskProcessor - [33/6c8bb2] Cached process > NFCORE_PROTEINFOLD:CASCADE:METRICS_CHAI (backbone_design_0_mpnn_3)
-jun-22 12:06:26.051 [Actor Thread 21] INFO  nextflow.processor.TaskProcessor - [36/7c3db8] Cached process > NFCORE_PROTEINFOLD:CASCADE:METRICS_CHAI (backbone_design_3_mpnn_1)
-jun-22 12:06:26.052 [Actor Thread 22] INFO  nextflow.processor.TaskProcessor - [78/b3ec2f] Cached process > NFCORE_PROTEINFOLD:CASCADE:METRICS_CHAI (backbone_design_0_mpnn_2)
-jun-22 12:06:26.058 [Actor Thread 33] INFO  nextflow.processor.TaskProcessor - [2d/a266fb] Cached process > NFCORE_PROTEINFOLD:CASCADE:RANK_CHAI (chai)
-jun-22 12:06:26.104 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
-jun-22 12:06:26.106 [Task submitter] INFO  nextflow.Session - [97/66612d] Submitted process > NFCORE_PROTEINFOLD:CASCADE:CASCADE_REPORT
-jun-22 12:06:26.858 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 57; name: NFCORE_PROTEINFOLD:CASCADE:CASCADE_REPORT; status: COMPLETED; exit: 0; error: -; workDir: /mnt/data_local/pipes/structural/PhiPsiProt_structural/work/97/66612dc0ef8cc0923603c4b6035e60]
-jun-22 12:06:26.858 [Task monitor] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'TaskFinalizer' minSize=10; maxSize=96; workQueue=LinkedBlockingQueue[-1]; allowCoreThreadTimeout=false
-jun-22 12:06:26.862 [main] DEBUG nextflow.Session - Session await > all processes finished
-jun-22 12:06:26.957 [Task monitor] DEBUG n.processor.TaskPollingMonitor - <<< barrier arrives (monitor: local) - terminating tasks monitor poll loop
-jun-22 12:06:26.957 [main] DEBUG nextflow.Session - Session await > all barriers passed
-jun-22 12:06:26.959 [main] DEBUG nextflow.util.ThreadPoolManager - Thread pool 'TaskFinalizer' shutdown completed (hard=false)
-jun-22 12:06:26.960 [main] DEBUG nextflow.util.ThreadPoolManager - Thread pool 'PublishDir' shutdown completed (hard=false)
-jun-22 12:06:26.963 [main] INFO  nextflow.Nextflow - -[0;35m[nf-core/proteinfold][0;32m Pipeline completed successfully[0m-
-jun-22 12:06:26.967 [main] DEBUG n.trace.WorkflowStatsObserver - Workflow completed > WorkflowStats[succeededCount=1; failedCount=0; ignoredCount=0; cachedCount=56; pendingCount=0; submittedCount=0; runningCount=0; retriesCount=0; abortedCount=0; succeedDuration=77ms; failedDuration=0ms; cachedDuration=12h 44m 21s;loadCpus=0; loadMemory=0; peakRunning=1; peakCpus=1; peakMemory=6 GB; ]
-jun-22 12:06:27.017 [main] DEBUG nextflow.trace.ReportObserver - Workflow completed -- rendering execution report
-jun-22 12:06:27.270 [main] DEBUG nextflow.trace.TimelineObserver - Workflow completed -- rendering execution timeline
-jun-22 12:06:27.304 [main] DEBUG nextflow.trace.TraceFileObserver - Workflow completed -- saving trace file
-jun-22 12:06:27.312 [main] DEBUG nextflow.cache.CacheDB - Closing CacheDB done
-jun-22 12:06:27.343 [main] INFO  org.pf4j.AbstractPluginManager - Stop plugin 'nf-schema@2.6.1'
-jun-22 12:06:27.344 [main] DEBUG nextflow.plugin.BasePlugin - Plugin stopped nf-schema
-jun-22 12:06:27.345 [main] DEBUG nextflow.util.ThreadPoolManager - Thread pool 'FileTransfer' shutdown completed (hard=false)
-jun-22 12:06:27.345 [main] DEBUG nextflow.script.ScriptRunner - > Execution complete -- Goodbye
+You can see which process is holding the lock file by using the following command:
+ - lsof /mnt/data_local/pipes/structural/PhiPsiProt_structural/.nextflow/cache/39d67ff1-1d5a-4368-a264-9a8196badc13/db/LOCK
+	at nextflow.cache.DefaultCacheStore.openDb(DefaultCacheStore.groovy:91)
+	at nextflow.cache.DefaultCacheStore.open(DefaultCacheStore.groovy:106)
+	at nextflow.cache.DefaultCacheStore.open(DefaultCacheStore.groovy)
+	at nextflow.cache.CacheDB.open(CacheDB.groovy:59)
+	at nextflow.Session.init(Session.groovy:470)
+	at nextflow.script.ScriptRunner.execute(ScriptRunner.groovy:130)
+	at nextflow.cli.CmdRun.run(CmdRun.groovy:429)
+	at nextflow.cli.Launcher.run(Launcher.groovy:515)
+	at nextflow.cli.Launcher.main(Launcher.groovy:675)

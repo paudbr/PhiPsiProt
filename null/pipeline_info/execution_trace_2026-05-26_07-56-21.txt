@@ -1,2 +1,0 @@
-task_id	hash	native_id	name	status	exit	submit	duration	realtime	%cpu	peak_rss	peak_vmem	rchar	wchar
-1	19/9c646d	462466	BACKBONE:DESIGN_DUMMY (backbone)	COMPLETED	0	2026-05-26 07:56:26.761	64ms	4ms	88.9%	0	0	110.9 KB	258 B

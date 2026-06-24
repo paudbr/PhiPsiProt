@@ -1,0 +1,18 @@
+
+# Nextflow runtime / artefactos (nunca al repo)
+work/
+.nextflow/
+.nextflow.log*
+results/
+
+# Python
+__pycache__/
+*.pyc
+*.bak
+
+# dumps locales
+dir_structure.txt
+
+# RFantibody: repo ajeno clonado (la imagen ya está construida).
+# Se conserva el Dockerfile/.def de docker/RFantibody/, no el repo anidado.
+docker/RFantibody/RFantibody/

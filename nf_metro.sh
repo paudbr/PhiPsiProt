@@ -1,1 +1,1 @@
-nf-metro render --title PhiPsiProt --theme light full_pipeline.mmd -o pipeline.svg
+nf-metro render --title PhiPsiProt --theme light full_pipeline.mmd -o pipeline.svg --no-straight-diamonds

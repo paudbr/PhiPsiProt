@@ -81,6 +81,10 @@ workflow NFCORE_PROTEINFOLD {
     }
     else if (params.mode == 'antibody_design') {
         ANTIBODY_DESIGN(params.mode)
+        ANTIBODY_DESIGN.out.iptm_summary
+            .subscribe { tsv ->
+                log.info "[ANTIBODY_DESIGN] ipTM scores summary: ${tsv}"
+            }
     }
     else if (params.mode != 'structural') {
         error "Unknown mode: ${params.mode}"
@@ -118,7 +122,8 @@ workflow NFCORE_PROTEINFOLD {
             error "Ligand cofold mode needs --receptor_sequence"
         }
         if (!params.ligand_reference_pdb) {
-            error "Ligand filtering needs --ligand_reference_pdb."
+            error "Ligand filtering needs --ligand_reference_pdb."Otros marcadores
+            
         }
         if (!params.pocket_residues) {
             error "Ligand filtering needs --pocket_residues, for example A5,A4,A10,A238,A239,A240,A241,A242,A243,A100."
@@ -292,7 +297,7 @@ workflow NFCORE_PROTEINFOLD {
     ALPHAFOLD3   (no corre en modo cascada)
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     */
-    if (!run_cascade && requested_modes.contains("af3")) {
+    if (!run_cascade && requested_modes.contains("af3") && params.mode == 'structural') {
 
         PREPARE_ALPHAFOLD3_DBS(
             params.alphafold3_db,
@@ -405,7 +410,7 @@ workflow NFCORE_PROTEINFOLD {
     METRICS REPORT   (no corre en modo cascada; la cascada saca su propio report)
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     */
-    if (metrics_enabled && !run_cascade) {
+    if (metrics_enabled && !run_cascade && params.mode == 'structural') {
 
         ch_mr_af2_pdb  = requested_modes.contains("af2") ? ALPHAFOLD2.out.top_ranked_pdb : Channel.empty()
         ch_mr_af3_pdb  = requested_modes.contains("af3") ? ALPHAFOLD3.out.pdb : Channel.empty()
