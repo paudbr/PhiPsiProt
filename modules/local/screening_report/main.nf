@@ -9,6 +9,7 @@ process SCREENING_REPORT {
     input:
     path final_results
     path plots
+    path pymol_images
 
     output:
     path "screening_report.html"
@@ -16,11 +17,15 @@ process SCREENING_REPORT {
     script:
     """
     mkdir -p plots
+    mkdir -p pymol
+
     cp ${plots} plots/ || true
+    cp ${pymol_images} pymol/ || true
 
     python3 $projectDir/bin/generate_screening_report.py \
         --results_csv ${final_results} \
         --plots_dir plots \
+        --pymol_dir pymol \
         --outdir .
     """
 }

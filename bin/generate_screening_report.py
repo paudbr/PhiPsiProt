@@ -1,17 +1,37 @@
 #!/usr/bin/env python3
 
+"""
+Generate the final HTML report for PhiPsiProt Mode 1 screening.
+
+Purpose
+-------
+Create a self-contained HTML report from final_screening_results.csv,
+screening plots and optional PyMOL structural images.
+
+Current ranking scheme
+----------------------
+Candidates are ranked by PyRosetta ΔΔG.
+
+final_score = ddg
+
+Biophysical descriptors are reported as annotations only. They help interpret
+candidate developability but do not modify the ranking score.
+"""
+
 import argparse
-import csv
 import base64
+import csv
 from pathlib import Path
 
 
 def img_to_base64(path):
-    with open(path, "rb") as f:
-        return base64.b64encode(f.read()).decode("utf-8")
+    """Encode image as base64 for embedding in HTML."""
+    with open(path, "rb") as handle:
+        return base64.b64encode(handle.read()).decode("utf-8")
 
 
 def to_float(value):
+    """Convert value to float, returning None for missing values."""
     try:
         if value in ["", "NA", None]:
             return None
@@ -21,143 +41,282 @@ def to_float(value):
 
 
 def fmt_metric(value):
+    """Format numeric metrics for display."""
     if isinstance(value, (int, float)):
         return f"{value:.3f}"
     return str(value)
 
+
 def css_delta(value, good_if_positive=True):
+    """Return CSS class for delta-style metrics."""
     v = to_float(value)
     if v is None:
         return ""
+
     if good_if_positive:
         return "good" if v > 0 else "bad" if v < 0 else ""
+
     return "good" if v < 0 else "bad" if v > 0 else ""
 
+
 def css_ddg(value):
+    """Return CSS class for ddG-like metrics."""
     v = to_float(value)
     if v is None:
         return ""
+
     if v < 0:
         return "good"
     if v > 0:
         return "bad"
+
     return ""
 
-
-def css_final_score(value):
-    v = to_float(value)
-    if v is None:
-        return ""
-    if v < 0:
-        return "good"
-    if v > 0:
-        return "bad"
-    return ""
 
 def top_candidate_summary(rows):
+    """Create HTML summary for the top-ranked candidate."""
     if not rows:
         return ""
 
-    r = rows[0]
+    top = rows[0]
 
-    mutation = r.get("mutation", "NA")
-    ddg = r.get("ddg", "NA")
-    final_score = r.get("final_score", "NA")
-    dsol = r.get("delta_solubility_score", "NA")
-    dinst = r.get("delta_instability_index", "NA")
+    mutation = top.get("mutation", "NA")
+    ddg = top.get("ddg", "NA")
+    final_score = top.get("final_score", "NA")
+    dsol = top.get("delta_solubility_score", "NA")
+    dinst = top.get("delta_instability_index", "NA")
 
     return f"""
     <section class="card">
         <h2>Top candidate summary</h2>
         <p class="note">
             <b>{mutation}</b> is the highest ranked candidate.
-            It has ΔΔG = <b>{ddg}</b> and final score = <b>{final_score}</b>.
+            It has ΔΔG = <b>{ddg}</b>. In the current ranking scheme,
+            final score = ΔΔG = <b>{final_score}</b>.
             Relative to WT, ΔSolubility = <b>{dsol}</b> and
             ΔInstability = <b>{dinst}</b>.
         </p>
     </section>
     """
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--results_csv", required=True)
-parser.add_argument("--plots_dir", required=True)
-parser.add_argument("--outdir", required=True)
-args = parser.parse_args()
 
-results_csv = Path(args.results_csv)
-plots_dir = Path(args.plots_dir)
-outdir = Path(args.outdir)
-outdir.mkdir(parents=True, exist_ok=True)
+def target_summary(rows):
+    """Create HTML summary of the screened protein and residue selection."""
+    if not rows:
+        return ""
 
-rows = []
-with open(results_csv, newline="") as f:
-    reader = csv.DictReader(f)
-    for row in reader:
-        ddg = to_float(row.get("ddg"))
-        final_score = to_float(row.get("final_score"))
+    first = rows[0]
 
-        if ddg is None:
-            continue
+    input_pdb = first.get("input_pdb", "NA")
+    chain = first.get("chain", "NA")
+    selection_mode = first.get("selection_mode", "NA")
+    selected_positions = first.get("selected_positions", "NA")
+    ligand_resname = first.get("ligand_resname", "")
+    interface_chain = first.get("interface_chain", "")
+    distance_cutoff = first.get("distance_cutoff", "NA")
 
-        row["ddg_float"] = ddg
-        row["final_score_float"] = final_score if final_score is not None else ddg
-        rows.append(row)
+    extra_rows = ""
 
-# Final ranking uses the combined score when available
-rows = sorted(rows, key=lambda r: r["final_score_float"])
-top10 = rows[:10]
-display_rows = rows
-
-
-best_ddg = min((r["ddg_float"] for r in rows), default="NA")
-worst_ddg = max((r["ddg_float"] for r in rows), default="NA")
-mean_ddg = (
-    sum(r["ddg_float"] for r in rows) / len(rows)
-    if rows else "NA"
-)
-best_final_score = (
-    rows[0]["final_score_float"]
-    if rows else "NA"
-)
-
-plot_files = [
-    ("ddg_ranking_barplot.png", "PyRosetta ΔΔG ranking"),
-    ("top10_stabilizing_mutations.png", "Top 10 stabilizing mutations"),
-    ("ddg_heatmap.png", "ΔΔG heatmap"),
-]
-
-plots_html = ""
-for filename, title in plot_files:
-    path = plots_dir / filename
-    if path.exists():
-        b64 = img_to_base64(path)
-        plots_html += f"""
-        <section class="card">
-            <h2>{title}</h2>
-            <img src="data:image/png;base64,{b64}" />
-        </section>
+    if ligand_resname:
+        extra_rows += f"""
+        <tr>
+            <th>Ligand</th>
+            <td>{ligand_resname}</td>
+        </tr>
         """
 
-table_rows = ""
-for r in display_rows:
-    table_rows += f"""
-    <tr>
-        <td>{r.get("candidate_id", "")}</td>
-        <td>{r.get("mutation", "")}</td>
-        <td>{r.get("position", "")}</td>
-        <td>{r.get("wildtype", "")}</td>
-        <td>{r.get("mutant", "")}</td>
-        <td class="{css_ddg(r.get("ddg"))}">{r.get("ddg", "")}</td>
-        <td class="{css_final_score(r.get("final_score"))}">{r.get("final_score", "")}</td>
-        <td class="{css_delta(r.get("delta_solubility_score"), True)}">{r.get("delta_solubility_score", "")}</td>
-        <td class="{css_delta(r.get("delta_instability_index"), False)}">{r.get("delta_instability_index", "")}</td>
-        <td class="{css_delta(r.get("delta_gravy"), False)}">{r.get("delta_gravy", "")}</td>
-        <td>{r.get("isoelectric_point", "")}</td>
-        <td>{r.get("molecular_weight", "")}</td>
-    </tr>
+    if interface_chain:
+        extra_rows += f"""
+        <tr>
+            <th>Interface chain</th>
+            <td>{interface_chain}</td>
+        </tr>
+        """
+
+    return f"""
+    <section class="card">
+        <h2>Target protein and residue selection</h2>
+        <table class="metadata-table">
+            <tr>
+                <th>Input structure</th>
+                <td>{input_pdb}</td>
+            </tr>
+            <tr>
+                <th>Target chain</th>
+                <td>{chain}</td>
+            </tr>
+            <tr>
+                <th>Selection mode</th>
+                <td>{selection_mode}</td>
+            </tr>
+            <tr>
+                <th>Selected positions</th>
+                <td>{selected_positions}</td>
+            </tr>
+            {extra_rows}
+            <tr>
+                <th>Distance cutoff</th>
+                <td>{distance_cutoff}</td>
+            </tr>
+        </table>
+    </section>
     """
 
-html = f"""
+
+def build_pymol_html(pymol_dir, rows):
+    """Create HTML block for optional PyMOL structural images."""
+    if not pymol_dir:
+        return ""
+
+    target_img = pymol_dir / "target_structure.png"
+    mutation_img = pymol_dir / "top_candidate_mutation.png"
+
+    target_html = ""
+    mutation_html = ""
+
+    if target_img.exists():
+        target_b64 = img_to_base64(target_img)
+        target_html = f"""
+        <div>
+            <h3>Input structure</h3>
+            <img src="data:image/png;base64,{target_b64}" />
+        </div>
+        """
+
+    if mutation_img.exists():
+        mutation_b64 = img_to_base64(mutation_img)
+        mutation_label = rows[0].get("mutation", "Top candidate") if rows else "Top candidate"
+        mutation_html = f"""
+        <div>
+            <h3>Top candidate: {mutation_label}</h3>
+            <img src="data:image/png;base64,{mutation_b64}" />
+        </div>
+        """
+
+    if not target_html and not mutation_html:
+        return ""
+
+    return f"""
+    <section class="card">
+        <h2>Structural visualization</h2>
+        <p class="note">
+            PyMOL renderings of the input protein structure and the top-ranked
+            mutation site highlighted on the structure.
+        </p>
+        <div class="structure-grid">
+            {target_html}
+            {mutation_html}
+        </div>
+    </section>
+    """
+
+
+def build_plots_html(plots_dir):
+    """Create HTML blocks for available screening plots."""
+    plot_files = [
+        ("ddg_ranking_barplot.png", "PyRosetta ΔΔG ranking"),
+        ("top10_stabilizing_mutations.png", "Top 10 stabilizing mutations"),
+        ("ddg_heatmap.png", "ΔΔG heatmap"),
+    ]
+
+    plots_html = ""
+
+    for filename, title in plot_files:
+        path = plots_dir / filename
+        if path.exists():
+            image_b64 = img_to_base64(path)
+            plots_html += f"""
+            <section class="card">
+                <h2>{title}</h2>
+                <img src="data:image/png;base64,{image_b64}" />
+            </section>
+            """
+
+    return plots_html
+
+
+def build_table_rows(rows):
+    """Create HTML table rows for ranked candidates."""
+    table_rows = ""
+
+    for row in rows:
+        table_rows += f"""
+        <tr>
+            <td>{row.get("candidate_id", "")}</td>
+            <td>{row.get("mutation", "")}</td>
+            <td>{row.get("position", "")}</td>
+            <td>{row.get("wildtype", "")}</td>
+            <td>{row.get("mutant", "")}</td>
+            <td class="{css_ddg(row.get("ddg"))}">{row.get("ddg", "")}</td>
+            <td class="{css_ddg(row.get("final_score"))}">{row.get("final_score", "")}</td>
+            <td>{row.get("ddg_pass", "")}</td>
+            <td class="{css_delta(row.get("delta_solubility_score"), True)}">{row.get("delta_solubility_score", "")}</td>
+            <td class="{css_delta(row.get("delta_instability_index"), False)}">{row.get("delta_instability_index", "")}</td>
+            <td class="{css_delta(row.get("delta_gravy"), False)}">{row.get("delta_gravy", "")}</td>
+            <td>{row.get("isoelectric_point", "")}</td>
+            <td>{row.get("molecular_weight", "")}</td>
+        </tr>
+        """
+
+    return table_rows
+
+
+def read_results(results_csv):
+    """Read final screening results and keep candidates with numeric ddG."""
+    rows = []
+
+    with open(results_csv, newline="") as handle:
+        reader = csv.DictReader(handle)
+
+        for row in reader:
+            ddg = to_float(row.get("ddg"))
+            final_score = to_float(row.get("final_score"))
+
+            if ddg is None:
+                continue
+
+            row["ddg_float"] = ddg
+            row["final_score_float"] = final_score if final_score is not None else ddg
+            rows.append(row)
+
+    return sorted(rows, key=lambda row: row["final_score_float"])
+
+
+def main():
+    """Generate screening HTML report."""
+    parser = argparse.ArgumentParser(
+        description="Generate PhiPsiProt screening HTML report."
+    )
+    parser.add_argument("--results_csv", required=True)
+    parser.add_argument("--plots_dir", required=True)
+    parser.add_argument("--pymol_dir", required=False, default="")
+    parser.add_argument("--outdir", required=True)
+    args = parser.parse_args()
+
+    results_csv = Path(args.results_csv)
+    plots_dir = Path(args.plots_dir)
+    pymol_dir = Path(args.pymol_dir) if args.pymol_dir else None
+    outdir = Path(args.outdir)
+    outdir.mkdir(parents=True, exist_ok=True)
+
+    rows = read_results(results_csv)
+
+    best_ddg = min((row["ddg_float"] for row in rows), default="NA")
+    mean_ddg = (
+        sum(row["ddg_float"] for row in rows) / len(rows)
+        if rows else "NA"
+    )
+    best_final_score = (
+        rows[0]["final_score_float"]
+        if rows else "NA"
+    )
+
+    table_rows = build_table_rows(rows)
+    plots_html = build_plots_html(plots_dir)
+    pymol_html = build_pymol_html(pymol_dir, rows)
+    target_html = target_summary(rows)
+
+    html = f"""
 <!DOCTYPE html>
 <html>
 <head>
@@ -237,7 +396,9 @@ td {{
     border-bottom: 1px solid #e5e7eb;
     padding: 9px;
 }}
-
+.metadata-table th {{
+    width: 220px;
+}}
 .table-container {{
     overflow-x: auto;
     overflow-y: auto;
@@ -245,7 +406,6 @@ td {{
     border-radius: 10px;
     border: 1px solid #e5e7eb;
 }}
-
 thead th {{
     position: sticky;
     top: 0;
@@ -260,12 +420,10 @@ thead th {{
     border-radius: 999px;
     font-weight: bold;
 }}
-
 .good {{
     color: #15803d;
     font-weight: bold;
 }}
-
 .bad {{
     color: #dc2626;
     font-weight: bold;
@@ -273,6 +431,15 @@ thead th {{
 .note {{
     color: #475569;
     line-height: 1.5;
+}}
+.structure-grid {{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(300px, 1fr));
+    gap: 24px;
+}}
+.structure-grid h3 {{
+    margin-top: 0;
+    color: #334155;
 }}
 footer {{
     color: #64748b;
@@ -285,7 +452,7 @@ footer {{
 
 <header>
     <h1>PhiPsiProt Mutational Screening Report</h1>
-    <p>PyRosetta ΔΔG screening with biophysical candidate prioritization</p>
+    <p>PyRosetta ΔΔG screening with biophysical candidate annotation</p>
 </header>
 
 <div class="container">
@@ -308,14 +475,21 @@ footer {{
             <div class="value">{fmt_metric(best_final_score)}</div>
         </div>
     </div>
+
+    {target_html}
+
     {top_candidate_summary(rows)}
+
+    {pymol_html}
+
     <section class="card">
         <h2>Top ranked mutations</h2>
-        <p><span class="badge">Lower final score = better combined candidate</span></p>
+        <p><span class="badge">Lower final score = better PyRosetta ΔΔG</span></p>
         <p class="note">
-            The final score combines PyRosetta ΔΔG with biophysical penalties,
-            including instability and solubility. ΔΔG remains the main driver,
-            while biophysical properties help prioritize more developable candidates.
+            Candidates are ranked by PyRosetta ΔΔG. The final score is equal to
+            the predicted ΔΔG. Biophysical descriptors are reported as annotations
+            to help interpret candidate developability, but they are not used to
+            modify the ranking.
         </p>
 
         <div class="table-container">
@@ -329,6 +503,7 @@ footer {{
                     <th>Mutant</th>
                     <th>ΔΔG</th>
                     <th>Final score</th>
+                    <th>ddG pass</th>
                     <th>ΔSolubility</th>
                     <th>ΔInstability</th>
                     <th>ΔGRAVY</th>
@@ -357,9 +532,11 @@ footer {{
     <section class="card">
         <h2>How to interpret this table</h2>
         <p class="note">
-            Green values indicate favorable changes. Red values indicate potentially unfavorable changes.
-            Negative ΔΔG and lower final score are preferred. Positive ΔSolubility is preferred.
-            Negative ΔInstability and negative ΔGRAVY are generally preferred.
+            Green values indicate favorable changes. Red values indicate potentially
+            unfavorable changes. Negative ΔΔG and lower final score are preferred.
+            Positive ΔSolubility, negative ΔInstability and negative ΔGRAVY may
+            indicate more favorable sequence-level properties, but these descriptors
+            are reported separately from the ranking score.
         </p>
     </section>
 
@@ -375,5 +552,9 @@ footer {{
 </html>
 """
 
-with open(outdir / "screening_report.html", "w") as f:
-    f.write(html)
+    with open(outdir / "screening_report.html", "w") as handle:
+        handle.write(html)
+
+
+if __name__ == "__main__":
+    main()

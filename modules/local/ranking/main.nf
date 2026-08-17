@@ -1,3 +1,23 @@
+/*
+===============================================================================
+RANK_SCREENING
+
+Purpose:
+Rank annotated screening candidates using PyRosetta ddG and biophysical
+developability descriptors.
+
+Inputs:
+- candidates_biophysical_annotated.csv
+
+Outputs:
+- ranked_candidates.csv
+
+Notes:
+- No candidates are removed.
+- Lower final_score is better.
+===============================================================================
+*/
+
 process RANK_SCREENING {
 
     tag "rank_screening"
@@ -7,15 +27,15 @@ process RANK_SCREENING {
     publishDir "${params.outdir}/ranking", mode: 'copy'
 
     input:
-    path filtered_candidates_csv
+    path annotated_candidates_csv
 
     output:
     path "ranked_candidates.csv"
 
     script:
     """
-    python $projectDir/bin/rank_screening_candidates.py \
-        --input ${filtered_candidates_csv} \
+    python3 $projectDir/bin/rank_screening_candidates.py \
+        --input ${annotated_candidates_csv} \
         --output ranked_candidates.csv
     """
 }

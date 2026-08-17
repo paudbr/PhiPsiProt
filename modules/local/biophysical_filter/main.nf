@@ -4,7 +4,7 @@ process BIOPHYSICAL_FILTER {
 
     container 'docker.io/biopython/biopython:latest'
 
-    publishDir "${params.outdir}/intermediate", mode: 'copy'
+    publishDir "${params.outdir}/biophysical_filter", mode: 'copy'
 
     input:
     path input_csv
@@ -12,11 +12,11 @@ process BIOPHYSICAL_FILTER {
     output:
     path "biophysical_filtered.csv"
 
-    script:
+   script:
     """
     python3 $projectDir/modules/local/biophysical_filter/bin/biophysical_filter.py \
         --input_csv $input_csv \
-        --output_csv biophysical_filtered.csv \
+        --output_csv candidates_biophysical_annotated.csv \
         --filters "${params.biophysical_filters}"
     """
 }

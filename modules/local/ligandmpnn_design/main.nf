@@ -1,3 +1,32 @@
+/*
+===============================================================================
+LIGANDMPNN_DESIGN
+
+Purpose:
+Design protein sequences in a functional molecular context using LigandMPNN.
+
+Inputs:
+- designed_pdb:
+    PDB containing the protein structure and, when applicable, ligand,
+    cofactor, metal, DNA, RNA, substrate, or defined pocket context.
+
+Outputs:
+- seqs/*.fa
+- backbones/*.pdb
+
+Parameters:
+- params.ligandmpnn_seed:
+    Random seed for LigandMPNN.
+- params.ligandmpnn_temperature:
+    Sampling temperature for sequence generation.
+
+Notes:
+- This module is the core sequence-design step of Mode 3.
+- It is used for ligand-aware / function-aware design.
+- The input PDB should already contain the functional context to preserve.
+===============================================================================
+*/
+
 process LIGANDMPNN_DESIGN {
 
     tag "$designed_pdb"

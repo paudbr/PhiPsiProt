@@ -1,5 +1,30 @@
 #!/usr/bin/env python3
 
+"""
+Generate plots for PhiPsiProt Mode 1 screening results.
+
+Purpose
+-------
+Create visual summaries from ranked screening candidates.
+
+Generated plots
+---------------
+ddg_ranking_barplot.png:
+    Barplot of all candidate ddG values ordered by final_score.
+
+top10_stabilizing_mutations.png:
+    Horizontal barplot of the top 10 most stabilizing mutations.
+
+ddg_heatmap.png:
+    Heatmap of ddG values by residue position and mutant amino acid.
+
+Notes
+-----
+- The plots use PyRosetta ddG values.
+- Some ddG values are clipped only for visualization readability.
+- The underlying CSV values are not modified.
+"""
+
 import argparse
 import csv
 from pathlib import Path
@@ -66,16 +91,19 @@ if not rows:
 
 
 # Ranking plot: show all candidates, clipped for readability
-mutations = [r["mutation"] for r in rows]
-ddgs = [clip_ddg(r["ddg_float"]) for r in rows]
+# Ranking plot: show only top candidates to keep the figure readable
+ranking_rows = rows[:100]
 
-plt.figure(figsize=(max(9, len(rows) * 0.35), 6))
+mutations = [r["mutation"] for r in ranking_rows]
+ddgs = [clip_ddg(r["ddg_float"]) for r in ranking_rows]
+
+plt.figure(figsize=(max(9, len(ranking_rows) * 0.25), 6))
 plt.bar(mutations, ddgs)
 plt.axhline(0, linestyle="--", linewidth=1)
 plt.xticks(rotation=90)
 plt.ylabel("ddG mutant - WT (clipped)")
 plt.xlabel("Mutation")
-plt.title("PyRosetta ddG ranking")
+plt.title("PyRosetta ddG ranking - top 100 candidates")
 plt.tight_layout()
 plt.savefig(outdir / "ddg_ranking_barplot.png", dpi=300)
 plt.close()

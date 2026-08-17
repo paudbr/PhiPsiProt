@@ -5,13 +5,14 @@ PhiPsiProt - Mode 1: Mutational Screening
 
 Workflow:
 
-1. Residue selection
-2. PyRosetta mutational scan
-3. ddG filtering
-4. Candidate ranking
-5. Plot generation
-6. Result aggregation
-7. HTML report generation
+STEP 1 Residue selection
+STEP 2 PyRosetta screening
+STEP 3 DDG annotation
+STEP 4 Biophysical annotation
+STEP 5 Candidate ranking
+STEP 6 Plot generation
+STEP 7 Result aggregation
+STEP 8 HTML report generation
 
 Selection modes:
 - manual
@@ -22,6 +23,8 @@ Selection modes:
 
 Output:
 - candidates.csv
+- candidates_ddg_annotated.csv
+- candidates_biophysical_annotated.csv
 - ranked_candidates.csv
 - plots/
 - screening_report.html
@@ -30,14 +33,15 @@ Output:
 */
 
 include { PYROSETTA_SCREENING } from '../../modules/local/pyrosetta_screening/main'
-include { DDG_FILTER } from '../../modules/local/ddg_filter/main'
+include { DDG_ANNOTATION } from '../../modules/local/ddg_annotation/main'
 include { RESIDUE_SELECTION } from '../../modules/local/residue_selection/main'
 include { AUTO_POCKET_DETECTION } from '../../modules/local/auto_pocket_detection/main'
 include { RANK_SCREENING } from '../../modules/local/ranking/main'
-include { BIOPHYSICAL_FILTER } from '../../modules/local/biophysical_filter/main'
+include { BIOPHYSICAL_ANNOTATION } from '../../modules/local/biophysical_annotation/main'
 include { MERGE_SCREENING_RESULTS } from '../../modules/local/merge_screening_results/main'
 include { SCREENING_PLOTS } from '../../modules/local/screening_plots/main'
 include { SCREENING_REPORT } from '../../modules/local/screening_report/main'
+include { PYMOL_SCREENING_IMAGES } from '../../modules/local/pymol_screening_images/main'
 
 workflow SCREENING {
 
@@ -49,6 +53,15 @@ workflow SCREENING {
     main:
 
     /*
+     * Define local workflow variables from the inputs received via `take`.
+     * This avoids mixing global params with subworkflow inputs.
+     */
+    def chain = target_chain ?: 'A'
+    def pos = positions ?: 'ALL'
+    def mode = params.selection_mode ?: 'manual'
+    def cutoff = params.distance_cutoff ?: 6.0
+
+    /*
      * STEP 1
      * Select mutable residues according to:
      * - manual positions
@@ -58,11 +71,11 @@ workflow SCREENING {
      * - all residues in the target chain
      */
 
-    if ((params.selection_mode ?: 'manual') == 'auto_pocket') {
+    if (mode == 'auto_pocket') {
 
         AUTO_POCKET_DETECTION(
             input_pdb,
-            params.target_chain ?: 'A',
+            chain,
             params.pocket_rank ?: 1
         )
 
@@ -73,12 +86,12 @@ workflow SCREENING {
 
         RESIDUE_SELECTION(
             input_pdb,
-            params.target_chain ?: 'A',
-            params.positions ?: 'ALL',
-            params.selection_mode ?: 'manual',
+            chain,
+            pos,
+            mode,
             params.ligand_resname ?: '',
             params.interface_chain ?: '',
-            params.distance_cutoff ?: 6.0
+            cutoff
         )
 
         selected_positions_ch = RESIDUE_SELECTION.out[0]
@@ -87,44 +100,50 @@ workflow SCREENING {
 
     /*
      * STEP 2
-     * Generate all single amino acid substitutions
-     * and calculate ΔΔG using PyRosetta
+     * Generate all single amino-acid substitutions
+     * and calculate ΔΔG using PyRosetta.
      */
 
     PYROSETTA_SCREENING(
         input_pdb,
-        params.target_chain ?: 'A',
+        chain,
         selected_positions_ch
     )
 
     /*
      * STEP 3
-     * Keep stabilizing mutations according
-     * to the configured ddG threshold
+     * Annotate candidates with ddG threshold information.
+     * No candidates are removed at this stage.
      */
 
-    DDG_FILTER(
+    DDG_ANNOTATION(
         PYROSETTA_SCREENING.out[0]
     )
-
-    BIOPHYSICAL_FILTER(
-        PYROSETTA_SCREENING.out[0]
-    )
-
 
     /*
      * STEP 4
-     * Rank candidates by ddG score
+     * Annotate candidates with sequence-based developability descriptors.
+     * No candidates are removed at this stage.
      */
 
-    RANK_SCREENING(
-        BIOPHYSICAL_FILTER.out
+    BIOPHYSICAL_ANNOTATION(
+        DDG_ANNOTATION.out
     )
 
     /*
      * STEP 5
-     * Generate visual summaries
-     * (heatmap, ranking plot, top mutations)
+     * Rank candidates using a combined score based on PyRosetta ddG
+     * and biophysical developability annotations.
+     */
+
+    RANK_SCREENING(
+        BIOPHYSICAL_ANNOTATION.out
+    )
+
+    /*
+     * STEP 6
+     * Generate visual summaries:
+     * heatmap, ranking plot and top mutation plots.
      */
 
     SCREENING_PLOTS(
@@ -132,8 +151,8 @@ workflow SCREENING {
     )
 
     /*
-     * STEP 6
-     * Merge ranked candidates with selection metadata
+     * STEP 7
+     * Merge ranked candidates with residue selection metadata.
      */
 
     MERGE_SCREENING_RESULTS(
@@ -141,24 +160,35 @@ workflow SCREENING {
         selection_summary_ch
     )
 
+    PYMOL_SCREENING_IMAGES(
+        input_pdb,
+        MERGE_SCREENING_RESULTS.out
+    )
+
     /*
-     * STEP 7
-     * Generate final HTML report
+     * STEP 8
+     * Generate final HTML report.
      */
 
     SCREENING_REPORT(
         MERGE_SCREENING_RESULTS.out,
-        SCREENING_PLOTS.out.collect()
+        SCREENING_PLOTS.out.collect(),
+        PYMOL_SCREENING_IMAGES.out.images.collect()
     )
+
+    /*
+     * Expose intermediate and final outputs so that the main workflow
+     * can publish, test, or reuse them in downstream design modes.
+     */
 
     emit:
     selected_positions = selected_positions_ch
     candidates_csv = PYROSETTA_SCREENING.out[0]
     candidates_fasta = PYROSETTA_SCREENING.out[1]
-    filtered_candidates_csv = DDG_FILTER.out[0]
-    filtered_candidates_fasta = DDG_FILTER.out[1]
-    screening_samplesheet = DDG_FILTER.out[2]
+    ddg_annotated_candidates = DDG_ANNOTATION.out
+    biophysical_annotated_candidates = BIOPHYSICAL_ANNOTATION.out
     selection_summary = selection_summary_ch
     ranked_candidates = RANK_SCREENING.out
     final_screening_results = MERGE_SCREENING_RESULTS.out
+    pymol_images = PYMOL_SCREENING_IMAGES.out.images
 }

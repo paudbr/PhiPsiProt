@@ -1,11 +1,37 @@
 #!/usr/bin/env python3
 
+
+"""
+Rank PhiPsiProt screening candidates.
+
+Purpose
+-------
+Rank candidates using PyRosetta ddG and sequence-based biophysical
+annotations.
+
+Scoring
+-------
+Lower final_score is better.
+
+Current formula
+---------------
+final_score = ddg
+
+Notes
+-----
+- No candidates are removed.
+- Candidates are sorted by final_score.
+- structural_score is reserved for future structural validation methods.
+- status is currently set to 'pending_structural_validation'.
+"""
+
 import argparse
 import csv
 import math
 
 
 def to_float(value):
+    """Convert values to float, returning None for missing or invalid values."""
     try:
         if value in ["", "NA", None]:
             return None
@@ -13,73 +39,65 @@ def to_float(value):
     except Exception:
         return None
 
+
 def compute_final_score(row):
     """
-    Lower final_score is better.
+    Compute candidate ranking score.
 
-    The score combines:
-    - PyRosetta ddG as the main stability term
-    - delta_solubility_score relative to WT
-    - delta_instability_index relative to WT
+    Lower final_score indicates a more favorable candidate.
     """
-
     ddg = to_float(row.get("ddg"))
-    delta_solubility = to_float(row.get("delta_solubility_score"))
-    delta_instability = to_float(row.get("delta_instability_index"))
 
     if ddg is None:
         return "NA"
 
-    score = ddg
+    return round(ddg, 4)
 
-    # Reward increased predicted solubility relative to WT.
-    if delta_solubility is not None:
-        score -= 5.0 * delta_solubility
+def sort_key(row):
+    """Sort candidates by final_score, placing NA values last."""
+    final_score = row.get("final_score", "NA")
 
-    # Penalize increased instability relative to WT.
-    if delta_instability is not None and delta_instability > 0:
-        score += 0.05 * delta_instability
+    if final_score == "NA":
+        return math.inf
 
-    return round(score, 4)
-
+    return float(final_score)
 
 
-
-parser = argparse.ArgumentParser()
-parser.add_argument("--input", required=True)
-parser.add_argument("--output", required=True)
-args = parser.parse_args()
-
-rows = []
-
-with open(args.input, newline="") as infile:
-    reader = csv.DictReader(infile)
-
-    base_fieldnames = reader.fieldnames or []
-
-    fieldnames = list(base_fieldnames)
-    for extra in ["structural_score", "final_score", "status"]:
-        if extra not in fieldnames:
-            fieldnames.append(extra)
-
-    for row in reader:
-        final_score = compute_final_score(row)
-
-        row["structural_score"] = row.get("structural_score", "NA")
-        row["final_score"] = final_score
-        row["status"] = "pending_structural_validation"
-
-        rows.append(row)
-
-rows.sort(
-    key=lambda r: (
-        math.inf if r["final_score"] == "NA" else float(r["final_score"])
+def main():
+    """Run candidate ranking."""
+    parser = argparse.ArgumentParser(
+        description="Rank PhiPsiProt screening candidates."
     )
-)
+    parser.add_argument("--input", required=True)
+    parser.add_argument("--output", required=True)
+    args = parser.parse_args()
 
-with open(args.output, "w", newline="") as outfile:
-    writer = csv.DictWriter(outfile, fieldnames=fieldnames)
-    writer.writeheader()
-    writer.writerows(rows)
+    rows = []
 
-print(f"Ranked candidates: {len(rows)}")
+    with open(args.input, newline="") as infile:
+        reader = csv.DictReader(infile)
+        base_fieldnames = reader.fieldnames or []
+
+        fieldnames = list(base_fieldnames)
+        for extra in ["structural_score", "final_score", "status"]:
+            if extra not in fieldnames:
+                fieldnames.append(extra)
+
+        for row in reader:
+            row["structural_score"] = row.get("structural_score", "NA")
+            row["final_score"] = compute_final_score(row)
+            row["status"] = "pending_structural_validation"
+            rows.append(row)
+
+    rows.sort(key=sort_key)
+
+    with open(args.output, "w", newline="") as outfile:
+        writer = csv.DictWriter(outfile, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
+
+    print(f"Ranked candidates: {len(rows)}")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,3 +1,19 @@
+/*
+===============================================================================
+MERGE_SCREENING_RESULTS
+
+Purpose:
+Merge ranked screening candidates with residue selection metadata.
+
+Inputs:
+- ranked_candidates.csv
+- selection_summary.csv
+
+Outputs:
+- final_screening_results.csv
+===============================================================================
+*/
+
 process MERGE_SCREENING_RESULTS {
 
     tag "merge_screening_results"
@@ -7,7 +23,7 @@ process MERGE_SCREENING_RESULTS {
     publishDir "${params.outdir}/final", mode: 'copy'
 
     input:
-    path candidates_csv
+    path ranked_candidates_csv
     path selection_summary_csv
 
     output:
@@ -15,8 +31,8 @@ process MERGE_SCREENING_RESULTS {
 
     script:
     """
-    python $projectDir/bin/merge_screening_results.py \
-        --candidates ${candidates_csv} \
+    python3 $projectDir/bin/merge_screening_results.py \
+        --candidates ${ranked_candidates_csv} \
         --selection_summary ${selection_summary_csv} \
         --output final_screening_results.csv
     """
