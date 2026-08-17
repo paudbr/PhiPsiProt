@@ -144,13 +144,59 @@ def load_model(hf_home):
     config.esmc_id = esmc_snap
     print(f"[ESMFold2] ESMC backbone: {esmc_snap}", file=sys.stderr)
 
-    print("[ESMFold2] Loading model weights...", file=sys.stderr)
+    # Log available VRAM before loading
+    if torch.cuda.is_available():
+        free, total = torch.cuda.mem_get_info()
+        print(f"[ESMFold2] VRAM before load: {free/1e9:.1f}GB free / {total/1e9:.1f}GB total",
+              file=sys.stderr)
+
+    print("[ESMFold2] Loading model weights on CPU...", file=sys.stderr)
+    # Load on CPU first, then move to GPU with .to('cuda')
+    # Note: from_pretrained(...).cuda() fails with this model/driver combo,
+    # but load on CPU + .to('cuda') works correctly.
     model = ESMFold2Model.from_pretrained(
         snap_path,
         config=config,
-        local_files_only=True
-    ).cuda().eval()
-    print("[ESMFold2] Model loaded OK", file=sys.stderr)
+        local_files_only=True,
+    ).eval()
+    # Ensure consistent float32 dtype before any GPU transfer attempt
+    model = model.float()
+    print("[ESMFold2] Model cast to float32", file=sys.stderr)
+
+    # _esmc (ESMC-6B ~12GB) + folding trunk (~2GB) don't fit together in 16GB VRAM
+    # Strategy: keep _esmc on CPU, move everything else to GPU
+    # ESMFold2 uses ESMC as sequence encoder — it will run on CPU, trunk on GPU
+    CPU_MODULES = {"_esmc"}
+    print("[ESMFold2] Moving modules to GPU (keeping _esmc on CPU to save VRAM)...",
+          file=sys.stderr)
+    failed = []
+    for name, module in model.named_children():
+        if name in CPU_MODULES:
+            print(f"  [CPU] {name} (kept on CPU intentionally)", file=sys.stderr)
+            continue
+        try:
+            module.to('cuda')
+            print(f"  [GPU] {name}", file=sys.stderr)
+        except Exception as e:
+            failed.append(f"{name}: {e}")
+            print(f"  [FAIL] {name}: {e}", file=sys.stderr)
+
+    if failed:
+        print(f"[ESMFold2] WARNING: some modules failed GPU transfer: {failed}",
+              file=sys.stderr)
+        _on_gpu = False
+    else:
+        print("[ESMFold2] Hybrid CPU/GPU setup OK (_esmc on CPU, rest on GPU)",
+              file=sys.stderr)
+        _on_gpu = True  # folding trunk is on GPU, inference will work
+
+    if torch.cuda.is_available():
+        free, total = torch.cuda.mem_get_info()
+        print(f"[ESMFold2] VRAM after load: {free/1e9:.1f}GB free / {total/1e9:.1f}GB total",
+              file=sys.stderr)
+
+    model._phipsiprot_on_gpu = _on_gpu
+
     return model
 
 
@@ -190,11 +236,17 @@ def run_one(model, builder, design_pdb, antigen_seq, antigen_chain,
 
     spi = StructurePredictionInput(sequences=sequences)
 
+    # Determine device from model
+    on_gpu = getattr(model, '_phipsiprot_on_gpu', True)
+    device = 'cuda' if on_gpu else 'cpu'
+    if not on_gpu:
+        print(f"  [CPU mode] running inference on CPU", file=sys.stderr)
+
     with torch.no_grad():
         result = builder.fold(
             model, spi,
-            num_loops=num_loops,
-            num_sampling_steps=num_steps,
+            num_loops=num_loops if on_gpu else 1,
+            num_sampling_steps=num_steps if on_gpu else 5,
             num_diffusion_samples=1,
             seed=seed
         )

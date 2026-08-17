@@ -1,0 +1,285 @@
+ .nextflow.log                                      |  449 ++++++--
+ .nextflow.log.1                                    |  880 ++++++++--------
+ .nextflow.log.2                                    |  312 ++++++
+ .nextflow.log.3                                    |  323 ++++++
+ .nextflow.log.4                                    |  313 ++++++
+ .nextflow.log.5                                    |  656 ++++++++++++
+ .nextflow.log.6                                    |  585 +++++++++++
+ .nextflow.log.7                                    |  498 +++++++++
+ .nextflow.log.8                                    |  477 +++++++++
+ .nextflow.log.9                                    |  419 ++++++++
+ .nextflow.log.old                                  |  370 +++++++
+ .nextflow/history                                  |   47 -
+ README.md                                          |  353 ++-----
+ bin/generate_ab_report.py                          |  441 ++++++++
+ bin/run_esmfold2_ab.py                             |  369 +++++++
+ command_ab.sh                                      |   24 +
+ conf/modules_antibody.config                       |  106 ++
+ conf/params_antibody.config                        |   59 ++
+ conf/scoring_ab_af3.yaml                           |   12 +
+ conf/scoring_ab_esmfold2.yaml                      |   19 +
+ conf/scoring_ab_haddock3.yaml                      |   11 +
+ docker/esmfold2/Dockerfile                         |   60 ++
+ full_pipeline.mmd                                  |   50 +-
+ main.nf                                            | 1045 ++++++++++---------
+ modules/local/ab_qv_to_af3_json/main.nf            |  164 +++
+ modules/local/extract_af3_ab_metrics/main.nf       |  102 ++
+ modules/local/extract_haddock3_ab_metrics/main.nf  |   89 ++
+ modules/local/extract_pdb_from_qv/main.nf          |   23 +
+ modules/local/filter_iptm_ab/main.nf               |  115 +++
+ modules/local/filter_rank_ab/main.nf               |  190 ++++
+ modules/local/generate_ab_haddock_airs/main.nf     |   80 ++
+ modules/local/generate_ab_report/main.nf           |   53 +
+ modules/local/prepare_htl/main.nf                  |    0
+ modules/local/run_chai1/main.nf                    |    2 -
+ modules/local/run_esmfold/main.nf                  |    2 -
+ modules/local/run_esmfold2_ab/main.nf              |   77 ++
+ modules/local/run_proteinmpnn_rfab/main.nf         |   56 +
+ modules/local/run_rfantibody/main.nf               |   66 ++
+ nextflow.config                                    |    7 -
+ nextflow_schema.json                               |   24 -
+ nf_metro.sh                                        |    2 +-
+ null/design/candidates.csv                         |    2 +
+ .../execution_report_2026-05-26_07-48-56.html      | 1040 +++++++++++++++++++
+ .../execution_report_2026-05-26_07-56-19.html      | 1047 +++++++++++++++++++
+ .../execution_report_2026-05-26_07-56-21.html      | 1040 +++++++++++++++++++
+ .../execution_report_2026-05-26_08-00-19.html      | 1040 +++++++++++++++++++
+ .../execution_report_2026-05-26_08-02-54.html      | 1040 +++++++++++++++++++
+ .../execution_report_2026-05-26_08-19-23.html      | 1040 +++++++++++++++++++
+ .../execution_report_2026-05-26_08-22-59.html      | 1072 ++++++++++++++++++++
+ .../execution_report_2026-05-26_08-25-08.html      | 1040 +++++++++++++++++++
+ .../execution_report_2026-05-26_08-27-15.html      | 1040 +++++++++++++++++++
+ .../execution_report_2026-05-26_08-29-42.html      | 1040 +++++++++++++++++++
+ .../execution_report_2026-05-26_08-29-51.html      | 1040 +++++++++++++++++++
+ .../execution_report_2026-05-26_08-29-59.html      | 1040 +++++++++++++++++++
+ .../execution_report_2026-05-26_08-30-08.html      | 1040 +++++++++++++++++++
+ .../execution_report_2026-05-26_09-07-02.html      | 1071 +++++++++++++++++++
+ .../execution_report_2026-05-26_09-09-22.html      | 1071 +++++++++++++++++++
+ .../execution_report_2026-05-26_09-12-22.html      | 1051 +++++++++++++++++++
+ .../execution_report_2026-05-26_09-14-43.html      | 1051 +++++++++++++++++++
+ .../execution_report_2026-05-26_09-18-19.html      | 1051 +++++++++++++++++++
+ .../execution_report_2026-05-26_09-19-11.html      | 1071 +++++++++++++++++++
+ .../execution_report_2026-05-26_09-20-35.html      | 1051 +++++++++++++++++++
+ .../execution_report_2026-05-26_09-22-06.html      | 1051 +++++++++++++++++++
+ .../execution_report_2026-05-26_09-23-37.html      | 1071 +++++++++++++++++++
+ .../execution_report_2026-05-26_09-25-13.html      | 1068 +++++++++++++++++++
+ .../execution_report_2026-05-26_09-27-42.html      | 1068 +++++++++++++++++++
+ .../execution_report_2026-05-26_09-29-57.html      | 1040 +++++++++++++++++++
+ .../execution_report_2026-05-26_09-47-29.html      | 1040 +++++++++++++++++++
+ .../execution_report_2026-05-26_10-46-45.html      | 1051 +++++++++++++++++++
+ .../execution_report_2026-05-26_10-50-52.html      | 1043 +++++++++++++++++++
+ .../execution_report_2026-05-26_10-53-03.html      | 1040 +++++++++++++++++++
+ .../execution_report_2026-05-26_12-31-15.html      | 1043 +++++++++++++++++++
+ .../execution_report_2026-05-26_12-31-26.html      | 1043 +++++++++++++++++++
+ .../execution_report_2026-05-26_12-33-31.html      | 1048 +++++++++++++++++++
+ .../execution_report_2026-05-26_12-35-54.html      | 1047 +++++++++++++++++++
+ .../execution_report_2026-06-01_10-43-25.html      | 1047 +++++++++++++++++++
+ .../execution_report_2026-06-01_10-46-45.html      | 1047 +++++++++++++++++++
+ .../execution_report_2026-06-02_07-48-11.html      | 1043 +++++++++++++++++++
+ .../execution_report_2026-06-02_07-50-46.html      | 1051 +++++++++++++++++++
+ .../execution_report_2026-06-02_07-51-25.html      | 1050 +++++++++++++++++++
+ .../execution_report_2026-06-22_09-55-03.html      | 1047 +++++++++++++++++++
+ .../execution_timeline_2026-05-26_07-48-56.html    |  223 ++++
+ .../execution_timeline_2026-05-26_07-56-19.html    |  223 ++++
+ .../execution_timeline_2026-05-26_07-56-21.html    |  223 ++++
+ .../execution_timeline_2026-05-26_08-00-19.html    |  223 ++++
+ .../execution_timeline_2026-05-26_08-02-54.html    |  223 ++++
+ .../execution_timeline_2026-05-26_08-19-23.html    |  223 ++++
+ .../execution_timeline_2026-05-26_08-22-59.html    |  223 ++++
+ .../execution_timeline_2026-05-26_08-25-08.html    |  223 ++++
+ .../execution_timeline_2026-05-26_08-27-15.html    |  223 ++++
+ .../execution_timeline_2026-05-26_08-29-42.html    |  223 ++++
+ .../execution_timeline_2026-05-26_08-29-51.html    |  223 ++++
+ .../execution_timeline_2026-05-26_08-29-59.html    |  223 ++++
+ .../execution_timeline_2026-05-26_08-30-08.html    |  223 ++++
+ .../execution_timeline_2026-05-26_09-07-02.html    |  223 ++++
+ .../execution_timeline_2026-05-26_09-09-22.html    |  223 ++++
+ .../execution_timeline_2026-05-26_09-12-22.html    |  223 ++++
+ .../execution_timeline_2026-05-26_09-14-43.html    |  223 ++++
+ .../execution_timeline_2026-05-26_09-18-19.html    |  223 ++++
+ .../execution_timeline_2026-05-26_09-19-11.html    |  223 ++++
+ .../execution_timeline_2026-05-26_09-20-35.html    |  223 ++++
+ .../execution_timeline_2026-05-26_09-22-06.html    |  223 ++++
+ .../execution_timeline_2026-05-26_09-23-37.html    |  223 ++++
+ .../execution_timeline_2026-05-26_09-25-13.html    |  223 ++++
+ .../execution_timeline_2026-05-26_09-27-42.html    |  223 ++++
+ .../execution_timeline_2026-05-26_09-29-57.html    |  223 ++++
+ .../execution_timeline_2026-05-26_09-47-29.html    |  223 ++++
+ .../execution_timeline_2026-05-26_10-46-45.html    |  223 ++++
+ .../execution_timeline_2026-05-26_10-50-52.html    |  223 ++++
+ .../execution_timeline_2026-05-26_10-53-03.html    |  223 ++++
+ .../execution_timeline_2026-05-26_12-31-15.html    |  223 ++++
+ .../execution_timeline_2026-05-26_12-31-26.html    |  223 ++++
+ .../execution_timeline_2026-05-26_12-33-31.html    |  223 ++++
+ .../execution_timeline_2026-05-26_12-35-54.html    |  223 ++++
+ .../execution_timeline_2026-06-01_10-43-25.html    |  223 ++++
+ .../execution_timeline_2026-06-01_10-46-45.html    |  223 ++++
+ .../execution_timeline_2026-06-02_07-48-11.html    |  223 ++++
+ .../execution_timeline_2026-06-02_07-50-46.html    |  223 ++++
+ .../execution_timeline_2026-06-02_07-51-25.html    |  223 ++++
+ .../execution_timeline_2026-06-22_09-55-03.html    |  223 ++++
+ .../execution_trace_2026-05-26_07-48-56.txt        |    2 +
+ .../execution_trace_2026-05-26_07-56-19.txt        |    1 +
+ .../execution_trace_2026-05-26_07-56-21.txt        |    2 +
+ .../execution_trace_2026-05-26_08-00-19.txt        |    2 +
+ .../execution_trace_2026-05-26_08-02-54.txt        |    2 +
+ .../execution_trace_2026-05-26_08-19-23.txt        |    2 +
+ .../execution_trace_2026-05-26_08-22-59.txt        |    2 +
+ .../execution_trace_2026-05-26_08-25-08.txt        |    2 +
+ .../execution_trace_2026-05-26_08-27-15.txt        |    2 +
+ .../execution_trace_2026-05-26_08-29-42.txt        |    2 +
+ .../execution_trace_2026-05-26_08-29-51.txt        |    2 +
+ .../execution_trace_2026-05-26_08-29-59.txt        |    2 +
+ .../execution_trace_2026-05-26_08-30-08.txt        |    2 +
+ .../execution_trace_2026-05-26_09-07-02.txt        |    2 +
+ .../execution_trace_2026-05-26_09-09-22.txt        |    2 +
+ .../execution_trace_2026-05-26_09-12-22.txt        |    1 +
+ .../execution_trace_2026-05-26_09-14-43.txt        |    1 +
+ .../execution_trace_2026-05-26_09-18-19.txt        |    1 +
+ .../execution_trace_2026-05-26_09-19-11.txt        |    2 +
+ .../execution_trace_2026-05-26_09-20-35.txt        |    1 +
+ .../execution_trace_2026-05-26_09-22-06.txt        |    1 +
+ .../execution_trace_2026-05-26_09-23-37.txt        |    2 +
+ .../execution_trace_2026-05-26_09-25-13.txt        |    2 +
+ .../execution_trace_2026-05-26_09-27-42.txt        |    2 +
+ .../execution_trace_2026-05-26_09-29-57.txt        |    2 +
+ .../execution_trace_2026-05-26_09-47-29.txt        |    2 +
+ .../execution_trace_2026-05-26_10-46-45.txt        |    1 +
+ .../execution_trace_2026-05-26_10-50-52.txt        |    1 +
+ .../execution_trace_2026-05-26_10-53-03.txt        |    2 +
+ .../execution_trace_2026-05-26_12-31-15.txt        |    1 +
+ .../execution_trace_2026-05-26_12-31-26.txt        |    1 +
+ .../execution_trace_2026-05-26_12-33-31.txt        |    1 +
+ .../execution_trace_2026-05-26_12-35-54.txt        |    1 +
+ .../execution_trace_2026-06-01_10-43-25.txt        |    1 +
+ .../execution_trace_2026-06-01_10-46-45.txt        |    1 +
+ .../execution_trace_2026-06-02_07-48-11.txt        |    1 +
+ .../execution_trace_2026-06-02_07-50-46.txt        |    1 +
+ .../execution_trace_2026-06-02_07-51-25.txt        |    1 +
+ .../execution_trace_2026-06-22_09-55-03.txt        |    1 +
+ .../pipeline_dag_2026-05-26_07-48-56.html          |   55 +
+ .../pipeline_dag_2026-05-26_07-56-19.html          |   44 +
+ .../pipeline_dag_2026-05-26_07-56-21.html          |   55 +
+ .../pipeline_dag_2026-05-26_08-00-19.html          |   55 +
+ .../pipeline_dag_2026-05-26_08-02-54.html          |   55 +
+ .../pipeline_dag_2026-05-26_08-19-23.html          |   55 +
+ .../pipeline_dag_2026-05-26_08-22-59.html          |   55 +
+ .../pipeline_dag_2026-05-26_08-25-08.html          |   55 +
+ .../pipeline_dag_2026-05-26_08-27-15.html          |   55 +
+ .../pipeline_dag_2026-05-26_08-29-42.html          |   55 +
+ .../pipeline_dag_2026-05-26_08-29-51.html          |   55 +
+ .../pipeline_dag_2026-05-26_08-29-59.html          |   55 +
+ .../pipeline_dag_2026-05-26_08-30-08.html          |   55 +
+ .../pipeline_dag_2026-05-26_09-07-02.html          |   55 +
+ .../pipeline_dag_2026-05-26_09-09-22.html          |   55 +
+ .../pipeline_dag_2026-05-26_09-12-22.html          |   44 +
+ .../pipeline_dag_2026-05-26_09-14-43.html          |   44 +
+ .../pipeline_dag_2026-05-26_09-18-19.html          |   44 +
+ .../pipeline_dag_2026-05-26_09-19-11.html          |   55 +
+ .../pipeline_dag_2026-05-26_09-20-35.html          |   44 +
+ .../pipeline_dag_2026-05-26_09-22-06.html          |   44 +
+ .../pipeline_dag_2026-05-26_09-23-37.html          |   55 +
+ .../pipeline_dag_2026-05-26_09-25-13.html          |   55 +
+ .../pipeline_dag_2026-05-26_09-27-42.html          |   55 +
+ .../pipeline_dag_2026-05-26_09-29-57.html          |   55 +
+ .../pipeline_dag_2026-05-26_09-47-29.html          |   55 +
+ .../pipeline_dag_2026-05-26_10-46-45.html          |   44 +
+ .../pipeline_dag_2026-05-26_10-50-52.html          |   44 +
+ .../pipeline_dag_2026-05-26_10-53-03.html          |   59 ++
+ .../pipeline_dag_2026-05-26_12-31-15.html          |   44 +
+ .../pipeline_dag_2026-05-26_12-31-26.html          |   44 +
+ .../pipeline_dag_2026-05-26_12-33-31.html          |   44 +
+ .../pipeline_dag_2026-05-26_12-35-54.html          |   44 +
+ .../pipeline_dag_2026-06-01_10-43-25.html          |   44 +
+ .../pipeline_dag_2026-06-01_10-46-45.html          |   44 +
+ .../pipeline_dag_2026-06-02_07-48-11.html          |   44 +
+ .../pipeline_dag_2026-06-02_07-50-46.html          |   44 +
+ .../pipeline_dag_2026-06-02_07-51-25.html          |   44 +
+ null/pyrosetta/candidates.csv                      |   20 +
+ pipeline.svg                                       |  162 +--
+ run_B_af/.nextflow.log                             |  288 ++++++
+ run_B_af/.nextflow.log.1                           |  380 +++++++
+ run_B_af/.nextflow.log.2                           |  375 +++++++
+ run_B_af/.nextflow.log.3                           |  376 +++++++
+ run_B_af/.nextflow.log.4                           |  376 +++++++
+ run_B_af/.nextflow.log.5                           |  381 +++++++
+ run_B_af/.nextflow.log.6                           |  445 ++++++++
+ run_B_af/.nextflow.log.7                           |  121 +++
+ run_B_af/.nextflow.log.8                           |  288 ++++++
+ run_B_af/.nextflow.log.9                           |  162 +++
+ .../db/000003.log                                  |  Bin 0 -> 7386 bytes
+ .../db/CURRENT                                     |    1 +
+ .../31f5bfb8-ecbe-443a-a6e7-470a950b5c16/db/LOCK   |    0
+ .../db/MANIFEST-000002                             |  Bin 0 -> 50 bytes
+ .../index.condescending_yonath                     |  Bin 0 -> 34 bytes
+ .../db/000003.log                                  |  Bin 0 -> 1048576 bytes
+ .../db/CURRENT                                     |    1 +
+ .../651d59df-9509-4f3f-ad95-09095e4f07a1/db/LOCK   |    0
+ .../db/MANIFEST-000002                             |  Bin 0 -> 1048576 bytes
+ .../index.hungry_stallman                          |    0
+ .../db/000003.log                                  |  Bin 0 -> 6765 bytes
+ .../db/CURRENT                                     |    1 +
+ .../706ab880-70a5-48fe-8799-0ff0beece3dc/db/LOCK   |    0
+ .../db/MANIFEST-000002                             |  Bin 0 -> 50 bytes
+ .../index.awesome_kare                             |  Bin 0 -> 34 bytes
+ .../db/000003.log                                  |  Bin 0 -> 7399 bytes
+ .../db/CURRENT                                     |    1 +
+ .../8f1717c4-962a-4d83-93da-7ee5e0e04bc0/db/LOCK   |    0
+ .../db/MANIFEST-000002                             |  Bin 0 -> 50 bytes
+ .../index.awesome_brenner                          |  Bin 0 -> 34 bytes
+ .../db/000005.sst                                  |  Bin 0 -> 20886322 bytes
+ .../db/000008.log                                  |  Bin 0 -> 20890643 bytes
+ .../db/CURRENT                                     |    1 +
+ .../95aecf56-d3d8-43f9-9866-7f421a5d61a2/db/LOCK   |    0
+ .../db/MANIFEST-000007                             |  Bin 0 -> 107 bytes
+ .../index.exotic_kimura                            |  Bin 0 -> 323 bytes
+ .../index.sleepy_celsius                           |  Bin 0 -> 323 bytes
+ .../index.zen_crick                                |    0
+ .../db/000005.sst                                  |  Bin 0 -> 11767 bytes
+ .../db/000006.log                                  |  Bin 0 -> 14008 bytes
+ .../db/CURRENT                                     |    1 +
+ .../9f2f7411-58af-4279-9761-a86e5a53920f/db/LOCK   |    0
+ .../db/MANIFEST-000004                             |  Bin 0 -> 105 bytes
+ .../index.fabulous_hoover                          |  Bin 0 -> 68 bytes
+ .../index.naughty_darwin                           |  Bin 0 -> 85 bytes
+ .../db/000003.log                                  |  Bin 0 -> 7399 bytes
+ .../db/CURRENT                                     |    1 +
+ .../aa924384-32a2-4209-a3be-2d17aba2c4ea/db/LOCK   |    0
+ .../db/MANIFEST-000002                             |  Bin 0 -> 50 bytes
+ .../index.backstabbing_cuvier                      |  Bin 0 -> 34 bytes
+ .../db/000003.log                                  |  Bin 0 -> 1048576 bytes
+ .../db/CURRENT                                     |    1 +
+ .../b10ea215-f198-445d-83f8-4ad97363cdbb/db/LOCK   |    0
+ .../db/MANIFEST-000002                             |  Bin 0 -> 1048576 bytes
+ .../index.ecstatic_crick                           |  Bin 0 -> 34 bytes
+ .../db/000003.log                                  |  Bin 0 -> 6922 bytes
+ .../db/CURRENT                                     |    1 +
+ .../baa08716-90cf-4047-8073-0e1a306185a8/db/LOCK   |    0
+ .../db/MANIFEST-000002                             |  Bin 0 -> 50 bytes
+ .../index.kickass_kimura                           |  Bin 0 -> 34 bytes
+ .../db/000039.sst                                  |  Bin 0 -> 47115 bytes
+ .../db/000041.sst                                  |  Bin 0 -> 11775 bytes
+ .../db/000042.log                                  |  Bin 0 -> 11650 bytes
+ .../db/CURRENT                                     |    1 +
+ .../d8d0d0f3-e978-4cd1-968f-ed0455d9e16b/db/LOCK   |    0
+ .../db/MANIFEST-000040                             |  Bin 0 -> 188 bytes
+ .../index.astonishing_mandelbrot                   |  Bin 0 -> 34 bytes
+ .../index.berserk_kilby                            |  Bin 0 -> 68 bytes
+ .../index.boring_ramanujan                         |  Bin 0 -> 119 bytes
+ .../index.confident_wright                         |    0
+ .../index.distracted_shaw                          |  Bin 0 -> 119 bytes
+ .../index.gigantic_hopper                          |  Bin 0 -> 34 bytes
+ .../index.grave_shirley                            |  Bin 0 -> 85 bytes
+ .../index.high_sammet                              |    1 +
+ .../index.magical_torvalds                         |    0
+ .../index.nostalgic_bardeen                        |    0
+ .../index.pedantic_lagrange                        |  Bin 0 -> 85 bytes
+ .../index.romantic_monod                           |  Bin 0 -> 68 bytes
+ .../index.sad_carlsson                             |    0
+ .../index.scruffy_crick                            |    1 +
+ .../index.shrivelled_montalcini                    |    0
+ run_B_af/.nextflow/history                         |   27 +
+ run_B_af/[                                         |    0
+ run_B_af/command.sh                                |    1 +
+ subworkflows/design_modes/antibody_design.nf       |  308 +++++-
+ 284 files changed, 62750 insertions(+), 1482 deletions(-)

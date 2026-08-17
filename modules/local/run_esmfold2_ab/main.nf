@@ -8,7 +8,7 @@
  */
 process RUN_ESMFOLD2_AB {
     tag "esmfold2_batch"
-    label 'process_gpu'
+    label 'process_high_memory'
 
     container 'quay.io/esmfold2_local:1.0.0'
 
