@@ -1,0 +1,40 @@
+process BACKBONE_DESIGN {
+
+    tag "$input_pdb"
+
+    executor 'local'
+
+    publishDir "${params.outdir}/designs/backbones", mode: 'copy'
+
+    input:
+    path input_pdb
+
+    output:
+    path "backbone_design_*.pdb"
+    path "backbone_design_*.trb"
+
+    script:
+    """
+    mkdir -p rfdiffusion_output
+
+    INPUT_PDB=\$(readlink -f $input_pdb)
+
+    docker run --rm --gpus all \
+        -v \$(dirname \$INPUT_PDB):/input \
+        -v \$PWD/rfdiffusion_output:/output \
+        docker.io/rosettacommons/rfdiffusion:latest \
+        inference.output_prefix=/output/backbone_design \
+        inference.input_pdb=/input/\$(basename \$INPUT_PDB) \
+        inference.num_designs=${params.num_designs ?: 1} \
+        'contigmap.contigs=[${params.contig ?: "4-4"}]' \
+        diffuser.T=${params.diffusion_T ?: 50} \
+        denoiser.noise_scale_ca=${params.noise_scale_ca ?: 1.0} \
+        denoiser.noise_scale_frame=${params.noise_scale_frame ?: 1.0} \
+        ${params.final_step ? "inference.final_step=${params.final_step}" : ""}
+
+    sudo chown -R \$(id -u):\$(id -g) rfdiffusion_output
+
+    cp rfdiffusion_output/backbone_design_*.pdb .
+    cp rfdiffusion_output/backbone_design_*.trb .
+    """
+}

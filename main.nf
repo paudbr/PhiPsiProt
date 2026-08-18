@@ -21,6 +21,9 @@ include { CHAI1 }      from './workflows/chai1'
 
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_proteinfold_pipeline'
 include { PIPELINE_COMPLETION }     from './subworkflows/local/utils_nfcore_proteinfold_pipeline'
+include { SCREENING } from './subworkflows/design_modes/screening'
+include { getColabfoldAlphafold2Params     } from './subworkflows/local/utils_nfcore_proteinfold_pipeline'
+include { getColabfoldAlphafold2ParamsPath } from './subworkflows/local/utils_nfcore_proteinfold_pipeline'
 
 include { POST_PROCESSING } from './subworkflows/local/post_processing'
 include { METRICS_REPORT }  from './subworkflows/local/metrics_report'
@@ -68,8 +71,10 @@ workflow NFCORE_PROTEINFOLD {
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     */
     if (params.mode == 'screening') {
-        SATURATION(file(params.input_pdb), params.target_chain, params.positions)
-        ch_design_candidates = SATURATION.out.candidates
+        // TODO-MERGE: decidir SATURATION (stub de structural_mode) vs SCREENING
+        // (implementacion real de feature/design_module, 163 lineas).
+        SCREENING(file(params.input_pdb), params.target_chain ?: 'A', params.positions ?: 'ALL')
+        ch_design_candidates = SCREENING.out.candidates
     }
     else if (params.mode == 'backbone') {
         BACKBONE(params.mode)
@@ -491,13 +496,41 @@ workflow NFCORE_PROTEINFOLD {
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-ENTRY WORKFLOW
+    RUN MAIN WORKFLOW
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
 workflow {
 
-    PIPELINE_INITIALISATION(
+    main:
+
+    design_mode = (params.mode ?: '').toLowerCase().trim()
+
+    if (design_mode == 'screening') {
+        SCREENING(file(params.input_pdb), params.target_chain, params.positions)
+        return
+    }
+
+    if (design_mode == 'backbone') {
+        BACKBONE(file(params.input_pdb))
+        return
+    }
+
+
+    if (design_mode == 'peptide_design') {
+        PEPTIDE_DESIGN(file(params.input_pdb))
+        return
+    }
+
+    if (design_mode == 'antibody_design') {
+        ANTIBODY_DESIGN(
+            file(params.input_pdb),
+            file(params.antibody_framework)
+        )
+        return
+    }
+
+    PIPELINE_INITIALISATION (
         params.version,
         params.validate_params,
         params.monochrome_logs,
@@ -509,11 +542,11 @@ workflow {
         params.show_hidden
     )
 
-    NFCORE_PROTEINFOLD(
+    NFCORE_PROTEINFOLD (
         PIPELINE_INITIALISATION.out.samplesheet
     )
 
-    PIPELINE_COMPLETION(
+    PIPELINE_COMPLETION (
         params.email,
         params.email_on_fail,
         params.plaintext_email,
